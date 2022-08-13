@@ -12,7 +12,7 @@ class SettingsVM: ObservableObject {
 }
 
 struct ContentView: View {
-    @StateObject var settings = SettingsVM()
+    
 
     var body: some View {
         // TODO: create an actual model that pulls from Calendar
@@ -34,7 +34,6 @@ struct ContentView: View {
                 BirthdayObject(name: "Elizabeth Grapevine", date: Date())
             ]
         ])
-        .environmentObject(settings)
     }
 }
 

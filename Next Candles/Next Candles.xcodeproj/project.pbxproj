@@ -15,6 +15,7 @@
 		BD168DE02892EC300082E461 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DDF2892EC300082E461 /* MonthView.swift */; };
 		BD168DE22892EC900082E461 /* BirthdayObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DE12892EC900082E461 /* BirthdayObject.swift */; };
 		BD168DE42892ED980082E461 /* YearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DE32892ED980082E461 /* YearView.swift */; };
+		BD8D289928A81F2600B8B24B /* ContactsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8D289828A81F2600B8B24B /* ContactsVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		BD168DDF2892EC300082E461 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
 		BD168DE12892EC900082E461 /* BirthdayObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayObject.swift; sourceTree = "<group>"; };
 		BD168DE32892ED980082E461 /* YearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearView.swift; sourceTree = "<group>"; };
+		BD8D289828A81F2600B8B24B /* ContactsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 		BD168DCD2892E69C0082E461 /* Next Candles */ = {
 			isa = PBXGroup;
 			children = (
+				BD8D289828A81F2600B8B24B /* ContactsVM.swift */,
 				BD168DE32892ED980082E461 /* YearView.swift */,
 				BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */,
 				BD168DD02892E69C0082E461 /* ContentView.swift */,
@@ -154,6 +157,7 @@
 				BD168DDE2892E6C10082E461 /* BirthdayView.swift in Sources */,
 				BD168DE42892ED980082E461 /* YearView.swift in Sources */,
 				BD168DD12892E69C0082E461 /* ContentView.swift in Sources */,
+				BD8D289928A81F2600B8B24B /* ContactsVM.swift in Sources */,
 				BD168DE22892EC900082E461 /* BirthdayObject.swift in Sources */,
 				BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */,
 				BD168DE02892EC300082E461 /* MonthView.swift in Sources */,
@@ -283,8 +287,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Next Candles/Preview Content\"";
 				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSContactsUsageDescription = "Need to access contacts in order to read birthdays.";
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -315,8 +321,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Next Candles/Preview Content\"";
 				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				ENABLE_HARDENED_RUNTIME = YES;
+				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSContactsUsageDescription = "Need to access contacts in order to read birthdays.";
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
