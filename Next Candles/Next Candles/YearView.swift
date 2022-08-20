@@ -50,8 +50,12 @@ struct YearView: View {
                             .font(.system(.title, design: .monospaced, weight: .bold))
                             .padding(6)
                             .background {
-                                Circle()
-                                    .fill(Color.secondary.shadow(.drop(radius: 4)))
+                                ZStack {
+                                    Circle()
+                                        .fill(Color.white)
+                                    Circle()
+                                        .fill(Color.secondary.shadow(.drop(radius: 4)))
+                                }
                             }
                         
                     }

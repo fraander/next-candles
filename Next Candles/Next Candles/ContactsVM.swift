@@ -47,10 +47,9 @@ struct MonthWrapper: Identifiable {
     var contacts: [ContactWrapper]
     var month: String
     
+    // TODO: sorting isn't working (for this and for months too)
     init(contacts: [ContactWrapper], month: Int) {
-        self.contacts = contacts.sorted { lhs, rhs in
-            return lhs.day > rhs.day
-        }
+        self.contacts = contacts
         
         switch month {
             case 1:
@@ -90,29 +89,18 @@ class ContactsVM: ObservableObject {
         return collapser(input: contacts)
     }
     
-    init() {
-        do {
-            try self.contacts = self.fetch()
-        } catch {
-            self.contacts = []
-        }
-    }
-    
     // fetch the contacts from the system and create ContactWrappers from the useful ones
     // throws error if trouble fetching from System; returns [] if no valid contacts are found
-    func fetch() throws -> [ContactWrapper] {
+    func fetch() async throws -> [ContactWrapper] {
         var contacts: [ContactWrapper] = [] // fetched Contacts (that have valid birthdays and names)
         
         let store = CNContactStore() // store to access system contacts
         let fetchRequest = CNContactFetchRequest(keysToFetch: [CNContactGivenNameKey as CNKeyDescriptor, CNContactFamilyNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor]) // attributes to request so that the size is small
         
         do {
-                // TODO: Move this off of the main thread somehow
                 try store.enumerateContacts(with: fetchRequest) { contact, _ in // iterate over every contact ...
                     if (contact.areKeysAvailable([CNContactGivenNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor])) { // check they have required fields before fetching
-                        // TODO: check if familyName can be fetched even without checking it exists. If not, handle appropriately before trying the initializer (because it contains an access for a field that doens't exist in that case)
                         // TODO: profile photos?
-                        // TODO: move this all off the main thread; async/await with Jordan Morgan article? HWS article?
                         
                         // get each field and initialize
                         let _ = try? contacts.append(
