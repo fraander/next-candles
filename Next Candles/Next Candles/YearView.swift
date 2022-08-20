@@ -10,7 +10,7 @@ import SwiftUI
 struct YearView: View {
     @EnvironmentObject var settings: SettingsVM
     @State var showSettings = false
-    @State var months: [[BirthdayObject]]
+    @State var months: [MonthWrapper]
     
     var body: some View {
         NavigationStack {
@@ -18,7 +18,7 @@ struct YearView: View {
                 VStack(spacing: 0) {
                     
                     List() {
-                        ForEach($months, id: \.self) { $month in
+                        ForEach($months) { $month in
                             MonthView(birthdays: $month)
                         }
                     }
@@ -68,24 +68,24 @@ struct YearView: View {
     }
 }
 
-struct YearView_Previews: PreviewProvider {
-    static var previews: some View {
-        YearView(months: [
-            [
-                BirthdayObject(name: "Johnny Appleseed", date: Date()),
-                BirthdayObject(name: "Sammy Peachtree", date: Date()),
-                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
-            ],
-            [
-                BirthdayObject(name: "Johnny Appleseed", date: Date()),
-                BirthdayObject(name: "Sammy Peachtree", date: Date()),
-                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
-            ],
-            [
-                BirthdayObject(name: "Johnny Appleseed", date: Date()),
-                BirthdayObject(name: "Sammy Peachtree", date: Date()),
-                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
-            ]
-        ])
-    }
-}
+//struct YearView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        YearView(months: [
+//            [
+//                BirthdayObject(name: "Johnny Appleseed", date: Date()),
+//                BirthdayObject(name: "Sammy Peachtree", date: Date()),
+//                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
+//            ],
+//            [
+//                BirthdayObject(name: "Johnny Appleseed", date: Date()),
+//                BirthdayObject(name: "Sammy Peachtree", date: Date()),
+//                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
+//            ],
+//            [
+//                BirthdayObject(name: "Johnny Appleseed", date: Date()),
+//                BirthdayObject(name: "Sammy Peachtree", date: Date()),
+//                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
+//            ]
+//        ])
+//    }
+//}

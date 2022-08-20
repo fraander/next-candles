@@ -15,24 +15,14 @@ struct Next_CandlesApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-            List {
-                ForEach(contacts.contacts) { c in
-                    HStack {
-                        Text(c.name)
-                        
-                        Spacer()
-                        
-                        Text(c.formattedBirthday)
-                    }
-                }
-            }
-            .task {
-                contacts.fetch()
-            }
-            .environmentObject(settings)
-            .environmentObject(contacts)
+            ContentView()
+                .environmentObject(settings)
+                .environmentObject(contacts)
             
         }
     }
+}
+
+extension Array where Element == ContactWrapper {
+    
 }
