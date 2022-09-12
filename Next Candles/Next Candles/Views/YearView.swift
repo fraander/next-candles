@@ -26,21 +26,21 @@ struct YearView: View {
                 }
                 
                 HStack(spacing: 20) {
-                    Button {
-                        // toggle only favorites
-                        settings.favoritesOnly.toggle()
-                    } label: {
-                        Image(systemName: settings.favoritesOnly ? "star.fill" : "star")
-                            .foregroundColor(Color.white)
-                            .font(.system(.title, design: .monospaced, weight: .bold))
-                            .padding(6)
-                            .background {
-                                Circle()
-                                    .fill(Color.yellow.shadow(.drop(radius: 4)))
-                            }
-                        
-                    }
-                    .buttonStyle(.plain)
+//                    Button {
+//                        // toggle only favorites
+//                        settings.favoritesOnly.toggle()
+//                    } label: {
+//                        Image(systemName: settings.favoritesOnly ? "star.fill" : "star")
+//                            .foregroundColor(Color.white)
+//                            .font(.system(.title, design: .monospaced, weight: .bold))
+//                            .padding(6)
+//                            .background {
+//                                Circle()
+//                                    .fill(Color.yellow.shadow(.drop(radius: 4)))
+//                            }
+//                        
+//                    }
+//                    .buttonStyle(.plain)
                     
                     Button {
                         showSettings = true
@@ -64,32 +64,10 @@ struct YearView: View {
                 .padding()
             }
             .sheet(isPresented: $showSettings) {
-                Text("Settings View")
+                SettingsSheet()
                     .presentationDetents([.medium, .large])
             }
         }
         
     }
 }
-
-//struct YearView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        YearView(months: [
-//            [
-//                BirthdayObject(name: "Johnny Appleseed", date: Date()),
-//                BirthdayObject(name: "Sammy Peachtree", date: Date()),
-//                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
-//            ],
-//            [
-//                BirthdayObject(name: "Johnny Appleseed", date: Date()),
-//                BirthdayObject(name: "Sammy Peachtree", date: Date()),
-//                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
-//            ],
-//            [
-//                BirthdayObject(name: "Johnny Appleseed", date: Date()),
-//                BirthdayObject(name: "Sammy Peachtree", date: Date()),
-//                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
-//            ]
-//        ])
-//    }
-//}

@@ -13,9 +13,14 @@
 		BD168DD72892E69D0082E461 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD168DD62892E69D0082E461 /* Preview Assets.xcassets */; };
 		BD168DDE2892E6C10082E461 /* BirthdayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DDD2892E6C10082E461 /* BirthdayView.swift */; };
 		BD168DE02892EC300082E461 /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DDF2892EC300082E461 /* MonthView.swift */; };
-		BD168DE22892EC900082E461 /* BirthdayObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DE12892EC900082E461 /* BirthdayObject.swift */; };
 		BD168DE42892ED980082E461 /* YearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DE32892ED980082E461 /* YearView.swift */; };
 		BD8D289928A81F2600B8B24B /* ContactsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD8D289828A81F2600B8B24B /* ContactsVM.swift */; };
+		BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */; };
+		BDDFAAC528CF60D3009FC717 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC428CF60D3009FC717 /* SettingsVM.swift */; };
+		BDDFAAC728CF6104009FC717 /* MonthWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC628CF6104009FC717 /* MonthWrapper.swift */; };
+		BDDFAAC928CF610F009FC717 /* ContactWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC828CF610F009FC717 /* ContactWrapper.swift */; };
+		BDDFAACB28CF6988009FC717 /* SettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */; };
+		BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,9 +32,14 @@
 		BD168DD62892E69D0082E461 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BD168DDD2892E6C10082E461 /* BirthdayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayView.swift; sourceTree = "<group>"; };
 		BD168DDF2892EC300082E461 /* MonthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
-		BD168DE12892EC900082E461 /* BirthdayObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BirthdayObject.swift; sourceTree = "<group>"; };
 		BD168DE32892ED980082E461 /* YearView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearView.swift; sourceTree = "<group>"; };
 		BD8D289828A81F2600B8B24B /* ContactsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsVM.swift; sourceTree = "<group>"; };
+		BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCodingError.swift; sourceTree = "<group>"; };
+		BDDFAAC428CF60D3009FC717 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
+		BDDFAAC628CF6104009FC717 /* MonthWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthWrapper.swift; sourceTree = "<group>"; };
+		BDDFAAC828CF610F009FC717 /* ContactWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactWrapper.swift; sourceTree = "<group>"; };
+		BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheet.swift; sourceTree = "<group>"; };
+		BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomStepper.swift; path = "Next Candles/Views/CustomStepper.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +56,7 @@
 		BD168DC22892E69C0082E461 = {
 			isa = PBXGroup;
 			children = (
+				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
 				BD168DCD2892E69C0082E461 /* Next Candles */,
 				BD168DCC2892E69C0082E461 /* Products */,
 			);
@@ -62,13 +73,9 @@
 		BD168DCD2892E69C0082E461 /* Next Candles */ = {
 			isa = PBXGroup;
 			children = (
-				BD8D289828A81F2600B8B24B /* ContactsVM.swift */,
-				BD168DE32892ED980082E461 /* YearView.swift */,
+				BDDFAAC328CF6082009FC717 /* Model */,
+				BDDFAAC228CF6076009FC717 /* Views */,
 				BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */,
-				BD168DD02892E69C0082E461 /* ContentView.swift */,
-				BD168DDD2892E6C10082E461 /* BirthdayView.swift */,
-				BD168DDF2892EC300082E461 /* MonthView.swift */,
-				BD168DE12892EC900082E461 /* BirthdayObject.swift */,
 				BD168DD22892E69D0082E461 /* Assets.xcassets */,
 				BD168DD42892E69D0082E461 /* Next_Candles.entitlements */,
 				BD168DD52892E69D0082E461 /* Preview Content */,
@@ -82,6 +89,30 @@
 				BD168DD62892E69D0082E461 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		BDDFAAC228CF6076009FC717 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */,
+				BD168DD02892E69C0082E461 /* ContentView.swift */,
+				BD168DE32892ED980082E461 /* YearView.swift */,
+				BD168DDD2892E6C10082E461 /* BirthdayView.swift */,
+				BD168DDF2892EC300082E461 /* MonthView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BDDFAAC328CF6082009FC717 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				BD8D289828A81F2600B8B24B /* ContactsVM.swift */,
+				BDDFAAC828CF610F009FC717 /* ContactWrapper.swift */,
+				BDDFAAC628CF6104009FC717 /* MonthWrapper.swift */,
+				BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */,
+				BDDFAAC428CF60D3009FC717 /* SettingsVM.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -155,12 +186,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD168DDE2892E6C10082E461 /* BirthdayView.swift in Sources */,
+				BDDFAAC928CF610F009FC717 /* ContactWrapper.swift in Sources */,
 				BD168DE42892ED980082E461 /* YearView.swift in Sources */,
 				BD168DD12892E69C0082E461 /* ContentView.swift in Sources */,
 				BD8D289928A81F2600B8B24B /* ContactsVM.swift in Sources */,
-				BD168DE22892EC900082E461 /* BirthdayObject.swift in Sources */,
+				BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */,
+				BDDFAAC728CF6104009FC717 /* MonthWrapper.swift in Sources */,
 				BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */,
+				BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */,
 				BD168DE02892EC300082E461 /* MonthView.swift in Sources */,
+				BDDFAAC528CF60D3009FC717 /* SettingsVM.swift in Sources */,
+				BDDFAACB28CF6988009FC717 /* SettingsSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

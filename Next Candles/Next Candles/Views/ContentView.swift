@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-class SettingsVM: ObservableObject {
-    @Published var favoritesOnly: Bool = false
-}
-
 struct ContentView: View {
     @EnvironmentObject var contacts: ContactsVM
     @State var showInfoPage = false

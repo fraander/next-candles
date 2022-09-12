@@ -15,23 +15,20 @@ struct MonthView: View {
         Group {
             Text(birthdays.month)
                 .font(.system(.title, design: .rounded, weight: .bold))
+                .foregroundColor(isCurrentMonth(month: birthdays.monthInt) ? .pink : .primary)
             
-            ForEach($birthdays.contacts) { $birthday in
-                BirthdayView(birthday: $birthday)
+            ForEach(birthdays.sortedContacts) { birthday in
+                BirthdayView(birthday: birthday)
             }
             
             Spacer()
                 .listRowSeparator(Visibility.hidden)
         }
     }
+    
+    func isCurrentMonth(month: Int) -> Bool {
+        let nowComponents = Calendar.current.dateComponents([.month], from: Date())
+        
+        return nowComponents.month == month
+    }
 }
-
-//struct MonthView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MonthView(birthdays: .constant([
-//                BirthdayObject(name: "Johnny Appleseed", date: Date()),
-//                BirthdayObject(name: "Sammy Peachtree", date: Date()),
-//                BirthdayObject(name: "Elizabeth Grapevine", date: Date())
-//            ]))
-//    }
-//}

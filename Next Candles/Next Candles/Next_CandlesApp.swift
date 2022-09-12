@@ -22,7 +22,3 @@ struct Next_CandlesApp: App {
         }
     }
 }
-
-extension Array where Element == ContactWrapper {
-    
-}
