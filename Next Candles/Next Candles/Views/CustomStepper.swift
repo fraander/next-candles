@@ -82,6 +82,8 @@ struct CustomStepper: View {
     let increment: Double
     let tintColor: Color
     
+    @State var valueBuffer: Double = 0.0
+    
     @FocusState private var focused: Field?
     
     var body: some View {
@@ -91,32 +93,33 @@ struct CustomStepper: View {
                 .cornerRadius(10.0)
             
             HStack(alignment: .center, spacing: 0) {
-                StepperButton<Image> {
+                StepperButton<Image> { // TODO: button size smaller than shape size
                     if value > lower {
                         value -= increment
                     }
                 } label: {
                     Image(systemName: "minus")
                 }
-
+                
                 Divider()
                     .padding(.vertical, 8)
                 
-                
-                TextField("", value: $value, format: .number)
+                TextField("", value: $valueBuffer, format: .number)
+                    .focused($focused, equals: .typing)
                     .submitLabel(.done)
                     .keyboardType(.numberPad)
-//                    .onReceive(Just(value)) { newValue in
-//                        if lower < newValue && newValue < upper {
-//                            value = newValue
-//                        }
-//                    } // TODO: fix veritification for typed entries; values should be within range
+                    .onSubmit {
+                        if (lower..<upper).contains(valueBuffer) {
+                            value = valueBuffer
+                        } else {
+                            valueBuffer = value
+                        }
+                    }
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 8)
                     .font(.system(.body, design: .monospaced, weight: .regular))
                     .tint(tintColor)
                     .foregroundColor(tintColor)
-                    .focused($focused, equals: .typing)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
                 Divider()
@@ -131,14 +134,20 @@ struct CustomStepper: View {
                 }
             }
         }
-        .frame(width: 160, height: 40)
+        .frame(width: 180, height: 40)
+        .task {
+            valueBuffer = value
+        }
     }
 }
 
 struct CustomStepper_Previews: PreviewProvider {
+    
+    @State static var value = 200.0
+    
     static var previews: some View {
         VStack {
-            CustomStepper(value: .constant(200), lower: 0, upper: 365, increment: 1.0, tintColor: Color.purple)
+            CustomStepper(value: $value, lower: 0, upper: 365, increment: 1.0, tintColor: Color.purple)
 //            Stepper("Title", value: .constant(120), in: 0...365)
         }
     }
