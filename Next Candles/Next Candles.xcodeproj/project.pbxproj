@@ -21,6 +21,7 @@
 		BDDFAAC928CF610F009FC717 /* ContactWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC828CF610F009FC717 /* ContactWrapper.swift */; };
 		BDDFAACB28CF6988009FC717 /* SettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */; };
 		BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */; };
+		BDFA5A0D29FD8C6200634AE1 /* ContactsFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFA5A0C29FD8C6200634AE1 /* ContactsFeed.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +40,8 @@
 		BDDFAAC628CF6104009FC717 /* MonthWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthWrapper.swift; sourceTree = "<group>"; };
 		BDDFAAC828CF610F009FC717 /* ContactWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactWrapper.swift; sourceTree = "<group>"; };
 		BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheet.swift; sourceTree = "<group>"; };
-		BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomStepper.swift; path = "Next Candles/Views/CustomStepper.swift"; sourceTree = "<group>"; };
+		BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStepper.swift; sourceTree = "<group>"; };
+		BDFA5A0C29FD8C6200634AE1 /* ContactsFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsFeed.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +58,6 @@
 		BD168DC22892E69C0082E461 = {
 			isa = PBXGroup;
 			children = (
-				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
 				BD168DCD2892E69C0082E461 /* Next Candles */,
 				BD168DCC2892E69C0082E461 /* Products */,
 			);
@@ -79,6 +80,7 @@
 				BD168DD22892E69D0082E461 /* Assets.xcassets */,
 				BD168DD42892E69D0082E461 /* Next_Candles.entitlements */,
 				BD168DD52892E69D0082E461 /* Preview Content */,
+				BDFA5A0C29FD8C6200634AE1 /* ContactsFeed.swift */,
 			);
 			path = "Next Candles";
 			sourceTree = "<group>";
@@ -94,6 +96,7 @@
 		BDDFAAC228CF6076009FC717 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
 				BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */,
 				BD168DD02892E69C0082E461 /* ContentView.swift */,
 				BD168DE32892ED980082E461 /* YearView.swift */,
@@ -143,7 +146,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
-				LastUpgradeCheck = 1400;
+				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					BD168DCA2892E69C0082E461 = {
 						CreatedOnToolsVersion = 14.0;
@@ -187,6 +190,7 @@
 			files = (
 				BD168DDE2892E6C10082E461 /* BirthdayView.swift in Sources */,
 				BDDFAAC928CF610F009FC717 /* ContactWrapper.swift in Sources */,
+				BDFA5A0D29FD8C6200634AE1 /* ContactsFeed.swift in Sources */,
 				BD168DE42892ED980082E461 /* YearView.swift in Sources */,
 				BD168DD12892E69C0082E461 /* ContentView.swift in Sources */,
 				BD8D289928A81F2600B8B24B /* ContactsVM.swift in Sources */,
@@ -236,6 +240,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -294,6 +299,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -318,8 +324,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Next Candles/Next_Candles.entitlements";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Next Candles/Preview Content\"";
 				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -352,8 +360,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Next Candles/Next_Candles.entitlements";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Next Candles/Preview Content\"";
 				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				ENABLE_HARDENED_RUNTIME = YES;
