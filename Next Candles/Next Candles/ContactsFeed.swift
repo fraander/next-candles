@@ -28,8 +28,11 @@ struct MonthCard: View {
     var body: some View {
         VStack(spacing: 0) {
             MonthCardHeading(month: "February", count: birthdays.count)
-            ForEach(birthdays) { bd in
-                ContactCard(name: bd.name, date: bd.date, last: false)
+            Group {
+                ForEach(birthdays) { bd in
+                    ContactCard(name: bd.name, date: bd.date, last: false)
+                }
+                ContactCard(name: "Frank Anderson", date: Date(), last: true)
             }
             .padding(.leading, 16)
         }
@@ -72,7 +75,7 @@ struct ContactCard: View {
     
     var body: some View {
         HStack {
-                Text("\(7)")
+            Text("\(7)")
                 .font(.system(.title3, design: .monospaced, weight: .heavy))
                 .foregroundColor(.white)
                 .padding(12)
@@ -91,26 +94,12 @@ struct ContactCard: View {
         }
         .padding(.vertical, 10)
         .background {
-            if (last) {
-                GeometryReader { geo in
-                    HStack(alignment: .top) {
-                        Rectangle()
-                            .fill(Color.indigo)
-                            .frame(maxWidth: 4, maxHeight: geo.size.height / 2)
-                            .padding(.leading, 16)
-                        Spacer()
-                    }
-                }
-            } else if (passed) {
-                HStack {
+            GeometryReader { geo in
+                HStack(alignment: .top) {
                     Rectangle()
                         .fill(Color.indigo)
-                        .frame(maxWidth: 4, maxHeight: .infinity)
+                        .frame(maxWidth: 4, maxHeight: last ? geo.size.height / 2 : .infinity)
                         .padding(.leading, 16)
-                    Spacer()
-                }
-            } else {
-                HStack {
                     Spacer()
                 }
             }

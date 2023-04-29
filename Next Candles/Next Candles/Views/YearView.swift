@@ -26,21 +26,6 @@ struct YearView: View {
                 }
                 
                 HStack(spacing: 20) {
-//                    Button {
-//                        // toggle only favorites
-//                        settings.favoritesOnly.toggle()
-//                    } label: {
-//                        Image(systemName: settings.favoritesOnly ? "star.fill" : "star")
-//                            .foregroundColor(Color.white)
-//                            .font(.system(.title, design: .monospaced, weight: .bold))
-//                            .padding(6)
-//                            .background {
-//                                Circle()
-//                                    .fill(Color.yellow.shadow(.drop(radius: 4)))
-//                            }
-//                        
-//                    }
-//                    .buttonStyle(.plain)
                     
                     Button {
                         showSettings = true
