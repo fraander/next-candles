@@ -35,7 +35,9 @@ struct StepperButton<Content: View>: View {
     var body: some View {
         ZStack {
             Rectangle()
+            #if os(iOS)
                 .fill(isPressed ? Color(uiColor: UIColor.systemFill) : Color.clear)
+            #endif
                 .cornerRadius(8.0)
             
             Button(action: action, label: label)
@@ -89,7 +91,9 @@ struct CustomStepper: View {
     var body: some View {
         ZStack {
             Rectangle()
+#if os(iOS)
                 .fill(Color(uiColor: UIColor.tertiarySystemFill))
+            #endif
                 .cornerRadius(10.0)
             
             HStack(alignment: .center, spacing: 0) {
@@ -107,7 +111,9 @@ struct CustomStepper: View {
                 TextField("", value: $valueBuffer, format: .number)
                     .focused($focused, equals: .typing)
                     .submitLabel(.done)
+#if os(iOS)
                     .keyboardType(.numberPad)
+                #endif
                     .onSubmit {
                         if (lower..<upper).contains(valueBuffer) {
                             value = valueBuffer
