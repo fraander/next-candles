@@ -49,7 +49,8 @@ class ContactsVM: ObservableObject {
     func collapser(input: [ContactWrapper]) -> [MonthWrapper] {
         let base: [MonthWrapper] = [] // if no numbers exist, produce an empty array of arrays; easier for readability
         let reduced = input.reduce(base) {reducer(soFar: $0, next: $1)} // collapse the list into the list of lists
-        return sorter(reduced: reduced) // sort them
+        let sorted = sorter(reduced: reduced) // sort them in month order
+        return splitter(sorted: sorted) // move the current month to the first, and then go from there
     }
     
     // Converts list of months into list of lists of each occurrence of each number
@@ -76,5 +77,13 @@ class ContactsVM: ObservableObject {
     // Sorts months from least to greatest
     func sorter(reduced: [MonthWrapper]) -> [MonthWrapper] {
         return reduced.sorted()
+    }
+    
+    func splitter(sorted: [MonthWrapper]) -> [MonthWrapper] {
+        let currentMonth = (Calendar.current.dateComponents([.month], from: Date()).month ?? 0) - 1 // get current month index
+        let jan = 0 // january index
+        let dec = 11 // december index
+        
+        return (sorted[currentMonth ... dec] + sorted[jan ... currentMonth - 1]).map { $0 } // reorder into now -> dec + jan -> now
     }
 }

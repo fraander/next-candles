@@ -32,21 +32,25 @@ struct BirthdayView: View {
     }
     
     func withinNextXDays() -> Bool {
-        let currentYear = Calendar.current.dateComponents([.year], from: Date()).year
+        let currentYear = Calendar.current.dateComponents([.year], from: Date()).year!
+        let nextYear = currentYear + 1
+        for year in [currentYear, nextYear] {
         
-        let givenComponents = DateComponents(year: currentYear, month: birthday.month, day: birthday.day)
-        guard let givenDate = Calendar.current.date(from: givenComponents) else { return false }
-        
-        var xDays = DateComponents()
-        xDays.day = Int(settings.nextUpDays)
-        
-        let currentDate = Date()
-        if let futureDate = Calendar.current.date(byAdding: xDays, to: currentDate) {
-            if (currentDate <= givenDate && givenDate <= futureDate) {
-                return true
+            let givenComponents = DateComponents(year: year, month: birthday.month, day: birthday.day)
+            guard let givenDate = Calendar.current.date(from: givenComponents) else { return false }
+            
+            var xDays = DateComponents()
+            xDays.day = Int(settings.nextUpDays)
+            
+            let currentDate = Date()
+            if let futureDate = Calendar.current.date(byAdding: xDays, to: currentDate) {
+                if (currentDate <= givenDate && givenDate <= futureDate) {
+                    return true
+                }
             }
+            
         }
-        
         return false
+        
     }
 }
