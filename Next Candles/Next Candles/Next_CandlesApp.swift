@@ -10,14 +10,17 @@ import SwiftUI
 @main
 struct Next_CandlesApp: App {
     
-    @StateObject var settings = SettingsVM()
-    @StateObject var contacts = ContactsVM()
+    //    @StateObject var settings = SettingsVM()
+    //    @StateObject var contacts = ContactsVM()
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(settings)
-                .environmentObject(contacts)
+            ContactListView()
+                .modelContainer(for: Contact.self)
+            
+            //            ContentView()
+            //                .environmentObject(settings)
+            //                .environmentObject(contacts)
             
         }
     }
