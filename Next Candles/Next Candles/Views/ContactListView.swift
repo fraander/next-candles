@@ -8,38 +8,77 @@
 import SwiftUI
 import SwiftData
 
-struct ContactListView: View {
+struct ContactsMonthListView: View {
+    
     @Environment(\.modelContext) private var modelContext
-    @Query(filter: #Predicate<Contact> { contact in
-        contact.month != nil && contact.day != nil && contact.hidden == false
-    }, sort: [SortDescriptor(\Contact.month), SortDescriptor(\Contact.day), SortDescriptor(\Contact.year)]) private var contacts: [Contact]
+    @Query private var contacts: [Contact]
+    
+    init(month: Int) {
+        _contacts = Query(filter: #Predicate<Contact> { contact in
+            contact.month == month && contact.day != nil && contact.hidden == false
+        }, sort: [SortDescriptor(\Contact.month), SortDescriptor(\Contact.day), SortDescriptor(\Contact.year)])
+    }
+    
+    var body: some View {
+        ForEach(contacts) { contact in
+            HStack {
+                Text(contact.name)
+                    .font(.headline)
+                Spacer()
+                Text(
+                    (contact.birthdate ?? Date())
+                        .formatted(
+                            .dateTime
+                                .day()
+                                .month(.wide)
+                                .weekday(.wide)
+                        )
+                )
+                .font(.subheadline)
+            }
+            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                Button("Hide", systemImage: "eye.slash") { hide(contact)}
+                    .tint(.orange)
+            }
+        }
+    }
+    
+    func hide(_ contact: Contact) {
+        contact.hidden = true
+    }
+}
+
+
+struct ContactListView: View {
+    
+    @Environment(\.modelContext) private var modelContext
+    @Query private var contacts: [Contact]
+    
+    var months: [Int] {
+        let allMonths = contacts.compactMap(\.month)
+        return Set(allMonths).sorted { $0 < $1 }
+    }
     
     var body: some View {
         NavigationStack {
-            List {
-                
-                // https://stackoverflow.com/questions/58142962/how-do-i-separate-events-into-different-sections-of-a-list-based-on-a-date-in-sw
-                
-                ForEach(contacts) { contact in
-                    HStack {
-                        Text(contact.name)
-                            .font(.headline)
-                        Spacer()
-                        Text(
-                            (contact.birthdate ?? Date())
-                                .formatted(
-                                    .dateTime
-                                        .day()
-                                        .month(.wide)
-                                        .weekday(.wide)
-                                )
-                        )
-                        .font(.subheadline)
+            ScrollViewReader { svr in
+                List {
+                    ForEach(months, id: \.self) { month in
+                        Section("\(Calendar.current.monthSymbols[month-1])") {
+                            ContactsMonthListView(month: month)
+                                .id(month)
+                        }
                     }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button("Hide", systemImage: "eye.slash") { hide(contact)}
-                            .tint(.orange)
+                }
+                .task {
+                    let components = Calendar.current.dateComponents([.month], from: Date())
+                    let currentMonth = components.month
+                    if let currentMonth {
+                        if  months.contains(currentMonth) {
+                            svr.scrollTo(currentMonth, anchor: .top)
+                        }
                     }
+                    
                 }
             }
             .navigationTitle("Contacts")
@@ -51,13 +90,6 @@ struct ContactListView: View {
         }
     }
     
-    func delete(_ indexSet: IndexSet) {
-        indexSet.forEach { modelContext.delete(contacts[$0]) }
-    }
-    
-    func hide(_ contact: Contact) {
-        contact.hidden = true
-    }
     
     func fetch() {
         Task {
