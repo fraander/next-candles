@@ -52,7 +52,7 @@ struct ContactsMonthListView: View {
 struct ContactListView: View {
     
     @Environment(\.modelContext) private var modelContext
-    @Query private var contacts: [Contact]
+    @Query(filter: #Predicate<Contact> {  !$0.hidden }) private var contacts: [Contact]
     
     var months: [Int] {
         let allMonths = contacts.compactMap(\.month)
@@ -62,24 +62,30 @@ struct ContactListView: View {
     var body: some View {
         NavigationStack {
             ScrollViewReader { svr in
-                List {
-                    ForEach(months, id: \.self) { month in
-                        Section("\(Calendar.current.monthSymbols[month-1])") {
-                            ContactsMonthListView(month: month)
-                                .id(month)
+                if (contacts.isEmpty) {
+                    VStack {
+                        ContentUnavailableView("No birthdays found", systemImage: "birthday.cake", description: Text("Loading from your Contacts..."))
+                    }
+                } else {
+                    List {
+                        ForEach(months, id: \.self) { month in
+                            Section("\(Calendar.current.monthSymbols[month-1])") {
+                                ContactsMonthListView(month: month)
+                                    .id(month)
+                            }
+                        }
+                    }
+                    .task {
+                        let components = Calendar.current.dateComponents([.month], from: Date())
+                        let currentMonth = components.month
+                        if let currentMonth {
+                            if  months.contains(currentMonth) {
+                                svr.scrollTo(currentMonth, anchor: .top)
+                            }
                         }
                     }
                 }
-                .task {
-                    let components = Calendar.current.dateComponents([.month], from: Date())
-                    let currentMonth = components.month
-                    if let currentMonth {
-                        if  months.contains(currentMonth) {
-                            svr.scrollTo(currentMonth, anchor: .top)
-                        }
-                    }
-                    
-                }
+                
             }
             .navigationTitle("Contacts")
             .task {
