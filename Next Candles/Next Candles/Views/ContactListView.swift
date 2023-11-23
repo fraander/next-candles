@@ -15,7 +15,7 @@ struct ContactsMonthListView: View {
     
     init(month: Int) {
         _contacts = Query(filter: #Predicate<Contact> { contact in
-            contact.month == month && contact.day != nil && contact.hidden == false
+            return (contact.month == month) && (contact.day != nil) && (contact.hidden == false)
         }, sort: [SortDescriptor(\Contact.month), SortDescriptor(\Contact.day), SortDescriptor(\Contact.year)])
     }
     
@@ -24,13 +24,15 @@ struct ContactsMonthListView: View {
             HStack {
                 Text(contact.name)
                     .font(.headline)
+                    .lineLimit(2)
+                    .truncationMode(.tail)
                 Spacer()
                 Text(
                     (contact.birthdate ?? Date())
                         .formatted(
                             .dateTime
                                 .day()
-                                .month(.wide)
+                                .month(.abbreviated)
                                 .weekday(.wide)
                         )
                 )
@@ -49,10 +51,26 @@ struct ContactsMonthListView: View {
 }
 
 
+enum LoadingState {
+    case waiting, failed, loading
+}
+
+enum SheetType: Identifiable {
+    case custom, /*settings,*/ hidden
+    
+    var id: Self {
+        return self
+    }
+}
+
+
 struct ContactListView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Query(filter: #Predicate<Contact> {  !$0.hidden }) private var contacts: [Contact]
+
+    @State var loadingContacts: LoadingState = .waiting
+    @State var sheet: SheetType? = nil
     
     var months: [Int] {
         let allMonths = contacts.compactMap(\.month)
@@ -62,15 +80,21 @@ struct ContactListView: View {
     var body: some View {
         NavigationStack {
             ScrollViewReader { svr in
-                if (contacts.isEmpty) {
+                if (contacts.count == 0) {
                     VStack {
-                        ContentUnavailableView("No birthdays found", systemImage: "birthday.cake", description: Text("Loading from your Contacts..."))
+                        ContentUnavailableView {
+                            Label("No birthdays found", systemImage: "birthday.cake")
+                        } description: {
+                            Text("You can try importing some from your Contacts.")
+                        } actions: {
+                            Button("Search", systemImage: "doc.text.magnifyingglass", action: fetch)
+                        }
                     }
                 } else {
                     List {
                         ForEach(months, id: \.self) { month in
                             Section("\(Calendar.current.monthSymbols[month-1])") {
-                                ContactsMonthListView(month: month)
+                                ContactsMonthListView(month: month, searchText: searchText)
                                     .id(month)
                             }
                         }
@@ -88,9 +112,34 @@ struct ContactListView: View {
                 
             }
             .navigationTitle("Contacts")
-            .task {
-                if (contacts.isEmpty) {
-                    fetch()
+            .toolbar {
+                Menu("Settings", systemImage: "gear") {
+                    Button("Hidden Birthdays", systemImage: "eye.slash", action: {sheet = .hidden})
+                    Divider()
+                    Button("Import from Contacts", systemImage: "doc.text.magnifyingglass", action: { fetch() })
+                    Button("Add Manually", systemImage: "person.fill.badge.plus", action: {sheet = .custom})
+                }
+                .labelStyle(.titleAndIcon)
+            }
+            .overlay {
+                Group {
+                    if (loadingContacts == .loading) {
+                        ProgressView()
+                    } else if (loadingContacts == .failed) {
+                        ContentUnavailableView {
+                            Label("Could not find birthdays to import from Contacts.", systemImage: "birthday.cake")
+                        } actions: {
+                            Button("Try again.", systemImage: "doc.text.magnifyingglass", action: fetch)
+                        }
+                        
+                    }
+                }
+            }
+            .sheet(item: $sheet) { item in
+                switch item {
+//                case .settings: ContentUnavailableView("Settings", systemImage: "gear")
+                case .custom: ContentUnavailableView("Add Manually", systemImage: "person.fill.badge.plus")
+                case .hidden: ContentUnavailableView("Hidden Birthdays", systemImage: "eye.slash")
                 }
             }
         }

@@ -9,16 +9,17 @@ import SwiftUI
 
 /*
  Bugs
- - When removing the last contact from a month, the month sticks around
- - Loading for the first time brings the whole app to a halt -- setup some "import" screen to get around this
- - Names that are long mixed with dates that are long has a weird rendering error. Is there a way to shorten dates / truncate
+ - Names that are long mixedwith dates that are long has a weird rendering error. Is there a way to shorten dates / truncate
  
  Features
- - Birthday reminders x days out
- - Highlight upcoming in x days
- - Tap to detail to show contact card
  - Better import management
+ - Add custom/manually
  - Show/hide hidden
+ - Highlight upcoming in x days
+ - Reset / delete all
+ - Birthday reminders x days out
+ - Tap to detail to show contact card
+ - Search
  */
 
 @main
