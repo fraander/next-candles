@@ -12,6 +12,7 @@ import SwiftUI
  - Names that are long mixedwith dates that are long has a weird rendering error. Is there a way to shorten dates / truncate
  
  Features
+-  Show current month at top or show Jan->Dec toggle
  - Better import management
  - Add custom/manually
  - Show/hide hidden
