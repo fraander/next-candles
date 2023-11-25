@@ -9,6 +9,7 @@ import SwiftUI
 
 /*
  Features
+-  Show current month at top or show Jan->Dec toggle
  - Better import management
  - Add custom/manually
  - Highlight upcoming in x days
