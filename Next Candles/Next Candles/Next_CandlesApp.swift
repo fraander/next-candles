@@ -8,15 +8,10 @@
 import SwiftUI
 
 /*
- Bugs
- - Names that are long mixedwith dates that are long has a weird rendering error. Is there a way to shorten dates / truncate
- 
  Features
  - Better import management
  - Add custom/manually
- - Show/hide hidden
  - Highlight upcoming in x days
- - Reset / delete all
  - Birthday reminders x days out
  - Tap to detail to show contact card
  - Search
@@ -29,7 +24,6 @@ struct Next_CandlesApp: App {
         WindowGroup {
             ContactListView()
                 .modelContainer(for: Contact.self)
-            
         }
     }
 }
