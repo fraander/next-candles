@@ -18,9 +18,8 @@
 		BDD9F7982B12B150002E69F0 /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F7972B12B150002E69F0 /* LoadingState.swift */; };
 		BDD9F79A2B12B2E1002E69F0 /* SettingsMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F7992B12B2E1002E69F0 /* SettingsMenuView.swift */; };
 		BDD9F79C2B12B6C9002E69F0 /* LoadingContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F79B2B12B6C9002E69F0 /* LoadingContactsView.swift */; };
+		BDD9F79E2B12B7CA002E69F0 /* AddManuallyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F79D2B12B7CA002E69F0 /* AddManuallyView.swift */; };
 		BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */; };
-		BDDFAAC528CF60D3009FC717 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC428CF60D3009FC717 /* SettingsVM.swift */; };
-		BDDFAACB28CF6988009FC717 /* SettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */; };
 		BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */; };
 		BDFA5A0D29FD8C6200634AE1 /* ContactsFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFA5A0C29FD8C6200634AE1 /* ContactsFeed.swift */; };
 		BDFE4DD12B0C48680074D0A9 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFE4DD02B0C48680074D0A9 /* Contact.swift */; };
@@ -42,9 +41,8 @@
 		BDD9F7972B12B150002E69F0 /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
 		BDD9F7992B12B2E1002E69F0 /* SettingsMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuView.swift; sourceTree = "<group>"; };
 		BDD9F79B2B12B6C9002E69F0 /* LoadingContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingContactsView.swift; sourceTree = "<group>"; };
+		BDD9F79D2B12B7CA002E69F0 /* AddManuallyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddManuallyView.swift; sourceTree = "<group>"; };
 		BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCodingError.swift; sourceTree = "<group>"; };
-		BDDFAAC428CF60D3009FC717 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
-		BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSheet.swift; sourceTree = "<group>"; };
 		BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStepper.swift; sourceTree = "<group>"; };
 		BDFA5A0C29FD8C6200634AE1 /* ContactsFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsFeed.swift; sourceTree = "<group>"; };
 		BDFE4DD02B0C48680074D0A9 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
@@ -84,6 +82,7 @@
 			children = (
 				BDD9F7972B12B150002E69F0 /* LoadingState.swift */,
 				BDD9F7952B12B141002E69F0 /* SheetType.swift */,
+				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
 				BDDFAAC328CF6082009FC717 /* Model */,
 				BDDFAAC228CF6076009FC717 /* Views */,
 				BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */,
@@ -106,15 +105,14 @@
 		BDDFAAC228CF6076009FC717 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BDD9F79D2B12B7CA002E69F0 /* AddManuallyView.swift */,
 				BDD9F79B2B12B6C9002E69F0 /* LoadingContactsView.swift */,
 				BDD9F7992B12B2E1002E69F0 /* SettingsMenuView.swift */,
 				BDD9F7912B12AAA1002E69F0 /* ContactView.swift */,
-				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
 				BDFE4DD22B0C494A0074D0A9 /* ContactListView.swift */,
 				BDD9F78F2B12AA37002E69F0 /* HiddenContactsView.swift */,
 				BDD9F7932B12B0EA002E69F0 /* SheetRouter.swift */,
 				BDD9F78D2B12A9CB002E69F0 /* ContactsMonthListView.swift */,
-				BDDFAACA28CF6988009FC717 /* SettingsSheet.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -125,7 +123,6 @@
 				BDFE4DD02B0C48680074D0A9 /* Contact.swift */,
 				BDFE4DD42B0D53DD0074D0A9 /* ContactsUtils.swift */,
 				BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */,
-				BDDFAAC428CF60D3009FC717 /* SettingsVM.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -211,12 +208,11 @@
 				BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */,
 				BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */,
 				BDD9F7922B12AAA1002E69F0 /* ContactView.swift in Sources */,
+				BDD9F79E2B12B7CA002E69F0 /* AddManuallyView.swift in Sources */,
 				BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */,
-				BDDFAAC528CF60D3009FC717 /* SettingsVM.swift in Sources */,
 				BDD9F79C2B12B6C9002E69F0 /* LoadingContactsView.swift in Sources */,
 				BDD9F7982B12B150002E69F0 /* LoadingState.swift in Sources */,
 				BDD9F78E2B12A9CB002E69F0 /* ContactsMonthListView.swift in Sources */,
-				BDDFAACB28CF6988009FC717 /* SettingsSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,14 +13,10 @@ struct SheetRouter: View {
     
     var body: some View {
         switch item {
-        case .custom: ContentUnavailableView("Add Manually", systemImage: "person.fill.badge.plus")
+        case .custom: AddManuallyView()
         case .hidden: HiddenContactsView()
         case .none:
-            ContentUnavailableView("No sheet selected", systemImage: "wand.and.raysb")
+            ContentUnavailableView("No sheet selected", systemImage: "wand.and.rays")
         }
     }
-}
-
-#Preview {
-    return SheetRouter(item: .constant(SheetType.hidden))
 }

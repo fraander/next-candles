@@ -10,8 +10,10 @@ import SwiftData
 
 @Model
 class Contact {
+    var identifier: String?
     var givenName: String?
     var familyName: String?
+    var nickname: String?
     var month: Int?
     var day: Int?
     var year: Int?
@@ -23,6 +25,7 @@ class Contact {
         var components = PersonNameComponents()
         components.givenName = givenName
         components.familyName = familyName
+        components.nickname = nickname
         
         return formatter.string(from: components)
     }
@@ -40,9 +43,11 @@ class Contact {
         return nil
     }
     
-    init(givenName: String? = nil, familyName: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil) {
+    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil) {
+        self.identifier = identifier
         self.givenName = givenName
         self.familyName = familyName
+        self.nickname = nickname
         self.month = month
         self.day = day
         self.year = year

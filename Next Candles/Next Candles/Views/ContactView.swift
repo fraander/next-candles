@@ -28,6 +28,7 @@ struct ContactView: View {
                     )
             )
             .font(.subheadline)
+            .foregroundColor(.secondary)
         }
     }
 }

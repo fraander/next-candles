@@ -13,13 +13,36 @@ struct ContactListView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Query(filter: #Predicate<Contact> {  !$0.hidden }) private var contacts: [Contact]
-
+    
     @State var loadingContacts: LoadingState = .waiting
     @State var sheet: SheetType? = nil
+    @State var janStart = false
     
     var months: [Int] {
+        
+        
+        
         let allMonths = contacts.compactMap(\.month)
-        return Set(allMonths).sorted { $0 < $1 }
+        let sortedMonths: [Int] = Set(allMonths).sorted { $0 < $1 }
+        let currentMonth = Calendar.current.component(.month, from: Date())
+        
+        if (janStart) {
+            return sortedMonths
+        }
+        
+        var top: [Int] = []
+        var bottom: [Int] = []
+        
+        for month in sortedMonths {
+            if (month >= currentMonth) {
+                top.append(month)
+            } else {
+                bottom.append(month)
+            }
+        }
+        
+        print(top + bottom)
+        return top + bottom
     }
     
     var noContactsView: some View {
@@ -54,9 +77,9 @@ struct ContactListView: View {
                 }
                 
             }
-            .navigationTitle("Contacts")
+            .navigationTitle("Birthdays")
             .toolbar {
-                SettingsMenu(sheet: $sheet)
+                SettingsMenu(sheet: $sheet, janStart: $janStart)
             }
             .overlay {
                 LoadingContactsView(loadingContacts: loadingContacts)

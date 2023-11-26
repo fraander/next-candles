@@ -15,6 +15,7 @@ struct SettingsMenu: View {
     @Query(filter: #Predicate<Contact> { $0.hidden }) private var hiddenContacts: [Contact]
     @Binding var sheet: SheetType?
     @State var showDeleteAll = false
+    @Binding var janStart: Bool
     
     var body: some View {
         Menu("Settings", systemImage: "gear") {
@@ -30,6 +31,12 @@ struct SettingsMenu: View {
                 Button("Delete all", systemImage: "trash", role: .destructive) { showDeleteAll = true }
             }
             
+            Divider() 
+            
+            Button(!janStart ? "Top: Current month" : "Top: January", systemImage: "platter.filled.top.and.arrow.up.iphone") {
+                janStart.toggle()
+            }
+            
         }
         .labelStyle(.titleAndIcon)
         .alert("Delete all Birthdays?", isPresented: $showDeleteAll) {
@@ -40,16 +47,16 @@ struct SettingsMenu: View {
     
     func fetch() {
         Task {
-            let fetched = try await ContactsUtils.fetch()
+            let fetched = try await ContactsUtils.fetch(existingContacts: allContacts)
             if (fetched.count > 0) {
                 fetched.forEach { modelContext.insert($0) }
             } else {
-                print("Error fetching from device.")
+                print("No new contacts were added.")
             }
         }
     }
 }
 
 #Preview {
-    SettingsMenu(sheet: .constant(.hidden))
+    SettingsMenu(sheet: .constant(.hidden), janStart: .constant(false))
 }
