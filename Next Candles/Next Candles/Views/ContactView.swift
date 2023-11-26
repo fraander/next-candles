@@ -10,6 +10,7 @@ import SwiftUI
 struct ContactView: View {
     
     let contact: Contact
+    var dayRange: Int? = nil
     
     var body: some View {
         HStack {
@@ -28,18 +29,18 @@ struct ContactView: View {
                     )
             )
             .font(.subheadline)
-            .foregroundColor(.secondary)
+            .foregroundColor((dayRange != nil && contact.withinNextXDays(x: dayRange ?? 0)) ? .pink : .secondary)
         }
     }
 }
 
 #Preview {
     List {
-        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935))
+        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935), dayRange: 20)
 
-        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935))
+        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935), dayRange: 20)
 
-        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935))
+        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935), dayRange: 20)
 
     }
 }

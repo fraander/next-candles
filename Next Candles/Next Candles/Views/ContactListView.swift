@@ -16,7 +16,9 @@ struct ContactListView: View {
     
     @State var loadingContacts: LoadingState = .waiting
     @State var sheet: SheetType? = nil
+    @State var dayRangeAlert = false
     @State var janStart = false
+    @State var dayRange = 180
     
     var months: [Int] {
         
@@ -41,7 +43,6 @@ struct ContactListView: View {
             }
         }
         
-        print(top + bottom)
         return top + bottom
     }
     
@@ -60,7 +61,7 @@ struct ContactListView: View {
                     List {
                         ForEach(months, id: \.self) { month in
                             Section("\(Calendar.current.monthSymbols[month-1])") {
-                                ContactsMonthListView(month: month)
+                                ContactsMonthListView(month: month, dayRange: dayRange)
                                     .id(month)
                             }
                         }
@@ -79,13 +80,18 @@ struct ContactListView: View {
             }
             .navigationTitle("Birthdays")
             .toolbar {
-                SettingsMenu(sheet: $sheet, janStart: $janStart)
+                SettingsMenu(sheet: $sheet, janStart: $janStart, dayRange: $dayRange, dayRangeAlert: $dayRangeAlert)
             }
             .overlay {
                 LoadingContactsView(loadingContacts: loadingContacts)
             }
             .sheet(item: $sheet) { item in
                 SheetRouter(item: $sheet)
+            }
+            .alert("Highlight Range", isPresented: $dayRangeAlert) {
+                TextField("Days", value: $dayRange, formatter: NumberFormatter())
+                    .keyboardType(.numberPad)
+                Button("Set") {}
             }
         }
     }

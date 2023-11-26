@@ -16,6 +16,8 @@ struct SettingsMenu: View {
     @Binding var sheet: SheetType?
     @State var showDeleteAll = false
     @Binding var janStart: Bool
+    @Binding var dayRange: Int
+    @Binding var dayRangeAlert: Bool
     
     var body: some View {
         Menu("Settings", systemImage: "gear") {
@@ -37,6 +39,10 @@ struct SettingsMenu: View {
                 janStart.toggle()
             }
             
+            Button("Highlight Range: \(dayRange) days", systemImage: "circle.lefthalf.striped.horizontal") {
+                dayRangeAlert.toggle()
+            }
+            
         }
         .labelStyle(.titleAndIcon)
         .alert("Delete all Birthdays?", isPresented: $showDeleteAll) {
@@ -55,8 +61,4 @@ struct SettingsMenu: View {
             }
         }
     }
-}
-
-#Preview {
-    SettingsMenu(sheet: .constant(.hidden), janStart: .constant(false))
 }

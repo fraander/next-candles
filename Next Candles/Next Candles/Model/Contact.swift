@@ -43,6 +43,26 @@ class Contact {
         return nil
     }
     
+    func withinNextXDays(x: Int) -> Bool {
+            let currentYear = Calendar.current.component(.year, from: Date())
+            let currentMonth = Calendar.current.component(.month, from: Date())
+            
+        let givenComponents = DateComponents(year: currentYear + ((month ?? 0) < currentMonth ? 1 : 0), month: month, day: day)
+            guard let givenDate = Calendar.current.date(from: givenComponents) else { return false }
+            
+            var xDays = DateComponents()
+            xDays.day = x
+            
+            let currentDate = Date()
+            if let futureDate = Calendar.current.date(byAdding: xDays, to: currentDate) {
+                if (currentDate <= givenDate && givenDate <= futureDate) {
+                    return true
+                }
+            }
+            
+            return false
+        }
+    
     init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil) {
         self.identifier = identifier
         self.givenName = givenName

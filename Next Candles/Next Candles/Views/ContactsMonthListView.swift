@@ -12,16 +12,18 @@ struct ContactsMonthListView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Query private var contacts: [Contact]
+    let dayRange: Int
     
-    init(month: Int) {
+    init(month: Int, dayRange: Int) {
         _contacts = Query(filter: #Predicate<Contact> { contact in
             return (contact.month == month) && (contact.day != nil) && (contact.hidden == false)
         }, sort: [SortDescriptor(\Contact.month), SortDescriptor(\Contact.day), SortDescriptor(\Contact.year)])
+        self.dayRange = dayRange
     }
     
     var body: some View {
         ForEach(contacts) { contact in
-            ContactView(contact: contact)
+            ContactView(contact: contact, dayRange: dayRange)
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button("Hide", systemImage: "eye.slash") { hide(contact)}
                         .tint(.orange)
@@ -42,7 +44,7 @@ struct ContactsMonthListView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Contact.self, configurations: config)
     
-    return ContactsMonthListView(month: 5)
+    return ContactsMonthListView(month: 5, dayRange: 20)
         .modelContainer(container)
     
 }
