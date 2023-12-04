@@ -11,12 +11,11 @@ import SwiftData
 struct SettingsMenu: View {
     
     @Environment(\.modelContext) var modelContext
+    @EnvironmentObject private var settings: Settings
     @Query private var allContacts: [Contact]
     @Query(filter: #Predicate<Contact> { $0.hidden }) private var hiddenContacts: [Contact]
     @Binding var sheet: SheetType?
     @State var showDeleteAll = false
-    @Binding var janStart: Bool
-    @Binding var dayRange: Int
     @Binding var dayRangeAlert: Bool
     
     var body: some View {
@@ -35,11 +34,11 @@ struct SettingsMenu: View {
             
             Divider() 
             
-            Button(!janStart ? "Top: Current month" : "Top: January", systemImage: "platter.filled.top.and.arrow.up.iphone") {
-                janStart.toggle()
+            Button(!settings.janStart ? "Top: Current month" : "Top: January", systemImage: "platter.filled.top.and.arrow.up.iphone") {
+                settings.janStart.toggle()
             }
             
-            Button("Highlight Range: \(dayRange) days", systemImage: "circle.lefthalf.striped.horizontal") {
+            Button("Highlight Range: \(settings.dayRange) days", systemImage: "circle.lefthalf.striped.horizontal") {
                 dayRangeAlert.toggle()
             }
             

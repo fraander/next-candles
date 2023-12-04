@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SheetType: Identifiable {
+enum SheetType: Identifiable, Codable {
     case custom, hidden
     
     var id: Self {

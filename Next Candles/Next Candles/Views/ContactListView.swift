@@ -12,23 +12,19 @@ import SwiftData
 struct ContactListView: View {
     
     @Environment(\.modelContext) private var modelContext
+    @EnvironmentObject private var settings: Settings
     @Query(filter: #Predicate<Contact> {  !$0.hidden }) private var contacts: [Contact]
     
     @State var loadingContacts: LoadingState = .waiting
     @State var sheet: SheetType? = nil
     @State var dayRangeAlert = false
-    @State var janStart = false
-    @State var dayRange = 180
     
     var months: [Int] {
-        
-        
-        
         let allMonths = contacts.compactMap(\.month)
         let sortedMonths: [Int] = Set(allMonths).sorted { $0 < $1 }
         let currentMonth = Calendar.current.component(.month, from: Date())
         
-        if (janStart) {
+        if (settings.janStart) {
             return sortedMonths
         }
         
@@ -61,7 +57,7 @@ struct ContactListView: View {
                     List {
                         ForEach(months, id: \.self) { month in
                             Section("\(Calendar.current.monthSymbols[month-1])") {
-                                ContactsMonthListView(month: month, dayRange: dayRange)
+                                ContactsMonthListView(month: month, dayRange: settings.dayRange)
                                     .id(month)
                             }
                         }
@@ -80,7 +76,7 @@ struct ContactListView: View {
             }
             .navigationTitle("Birthdays")
             .toolbar {
-                SettingsMenu(sheet: $sheet, janStart: $janStart, dayRange: $dayRange, dayRangeAlert: $dayRangeAlert)
+                SettingsMenu(sheet: $sheet, dayRangeAlert: $dayRangeAlert)
             }
             .overlay {
                 LoadingContactsView(loadingContacts: loadingContacts)
@@ -89,7 +85,7 @@ struct ContactListView: View {
                 SheetRouter(item: $sheet)
             }
             .alert("Highlight Range", isPresented: $dayRangeAlert) {
-                TextField("Days", value: $dayRange, formatter: NumberFormatter())
+                TextField("Days", value: $settings.dayRange, formatter: NumberFormatter.valueFormatter) // TODO: ValueFormatter thing doens't solve issue of letting you erase all digits :\
                     .keyboardType(.numberPad)
                 Button("Set") {}
             }
