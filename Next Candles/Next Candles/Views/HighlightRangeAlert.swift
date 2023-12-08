@@ -16,9 +16,7 @@ struct NumbersOnlyViewModifier: ViewModifier {
         content
             .keyboardType(.numberPad)
             .onReceive (Just(text)) { newValue in
-                var numbers = "0123456789"
-                
-                let filtered = newValue.filter { numbers.contains ($0)}
+                let filtered = newValue.filter { "0123456789".contains ($0)}
                 if filtered != newValue {
                     self.text = filtered
                 }
@@ -40,6 +38,11 @@ struct HighlightRangeAlert: View {
     
     var body: some View {
         Group {
+            
+            TextField("Days", text: $newRange)
+                .numbersOnly($newRange)
+                .keyboardType(.numberPad)
+            
             Button("Set") {
                 if !newRange.isEmpty {
                     if let i = Int(newRange) {
