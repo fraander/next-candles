@@ -31,16 +31,12 @@ class Contact {
     }
     
     var birthdate: Date? {
-        if let month, let day, let year {
-            var components = DateComponents()
-            components.month = month
-            components.day = day
-            components.year = year
-            
-            return Calendar.current.date(from: components)
-        }
+        var components = DateComponents()
+        components.month = month
+        components.day = day
+        components.year = year ?? Calendar.current.component(.year, from: Date())
         
-        return nil
+        return Calendar.current.date(from: components)
     }
     
     func withinNextXDays(x: Int) -> Bool {
