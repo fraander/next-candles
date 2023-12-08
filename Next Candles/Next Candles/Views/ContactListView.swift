@@ -85,21 +85,16 @@ struct ContactListView: View {
                 SheetRouter(item: $sheet)
             }
             .alert("Highlight Range", isPresented: $dayRangeAlert) {
-                TextField("Days", value: $settings.dayRange, formatter: NumberFormatter.valueFormatter) // TODO: ValueFormatter thing doens't solve issue of letting you erase all digits :\
-                    .keyboardType(.numberPad)
-                Button("Set") {}
+                HighlightRangeAlert(dayRange: $settings.dayRange)
             }
         }
     }
 }
 
 #Preview {
-    
-    
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Contact.self, configurations: config)
     
     return ContactListView()
         .modelContainer(container)
-    
 }
