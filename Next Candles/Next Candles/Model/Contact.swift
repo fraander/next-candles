@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Contact {
+class Contact: ObservableObject {
     var identifier: String?
     var givenName: String?
     var familyName: String?
@@ -18,6 +18,7 @@ class Contact {
     var day: Int?
     var year: Int?
     var hidden: Bool = false
+    var notif: String?
     
     var name: String {
         let formatter = PersonNameComponentsFormatter()
@@ -59,7 +60,7 @@ class Contact {
             return false
         }
     
-    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil) {
+    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notif: String? = nil) {
         self.identifier = identifier
         self.givenName = givenName
         self.familyName = familyName
@@ -67,5 +68,17 @@ class Contact {
         self.month = month
         self.day = day
         self.year = year
+        self.notif = notif
+    }
+    
+    func notifyXDaysBefore(days: Int) async throws {
+        #warning("finish the implementation")
+        
+        do {
+            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, birthdateComponents: DateComponents())
+            self.notif = notifId
+        } catch {
+            throw error
+        }
     }
 }

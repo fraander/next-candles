@@ -51,7 +51,7 @@ struct NotificationsHelper {
     /// - Parameters:
     ///   - name: Name of the person
     ///   - birthdateComponents: Month/Day of their birthday
-    /// - Returns: <#description#>
+    /// - Returns: ID of the notification which has been set
     static func scheduleNotification(name: String, birthdateComponents: DateComponents) async throws -> String {
         #warning("note in TODO")
         // TODO: More work required becuase the notification should be set x days before their birthday. Perhaps start with on their birthday, and then adjust.

@@ -27,9 +27,9 @@ struct Next_CandlesApp: App {
             ContactListView()
                 .modelContainer(for: Contact.self)
                 .environmentObject(settings)
-                .task {
-                    let _ = try? await NotificationsHelper.scheduleNotification(name: "Frank", birthdateComponents: DateComponents(month: 2, day: 7))
-                }
+//                .task {
+//                    let _ = try? await NotificationsHelper.scheduleNotification(name: "Frank", birthdateComponents: DateComponents(month: 2, day: 7))
+//                }
         }
     }
 }

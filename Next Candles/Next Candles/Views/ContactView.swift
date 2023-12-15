@@ -6,21 +6,40 @@
 //
 
 import SwiftUI
+import SwiftData
+
+@Observable
+class ContactVM {
+    var contact: Contact
+    var dayRange: Int? = nil
+
+    init(contact: Contact, dayRange: Int?) {
+        self.contact = contact
+        self.dayRange = dayRange
+    }
+    convenience init(contact: Contact) {
+        self.init(contact: contact, dayRange: nil)
+    }
+}
+
 
 struct ContactView: View {
     
-    let contact: Contact
-    var dayRange: Int? = nil
+    var vm: ContactVM
+    
+    init(vm: ContactVM) {
+        self.vm = vm
+    }
     
     var body: some View {
         HStack {
-            Text(contact.name)
+            Text(vm.contact.name)
                 .font(.headline)
                 .lineLimit(2)
                 .truncationMode(.tail)
             Spacer()
             Text(
-                (contact.birthdate ?? Date())
+                (vm.contact.birthdate ?? Date())
                     .formatted(
                         .dateTime
                             .day()
@@ -29,18 +48,13 @@ struct ContactView: View {
                     )
             )
             .font(.subheadline)
-            .foregroundColor((dayRange != nil && contact.withinNextXDays(x: dayRange ?? 0)) ? .pink : .secondary)
+            .foregroundColor((vm.dayRange != nil && vm.contact.withinNextXDays(x: vm.dayRange ?? 0)) ? .pink : .secondary)
+            
+            if (vm.contact.notif != nil) {
+                Image(systemName: "bell.fill")
+                    .font(.subheadline)
+                    .foregroundColor((vm.dayRange != nil && vm.contact.withinNextXDays(x: vm.dayRange ?? 0)) ? .pink : .secondary)
+            }
         }
-    }
-}
-
-#Preview {
-    List {
-        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935), dayRange: 20)
-
-        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935), dayRange: 20)
-
-        ContactView(contact: Contact(givenName: "Malcolm", familyName: "Anderson", month: 3, day: 7, year: 1935), dayRange: 20)
-
     }
 }
