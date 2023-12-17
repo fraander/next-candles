@@ -9,6 +9,13 @@ import SwiftUI
 import UserNotifications
 import Combine
 
+
+/*
+ Fix this error:
+ CoreData: error: Could not materialize Objective-C class "Array<String>" for attribute named "notifs", property setter will not validate type
+ */
+
+
 /*
  Features
  - Better import management --> "Every contact in the contacts database has a unique ID, which you access using the identifier property. The mutable and immutable versions of the same contact have the same identifier."

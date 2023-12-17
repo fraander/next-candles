@@ -25,10 +25,63 @@ struct AddManuallyView: View {
     @State var day: Int = 1
     @State var year: Int = -1
     
+    var cancelButton: some View {
+        Button("Cancel", role: .cancel) { dismiss() }
+    }
+    
+    var addBirthdayButton: some View {
+        Button("Add Birthday", systemImage: "person.fill.badge.plus") {
+            
+            if (givenName.isEmpty) {
+                focus = .given
+            } else {
+                let new = Contact(givenName: givenName, familyName: familyName.isEmpty ? nil : familyName, nickname: nickname.isEmpty ? nil : nickname, month: month, day: day, year: year == -1 ? nil : year)
+                modelContext.insert(new)
+                dismiss()
+            }
+            
+        }
+        .disabled(givenName.isEmpty)
+    }
+    
+    var datePickers: some View {
+        Group {
+            Picker("Month", selection: $month) {
+                ForEach(1...12, id: \.self) { i in
+                    Text("\(Calendar.current.monthSymbols[i - 1])").tag(i)
+                        .onTapGesture {
+                            month = i
+                        }
+                }
+            }
+            .frame(minWidth: 80)
+            
+            Picker("Day", selection: $day) {
+                ForEach(1...daysInMonth(m: month), id: \.self) { i in
+                    Text("\(i)").tag(i)
+                        .onTapGesture {
+                            day = i
+                        }
+                }
+            }
+            .frame(minWidth: 40)
+            Picker("Year", selection: $year) {
+                Text("Unsure")
+                    .tag(-1)
+                ForEach(1900...currentYear(), id: \.self) { i in
+                    Text(verbatim: "\(i)").tag(i)
+                        .onTapGesture {
+                            year = i
+                        }
+                }
+            }
+            .frame(minWidth: 60)
+        }
+    }
+    
     var body: some View {
-        NavigationView {
+    
             VStack {
-                
                 Form {
                     Section("Name") {
                         TextField("Given name", text: $givenName)
@@ -39,6 +92,7 @@ struct AddManuallyView: View {
                                     focus = .family
                                 }
                             }
+                        
                         TextField("Family name", text: $familyName)
                             .onSubmit {
                                 focus = nil
@@ -55,72 +109,43 @@ struct AddManuallyView: View {
                     }
                     
                     Section("Birthday") {
-                        Picker("Month", selection: $month) {
-                            ForEach(1...12, id: \.self) { i in
-                                Text("\(Calendar.current.monthSymbols[i - 1])").tag(i)
-                                    .onTapGesture {
-                                        month = i
-                                    }
-                            }
-                        }
-                        Picker("Day", selection: $day) {
-                            ForEach(1...daysInMonth(m: month), id: \.self) { i in
-                                Text("\(i)").tag(i)
-                                    .onTapGesture {
-                                        day = i
-                                    }
-                            }
-                        }
-                        Picker("Year", selection: $year) {
-                            Text("Unsure")
-                                .tag(-1)
-                            ForEach(1900...currentYear(), id: \.self) { i in
-                                Text(verbatim: "\(i)").tag(i)
-                                    .onTapGesture {
-                                        year = i
-                                    }
-                            }
-                        }
+                        datePickers
                     }
-                    
-                    
                 }
+                #if os(iOS)
                 .overlay {
                     VStack {
                         Spacer()
-                        Button("Add Birthday", systemImage: "person.fill.badge.plus") {
-                            
-                            if (givenName.isEmpty) {
-                                focus = .given
-                            } else {
-                                let new = Contact(givenName: givenName, familyName: familyName.isEmpty ? nil : familyName, nickname: nickname.isEmpty ? nil : nickname, month: month, day: day, year: year == -1 ? nil : year)
-                                modelContext.insert(new)
-                                dismiss()
-                            }
-                            
-                        }
-                        .disabled(givenName.isEmpty)
+                        addBirthdayButton
                         .bold()
                         .buttonStyle(.borderedProminent)
                         .padding()
                     }
                 }
+                #endif
                 
                 
             }
+        #if os(macOS)
+            .padding()
+            .frame(width: 360)
+        #endif
             .toolbar {
                 #if os(iOS)
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Cancel", role: .cancel) { dismiss() }
+                    cancelButton
                 }
                 #else
-                ToolbarItem {
-                    Button("Cancel", role: .cancel) { dismiss() }
+                ToolbarItem(placement: .cancellationAction) {
+                    cancelButton
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    addBirthdayButton
                 }
                 #endif
             }
-            .navigationTitle("Add Birthday")
-        }
+
     }
     
     func daysInMonth(m: Int? = -1) -> Int {

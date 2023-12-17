@@ -53,11 +53,8 @@ struct NotificationsHelper {
     ///   - dateComponents: Month/Day of their birthday
     /// - Returns: ID of the notification which has been set
     static func scheduleNotification(name: String, dateComponents: DateComponents, distanceFromBD: Int) async throws -> String {
-        
-        // set a time for the notif
-        let dc = dateComponents
 
-        let date = Calendar.current.nextDate(after: Date(), matching: dc, matchingPolicy: .nextTime) ?? Date()
+        let date = Calendar.current.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .nextTime) ?? Date()
 
         // format the date into [M]/[D]
         let df = DateFormatter()
@@ -70,7 +67,7 @@ struct NotificationsHelper {
         let notificationContent = UNMutableNotificationContent(title: title, body: body)
         
         let calendarTrigger = UNCalendarNotificationTrigger(
-            dateMatching: dc,
+            dateMatching: dateComponents,
             repeats: true
         )
         let notificationIdentifier = UUID().uuidString

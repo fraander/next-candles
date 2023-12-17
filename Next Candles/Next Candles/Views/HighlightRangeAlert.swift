@@ -53,15 +53,20 @@ struct HighlightRangeAlert: View {
                     focused = true
                 }
             
-            Button("Set") {
-                if !newRange.isEmpty {
-                    if let i = Int(newRange) {
-                        if (i >= 0) {
-                            settings.dayRange = i
+            HStack {
+                Button("Cancel", role: .cancel) {}
+                
+                Button("Set") {
+                    if !newRange.isEmpty {
+                        if let i = Int(newRange) {
+                            if (i >= 0) {
+                                settings.dayRange = i
+                            }
                         }
                     }
                 }
             }
+            
         }
     }
 }

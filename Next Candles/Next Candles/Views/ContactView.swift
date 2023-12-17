@@ -29,6 +29,43 @@ struct ContactView: View {
         self.vm = .init(contact: contact)
     }
     
+    var hideButton: some View {
+        Button("Hide Birthday", systemImage: "eye.slash") { hide(vm.contact)}
+            .tint(.orange)
+    }
+    var deleteButton: some View {
+        Button("Delete Birthday", systemImage: "trash", role: .destructive) { modelContext.delete(vm.contact) }
+            .tint(.red)
+    }
+    var setNotifButton: some View {
+        Button(
+            vm.contact.hasNotifs() ? "Remove Notifications" : "Set Notifications",
+            systemImage: vm.contact.hasNotifs() ? "bell.slash" : "bell"
+        ) {
+            if (vm.contact.hasNotifs()) {
+                NotificationsHelper.removeNotifs(notifIds: vm.contact.notifs)
+                vm.contact.notifs?.removeAll()
+            } else {
+                
+                Task {
+                    print("ask access")
+                    let accessStatus = await NotificationsHelper.hasAccess()
+                    print(accessStatus)
+                    
+                    print("Setting notifications")
+                    do {
+                        try await vm.contact.setNotifs(dayRange: settings.dayRange)
+                        print("Notifs set")
+                    } catch {
+                        print(error.localizedDescription)
+                        alert = AlertItem(title: error.localizedDescription)
+                    }
+                }
+            }
+        }
+        .tint(.pink)
+    }
+    
     var body: some View {
         HStack {
             Text(vm.contact.name)
@@ -62,39 +99,20 @@ struct ContactView: View {
         .padding(.vertical, 8)
         #endif
         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-            Button("Hide", systemImage: "eye.slash") { hide(vm.contact)}
-                .tint(.orange)
+            hideButton
             
-            Button("Delete", systemImage: "trash", role: .destructive) { modelContext.delete(vm.contact) }
-                .tint(.red)
+            deleteButton
         }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
-            Button(
-                vm.contact.hasNotifs() ? "Remove notifications" : "Set notifications",
-                systemImage: vm.contact.hasNotifs() ? "bell.slash" : "bell"
-            ) {
-                if (vm.contact.hasNotifs()) {
-                    NotificationsHelper.removeNotifs(notifIds: vm.contact.notifs)
-                    vm.contact.notifs?.removeAll()
-                } else {
-                    
-                    Task {
-                        print("ask access")
-                        let accessStatus = await NotificationsHelper.hasAccess()
-                        print(accessStatus)
-                        
-                        print("Setting notifications")
-                        do {
-                            try await vm.contact.setNotifs(dayRange: settings.dayRange)
-                            print("Notifs set")
-                        } catch {
-                            print(error.localizedDescription)
-                            alert = AlertItem(title: error.localizedDescription)
-                        }
-                    }
-                }
-            }
-            .tint(.pink)
+            setNotifButton
+        }
+        .contextMenu {
+            hideButton
+            deleteButton
+            
+            Divider()
+            
+            setNotifButton
         }
         .alert(item: $alert) { alert in
             Alert(

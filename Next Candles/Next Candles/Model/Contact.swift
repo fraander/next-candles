@@ -41,24 +41,37 @@ class Contact: ObservableObject {
     }
     
     func withinNextXDays(x: Int) -> Bool {
-            let currentYear = Calendar.current.component(.year, from: Date())
-            let currentMonth = Calendar.current.component(.month, from: Date())
-            
-        let givenComponents = DateComponents(year: currentYear + ((month ?? 0) < currentMonth ? 1 : 0), month: month, day: day)
-            guard let givenDate = Calendar.current.date(from: givenComponents) else { return false }
-            
-            var xDays = DateComponents()
-            xDays.day = x
-            
-            let currentDate = Date()
-            if let futureDate = Calendar.current.date(byAdding: xDays, to: currentDate) {
-                if (currentDate <= givenDate && givenDate <= futureDate) {
-                    return true
-                }
-            }
-            
-            return false
+        let currentDate = Date()
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let currentMonth = Calendar.current.component(.month, from: Date())
+        let currentDay = Calendar.current.component(.day, from: Date())
+        
+        if currentMonth == month && currentDay == day {
+            return true
         }
+        
+        let givenComponents = DateComponents(
+            year: currentYear + (
+                (
+                    month ?? 0
+                ) < currentMonth ? 1 : 0
+            ),
+            month: month,
+            day: day
+        )
+        guard let givenDate = Calendar.current.date(from: givenComponents) else { return false }
+        
+        var xDays = DateComponents()
+        xDays.day = x
+        
+        if let futureDate = Calendar.current.date(byAdding: xDays, to: currentDate) {
+            if (currentDate <= givenDate && givenDate <= futureDate) {
+                return true
+            }
+        }
+        
+        return false
+    }
     
     init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notifs: [String]? = []) {
         self.identifier = identifier
@@ -93,17 +106,17 @@ class Contact: ObservableObject {
             throw error
         }
         
-//        // Set notification for x days out
-//        // remove dayRange days from the birthdate
-//        if birthdateComponents.day != nil {
-//            birthdateComponents.day = birthdateComponents.day! - dayRange
-//        }
-//        do { // set another notification
-//            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: dayRange)
-//            self.notifs?.append(notifId)
-//        } catch {
-//            throw error
-//        }
+        //        // Set notification for x days out
+        //        // remove dayRange days from the birthdate
+        //        if birthdateComponents.day != nil {
+        //            birthdateComponents.day = birthdateComponents.day! - dayRange
+        //        }
+        //        do { // set another notification
+        //            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: dayRange)
+        //            self.notifs?.append(notifId)
+        //        } catch {
+        //            throw error
+        //        }
         
     }
 }
