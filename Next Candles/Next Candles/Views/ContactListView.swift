@@ -74,7 +74,7 @@ struct ContactListView: View {
                 }
                 
             }
-            .navigationTitle("Birthdays")
+            .navigationTitle("Next Candles")
             .toolbar {
                 SettingsMenu(sheet: $sheet, dayRangeAlert: $dayRangeAlert)
             }
@@ -85,7 +85,7 @@ struct ContactListView: View {
                 SheetRouter(item: $sheet)
             }
             .alert("Highlight Range", isPresented: $dayRangeAlert) {
-                HighlightRangeAlert(dayRange: $settings.dayRange)
+                HighlightRangeAlert()
             }
         }
     }

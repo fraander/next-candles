@@ -42,11 +42,29 @@ struct SettingsMenu: View {
                 dayRangeAlert.toggle()
             }
             
+//            Divider()
+//            
+//            Button("Log notifications", systemImage: "apple.terminal.fill") {
+//                Task {
+//                    
+//                    print("All nids:", allContacts.compactMap(\.notifs))
+//                    
+//                    print("Printing Pending notifications")
+//                    await NotificationsHelper.printAllPendingNotifs()
+//                    print("---")
+//                }
+//            }
+            
         }
+        #if os(iOS)
         .labelStyle(.titleAndIcon)
+        #endif
         .alert("Delete all Birthdays?", isPresented: $showDeleteAll) {
             Button("No, cancel", role: .cancel, action: { showDeleteAll = false })
-            Button("Yes, delete", role: .destructive) { allContacts.forEach { modelContext.delete($0) } }
+            Button("Yes, delete", role: .destructive) {
+                allContacts.forEach { modelContext.delete($0) }
+                NotificationsHelper.removeAllNotifs()
+            }
         }
     }
     

@@ -109,9 +109,15 @@ struct AddManuallyView: View {
                 
             }
             .toolbar {
+                #if os(iOS)
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Cancel", role: .cancel) { dismiss() }
                 }
+                #else
+                ToolbarItem {
+                    Button("Cancel", role: .cancel) { dismiss() }
+                }
+                #endif
             }
             .navigationTitle("Add Birthday")
         }

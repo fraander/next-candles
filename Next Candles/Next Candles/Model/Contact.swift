@@ -18,7 +18,7 @@ class Contact: ObservableObject {
     var day: Int?
     var year: Int?
     var hidden: Bool = false
-    var notif: String?
+    var notifs: [String]? = []
     
     var name: String {
         let formatter = PersonNameComponentsFormatter()
@@ -60,7 +60,7 @@ class Contact: ObservableObject {
             return false
         }
     
-    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notif: String? = nil) {
+    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notifs: [String]? = []) {
         self.identifier = identifier
         self.givenName = givenName
         self.familyName = familyName
@@ -68,17 +68,42 @@ class Contact: ObservableObject {
         self.month = month
         self.day = day
         self.year = year
-        self.notif = notif
+        self.notifs = notifs
     }
     
-    func notifyXDaysBefore(days: Int) async throws {
-        #warning("finish the implementation")
-        
+    func hasNotifs() -> Bool {
+        if let notifs {
+            if notifs.isEmpty {
+                return false
+            } else {
+                return true
+            }
+        } else {
+            return false
+        }
+    }
+    
+    func setNotifs(dayRange: Int) async throws {
+        // Set notification for the day of
+        let birthdateComponents = DateComponents(calendar: .current, month: self.month, day: self.day)
         do {
-            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, birthdateComponents: DateComponents())
-            self.notif = notifId
+            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: 0)
+            self.notifs = [notifId]
         } catch {
             throw error
         }
+        
+//        // Set notification for x days out
+//        // remove dayRange days from the birthdate
+//        if birthdateComponents.day != nil {
+//            birthdateComponents.day = birthdateComponents.day! - dayRange
+//        }
+//        do { // set another notification
+//            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: dayRange)
+//            self.notifs?.append(notifId)
+//        } catch {
+//            throw error
+//        }
+        
     }
 }

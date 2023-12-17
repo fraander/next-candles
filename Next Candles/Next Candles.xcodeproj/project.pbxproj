@@ -13,7 +13,7 @@
 		BDB735642B1D67570079F35F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735632B1D67570079F35F /* Settings.swift */; };
 		BDB735682B1D7B240079F35F /* FormatterEmptyZero.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */; };
 		BDBE88DB2B23B8FF005D4C0F /* HighlightRangeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */; };
-		BDBE88E02B23CC66005D4C0F /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBE88DF2B23CC66005D4C0F /* Notifications.swift */; };
+		BDBE88E02B23CC66005D4C0F /* NotificationsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBE88DF2B23CC66005D4C0F /* NotificationsHelper.swift */; };
 		BDD9F78E2B12A9CB002E69F0 /* ContactsMonthListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F78D2B12A9CB002E69F0 /* ContactsMonthListView.swift */; };
 		BDD9F7902B12AA37002E69F0 /* HiddenContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F78F2B12AA37002E69F0 /* HiddenContactsView.swift */; };
 		BDD9F7922B12AAA1002E69F0 /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F7912B12AAA1002E69F0 /* ContactView.swift */; };
@@ -40,7 +40,7 @@
 		BDB735632B1D67570079F35F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterEmptyZero.swift; sourceTree = "<group>"; };
 		BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightRangeAlert.swift; sourceTree = "<group>"; };
-		BDBE88DF2B23CC66005D4C0F /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		BDBE88DF2B23CC66005D4C0F /* NotificationsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsHelper.swift; sourceTree = "<group>"; };
 		BDD9F78D2B12A9CB002E69F0 /* ContactsMonthListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsMonthListView.swift; sourceTree = "<group>"; };
 		BDD9F78F2B12AA37002E69F0 /* HiddenContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenContactsView.swift; sourceTree = "<group>"; };
 		BDD9F7912B12AAA1002E69F0 /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				BDB735632B1D67570079F35F /* Settings.swift */,
-				BDBE88DF2B23CC66005D4C0F /* Notifications.swift */,
+				BDBE88DF2B23CC66005D4C0F /* NotificationsHelper.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -217,7 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BDBE88E02B23CC66005D4C0F /* Notifications.swift in Sources */,
+				BDBE88E02B23CC66005D4C0F /* NotificationsHelper.swift in Sources */,
 				BDFE4DD32B0C494A0074D0A9 /* ContactListView.swift in Sources */,
 				BDD9F7942B12B0EA002E69F0 /* SheetRouter.swift in Sources */,
 				BDD9F7902B12AA37002E69F0 /* HiddenContactsView.swift in Sources */,
