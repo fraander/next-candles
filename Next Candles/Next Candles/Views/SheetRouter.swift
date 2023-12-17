@@ -16,7 +16,8 @@ struct SheetRouter: View {
         case .custom: AddManuallyView()
         case .hidden: HiddenContactsView()
         case .none:
-            ContentUnavailableView("No sheet selected", systemImage: "wand.and.rays")
+            Text("")
+//            ContentUnavailableView("No sheet selected", systemImage: "wand.and.rays")
         }
     }
 }
