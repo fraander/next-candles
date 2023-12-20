@@ -17,6 +17,7 @@ import Combine
      - In the future, import changes to existing ones as well!
  - Birthday notification reminders x days out (add to list and notify as many times as you'd like)
  - More timing customization on the notifications as well (probably give options at "time of set" in a sheet)
+ - iCloud Sync with SwiftData
  
  */
 
