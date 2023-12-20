@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Contact: ObservableObject {
+class Contact: ObservableObject, Equatable {
     var identifier: String?
     var givenName: String?
     var familyName: String?
@@ -18,7 +18,7 @@ class Contact: ObservableObject {
     var day: Int?
     var year: Int?
     var hidden: Bool = false
-    var notifs: [String]? = []
+    var notif: String?
     
     var name: String {
         let formatter = PersonNameComponentsFormatter()
@@ -38,6 +38,14 @@ class Contact: ObservableObject {
         components.year = year ?? Calendar.current.component(.year, from: Date())
         
         return Calendar.current.date(from: components)
+    }
+    
+    var hasNotifs: Bool {
+        if notif == nil {
+            return false
+        } else {
+            return true
+        }
     }
     
     func withinNextXDays(x: Int) -> Bool {
@@ -73,7 +81,7 @@ class Contact: ObservableObject {
         return false
     }
     
-    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notifs: [String]? = []) {
+    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notif: String? = nil) {
         self.identifier = identifier
         self.givenName = givenName
         self.familyName = familyName
@@ -81,19 +89,7 @@ class Contact: ObservableObject {
         self.month = month
         self.day = day
         self.year = year
-        self.notifs = notifs
-    }
-    
-    func hasNotifs() -> Bool {
-        if let notifs {
-            if notifs.isEmpty {
-                return false
-            } else {
-                return true
-            }
-        } else {
-            return false
-        }
+        self.notif = notif
     }
     
     func setNotifs(dayRange: Int) async throws {
@@ -101,22 +97,11 @@ class Contact: ObservableObject {
         let birthdateComponents = DateComponents(calendar: .current, month: self.month, day: self.day)
         do {
             let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: 0)
-            self.notifs = [notifId]
+            DispatchQueue.main.async {
+                self.notif = notifId
+            }
         } catch {
             throw error
         }
-        
-        //        // Set notification for x days out
-        //        // remove dayRange days from the birthdate
-        //        if birthdateComponents.day != nil {
-        //            birthdateComponents.day = birthdateComponents.day! - dayRange
-        //        }
-        //        do { // set another notification
-        //            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: dayRange)
-        //            self.notifs?.append(notifId)
-        //        } catch {
-        //            throw error
-        //        }
-        
     }
 }

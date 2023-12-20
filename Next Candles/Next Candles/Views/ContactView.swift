@@ -8,43 +8,33 @@
 import SwiftUI
 import SwiftData
 
-@Observable
-class ContactVM {
-    var contact: Contact
-    
-    init(contact: Contact) {
-        self.contact = contact
-    }
-}
-
 
 struct ContactView: View {
     
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var settings: Settings
     @State var alert: AlertItem? = nil
-    var vm: ContactVM
-    
-    init(contact: Contact) {
-        self.vm = .init(contact: contact)
-    }
+    var contact: Contact
     
     var hideButton: some View {
-        Button("Hide Birthday", systemImage: "eye.slash") { hide(vm.contact)}
+        Button("Hide Birthday", systemImage: "eye.slash") { hide(contact)}
             .tint(.orange)
     }
     var deleteButton: some View {
-        Button("Delete Birthday", systemImage: "trash", role: .destructive) { modelContext.delete(vm.contact) }
+        Button("Delete Birthday", systemImage: "trash", role: .destructive) { modelContext.delete(contact) }
             .tint(.red)
     }
     var setNotifButton: some View {
         Button(
-            vm.contact.hasNotifs() ? "Remove Notifications" : "Set Notifications",
-            systemImage: vm.contact.hasNotifs() ? "bell.slash" : "bell"
+            contact.hasNotifs ? "Remove Notifications" : "Set Notifications",
+            systemImage: contact.hasNotifs ? "bell.slash" : "bell"
         ) {
-            if (vm.contact.hasNotifs()) {
-                NotificationsHelper.removeNotifs(notifIds: vm.contact.notifs)
-                vm.contact.notifs?.removeAll()
+            if (contact.hasNotifs) {
+                if let n = contact.notif {
+                    NotificationsHelper.removeNotifs(notifIds: [n])
+                    contact.notif = nil
+                }
+                
             } else {
                 
                 Task {
@@ -54,7 +44,7 @@ struct ContactView: View {
                     
                     print("Setting notifications")
                     do {
-                        try await vm.contact.setNotifs(dayRange: settings.dayRange)
+                        try await contact.setNotifs(dayRange: settings.dayRange)
                         print("Notifs set")
                     } catch {
                         print(error.localizedDescription)
@@ -68,7 +58,7 @@ struct ContactView: View {
     
     var body: some View {
         HStack {
-            Text(vm.contact.name)
+            Text(contact.name)
             #if os(macOS)
                 .font(.body)
             #else
@@ -77,23 +67,28 @@ struct ContactView: View {
                 .lineLimit(2)
                 .truncationMode(.tail)
             Spacer()
-            Text(
-                (vm.contact.birthdate ?? Date())
-                    .formatted(
-                        .dateTime
-                            .day()
-                            .month(.abbreviated)
-                            .weekday(.wide)
-                    )
-            )
-            .font(.subheadline)
-            .foregroundColor((vm.contact.withinNextXDays(x: settings.dayRange)) ? .pink : .secondary)
-            
-            if (vm.contact.hasNotifs()) {
-                Image(systemName: "bell.fill")
-                    .font(.subheadline)
-                    .foregroundColor((vm.contact.withinNextXDays(x: settings.dayRange)) ? .pink : .secondary)
+            HStack {
+                
+                Text(
+                    (contact.birthdate ?? Date())
+                        .formatted(
+                            .dateTime
+                                .day()
+                                .month(.abbreviated)
+                                .weekday(.wide)
+                        )
+                )
+                .multilineTextAlignment(.leading)
+                .font(.subheadline)
+                .foregroundColor((contact.withinNextXDays(x: settings.dayRange)) ? .pink : .secondary)
+                
+                if (contact.hasNotifs) {
+                    Image(systemName: "bell.fill")
+                        .font(.subheadline)
+                        .foregroundColor((contact.withinNextXDays(x: settings.dayRange)) ? .pink : .secondary)
+                }
             }
+            .padding(.trailing, 4)
         }
         #if os(macOS)
         .padding(.vertical, 8)

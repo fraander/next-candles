@@ -57,7 +57,7 @@ struct ContactListView: View {
                     List {
                         ForEach(months, id: \.self) { month in
                             Section("\(Calendar.current.monthSymbols[month-1])") {
-                                ContactsMonthListView(month: month, dayRange: settings.dayRange)
+                                ContactsMonthListView(month: month)
                                     .id(month)
                             }
                         }
@@ -74,7 +74,11 @@ struct ContactListView: View {
                 }
                 
             }
+            #if os(iOS)
             .navigationTitle("Next Candles")
+//            #else
+//            .navigationTitle("")
+            #endif
             .toolbar {
                 SettingsMenu(sheet: $sheet, dayRangeAlert: $dayRangeAlert)
             }

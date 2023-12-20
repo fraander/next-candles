@@ -17,13 +17,13 @@ struct ContactsMonthListView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Query private var contacts: [Contact]
-    let dayRange: Int
+    @EnvironmentObject var settings: Settings
+    @State var alert: AlertItem? = nil
     
-    init(month: Int, dayRange: Int) {
+    init(month: Int) {
         _contacts = Query(filter: #Predicate<Contact> { contact in
             return (contact.month == month) && (contact.day != nil) && (contact.hidden == false)
         }, sort: [SortDescriptor(\Contact.month), SortDescriptor(\Contact.day), SortDescriptor(\Contact.year)])
-        self.dayRange = dayRange
     }
     
     
@@ -31,6 +31,7 @@ struct ContactsMonthListView: View {
     var body: some View {
         ForEach(contacts) { contact in
             ContactView(contact: contact)
+            .id(contact.id)
         }
     }
 }
@@ -40,7 +41,7 @@ struct ContactsMonthListView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Contact.self, configurations: config)
     
-    return ContactsMonthListView(month: 5, dayRange: 20)
+    return ContactsMonthListView(month: 5)
         .modelContainer(container)
     
 }

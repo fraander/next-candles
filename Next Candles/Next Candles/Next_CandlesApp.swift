@@ -9,19 +9,15 @@ import SwiftUI
 import UserNotifications
 import Combine
 
-
 /*
- Fix this error:
- CoreData: error: Could not materialize Objective-C class "Array<String>" for attribute named "notifs", property setter will not validate type
- */
-
-
-/*
+ 
  Features
  - Better import management --> "Every contact in the contacts database has a unique ID, which you access using the identifier property. The mutable and immutable versions of the same contact have the same identifier."
-    - So far, only imports new contacts
-    - In the future, import changes to existing ones as well!
+     - So far, only imports new contacts
+     - In the future, import changes to existing ones as well!
  - Birthday notification reminders x days out (add to list and notify as many times as you'd like)
+ - More timing customization on the notifications as well (probably give options at "time of set" in a sheet)
+ 
  */
 
 @main
@@ -34,9 +30,21 @@ struct Next_CandlesApp: App {
             ContactListView()
                 .modelContainer(for: Contact.self)
                 .environmentObject(settings)
-            #if os(macOS)
-                .frame(minWidth: 320, idealWidth: 400)
-            #endif
+#if os(macOS)
+                .frame(minWidth: 320)
+                .onAppear {
+                    let _ = NSApplication.shared.windows.map { $0.tabbingMode = .disallowed }
+                }
+#endif
+                .accentColor(Color.pink)
         }
+#if os(macOS)
+        .commands {
+            CommandGroup(replacing: .newItem) {} //remove "New Item"-menu entry
+        }
+        .windowStyle(.titleBar)
+        .windowToolbarStyle(.automatic)
+        .defaultSize(width: 400, height: 520)
+#endif
     }
 }

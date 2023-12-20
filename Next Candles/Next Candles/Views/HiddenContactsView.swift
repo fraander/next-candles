@@ -21,7 +21,8 @@ struct HiddenContactsView: View {
                     ContentUnavailableView("No birthdays are hidden", systemImage: "eye.slash", description: Text("You can swipe a birthday from right to left and tap the \(Image(systemName: "eye.slash")) icon to hide."))
                 } else {
                     List(contacts, id: \.self, selection: $selectedContacts) { contact in
-                        ContactView(contact: contact)
+//                        ContactView(contact: contact)
+                        Text(contact.name)
                     }
                 }
             }

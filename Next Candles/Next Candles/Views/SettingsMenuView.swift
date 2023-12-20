@@ -56,6 +56,7 @@ struct SettingsMenu: View {
 //            }
             
         }
+        .tint(.pink)
         #if os(iOS)
         .labelStyle(.titleAndIcon)
         #endif
