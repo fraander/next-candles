@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class Contact: ObservableObject, Equatable {
-    var identifier: String?
+    var identifier: String
     var givenName: String?
     var familyName: String?
     var nickname: String?
@@ -19,6 +19,7 @@ class Contact: ObservableObject, Equatable {
     var year: Int?
     var hidden: Bool = false
     var notif: String?
+    var contactAppIdentifier: String?
     
     var name: String {
         let formatter = PersonNameComponentsFormatter()
@@ -82,7 +83,7 @@ class Contact: ObservableObject, Equatable {
     }
     
     init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notif: String? = nil) {
-        self.identifier = identifier
+        self.identifier = identifier ?? UUID().uuidString
         self.givenName = givenName
         self.familyName = familyName
         self.nickname = nickname
@@ -90,13 +91,17 @@ class Contact: ObservableObject, Equatable {
         self.day = day
         self.year = year
         self.notif = notif
+        
+        if identifier != nil {
+            self.contactAppIdentifier = identifier
+        }
     }
     
     func setNotifs(dayRange: Int) async throws {
         // Set notification for the day of
         let birthdateComponents = DateComponents(calendar: .current, month: self.month, day: self.day)
         do {
-            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: 0)
+            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: 0, id: self.identifier)
             DispatchQueue.main.async {
                 self.notif = notifId
             }

@@ -19,6 +19,8 @@ struct ContactListView: View {
     @State var sheet: SheetType? = nil
     @State var dayRangeAlert = false
     
+    @State var path: [Contact] = []
+    
     var months: [Int] {
         let allMonths = contacts.compactMap(\.month)
         let sortedMonths: [Int] = Set(allMonths).sorted { $0 < $1 }
@@ -49,7 +51,7 @@ struct ContactListView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             ScrollViewReader { svr in
                 if (contacts.count == 0) {
                     noContactsView
@@ -74,11 +76,11 @@ struct ContactListView: View {
                 }
                 
             }
-            #if os(iOS)
-            .navigationTitle("Next Candles")
-//            #else
-//            .navigationTitle("")
-            #endif
+#if os(iOS)
+            .navigationTitle(path.isEmpty ? "Next Candles" : "Back")
+            //            #else
+            //            .navigationTitle("")
+#endif
             .toolbar {
                 SettingsMenu(sheet: $sheet, dayRangeAlert: $dayRangeAlert)
             }
@@ -91,6 +93,40 @@ struct ContactListView: View {
             .alert("Highlight Range", isPresented: $dayRangeAlert) {
                 HighlightRangeAlert()
             }
+            .onOpenURL { incomingURL in
+                print("App was opened via URL: \(incomingURL)")
+                handleIncomingURL(incomingURL)
+            }
+            .navigationDestination(for: Contact.self) { contact in
+                ContactDetailView(contact: contact)
+            }
+        }
+        .accentColor(path.isEmpty ? .pink : .white)
+    }
+    
+    private func handleIncomingURL(_ url: URL) {
+        guard url.scheme == "nextcandles" else {
+            return
+        }
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            print("Invalid URL")
+            return
+        }
+        
+        guard let action = components.host, action == "open" else {
+            print("Unknown URL, we can't handle this one!")
+            return
+        }
+        
+        guard let contactId = components.queryItems?.first(where: { $0.name == "contact" })?.value else {
+            print("Contact id not found")
+            return
+        }
+        
+        let foundIds = try? modelContext.fetch(FetchDescriptor(predicate: #Predicate<Contact> { $0.identifier == contactId}, sortBy: []))
+        
+        if let foundFirst = foundIds?.first {
+            path.append(foundFirst)
         }
     }
 }

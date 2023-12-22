@@ -30,7 +30,9 @@ struct ContactsMonthListView: View {
     
     var body: some View {
         ForEach(contacts) { contact in
-            ContactView(contact: contact)
+            NavigationLink(value: contact) {
+                ContactView(contact: contact)
+            }
             .id(contact.id)
         }
     }

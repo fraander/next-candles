@@ -10,6 +10,7 @@ import SwiftData
 
 struct SettingsMenu: View {
     
+    @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject private var settings: Settings
     @Query private var allContacts: [Contact]
@@ -41,20 +42,6 @@ struct SettingsMenu: View {
             Button("Highlight Range: \(settings.dayRange) days", systemImage: "circle.lefthalf.striped.horizontal") {
                 dayRangeAlert.toggle()
             }
-            
-//            Divider()
-//            
-//            Button("Log notifications", systemImage: "apple.terminal.fill") {
-//                Task {
-//                    
-//                    print("All nids:", allContacts.compactMap(\.notifs))
-//                    
-//                    print("Printing Pending notifications")
-//                    await NotificationsHelper.printAllPendingNotifs()
-//                    print("---")
-//                }
-//            }
-            
         }
         .tint(.pink)
         #if os(iOS)

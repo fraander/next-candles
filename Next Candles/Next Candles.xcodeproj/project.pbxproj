@@ -10,6 +10,8 @@
 		BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */; };
 		BD168DD32892E69D0082E461 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD168DD22892E69D0082E461 /* Assets.xcassets */; };
 		BD168DD72892E69D0082E461 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD168DD62892E69D0082E461 /* Preview Assets.xcassets */; };
+		BD2D76C22B33A81E001AA86F /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2D76C12B33A81E001AA86F /* ContactDetailView.swift */; };
+		BD2D76C72B350F2B001AA86F /* NCAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */; };
 		BDB735642B1D67570079F35F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735632B1D67570079F35F /* Settings.swift */; };
 		BDB735682B1D7B240079F35F /* FormatterEmptyZero.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */; };
 		BDBE88DB2B23B8FF005D4C0F /* HighlightRangeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */; };
@@ -37,6 +39,9 @@
 		BD168DD22892E69D0082E461 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BD168DD42892E69D0082E461 /* Next_Candles.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Next_Candles.entitlements; sourceTree = "<group>"; };
 		BD168DD62892E69D0082E461 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		BD2D76C12B33A81E001AA86F /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
+		BD2D76C32B33C2BD001AA86F /* Next-Candles-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Next-Candles-Info.plist"; sourceTree = SOURCE_ROOT; };
+		BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCAppDelegate.swift; sourceTree = "<group>"; };
 		BDB735632B1D67570079F35F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterEmptyZero.swift; sourceTree = "<group>"; };
 		BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightRangeAlert.swift; sourceTree = "<group>"; };
@@ -88,6 +93,7 @@
 		BD168DCD2892E69C0082E461 /* Next Candles */ = {
 			isa = PBXGroup;
 			children = (
+				BD2D76C32B33C2BD001AA86F /* Next-Candles-Info.plist */,
 				BDD9F7972B12B150002E69F0 /* LoadingState.swift */,
 				BDD9F7952B12B141002E69F0 /* SheetType.swift */,
 				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
@@ -95,6 +101,7 @@
 				BDDFAAC328CF6082009FC717 /* Model */,
 				BDDFAAC228CF6076009FC717 /* Views */,
 				BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */,
+				BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */,
 				BD168DD22892E69D0082E461 /* Assets.xcassets */,
 				BD168DD42892E69D0082E461 /* Next_Candles.entitlements */,
 				BD168DD52892E69D0082E461 /* Preview Content */,
@@ -127,6 +134,7 @@
 				BDD9F79B2B12B6C9002E69F0 /* LoadingContactsView.swift */,
 				BDD9F7992B12B2E1002E69F0 /* SettingsMenuView.swift */,
 				BDD9F7912B12AAA1002E69F0 /* ContactView.swift */,
+				BD2D76C12B33A81E001AA86F /* ContactDetailView.swift */,
 				BDFE4DD22B0C494A0074D0A9 /* ContactListView.swift */,
 				BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */,
 				BDD9F78F2B12AA37002E69F0 /* HiddenContactsView.swift */,
@@ -226,11 +234,13 @@
 				BDD9F79A2B12B2E1002E69F0 /* SettingsMenuView.swift in Sources */,
 				BDFA5A0D29FD8C6200634AE1 /* ContactsFeed.swift in Sources */,
 				BDFE4DD12B0C48680074D0A9 /* Contact.swift in Sources */,
+				BD2D76C22B33A81E001AA86F /* ContactDetailView.swift in Sources */,
 				BDD9F7962B12B141002E69F0 /* SheetType.swift in Sources */,
 				BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */,
 				BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */,
 				BDBE88DB2B23B8FF005D4C0F /* HighlightRangeAlert.swift in Sources */,
 				BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */,
+				BD2D76C72B350F2B001AA86F /* NCAppDelegate.swift in Sources */,
 				BDD9F7922B12AAA1002E69F0 /* ContactView.swift in Sources */,
 				BDD9F79E2B12B7CA002E69F0 /* AddManuallyView.swift in Sources */,
 				BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */,
@@ -380,6 +390,7 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Next-Candles-Info.plist";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Need to access contacts in order to read birthdays.";
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
@@ -418,6 +429,7 @@
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Next-Candles-Info.plist";
 				INFOPLIST_KEY_NSContactsUsageDescription = "Need to access contacts in order to read birthdays.";
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;

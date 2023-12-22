@@ -20,7 +20,7 @@ class ContactsUtils {
         do {
             try store.enumerateContacts(with: fetchRequest) { contact, _ in // iterate over every contact ...
                 
-                if !(existingContacts.compactMap(\.identifier).contains(contact.identifier)) { // right now, only brand new contacts will be imported ... in the future, compare changes and ask for user input for tough cases
+                if !(existingContacts.map(\.identifier).contains(contact.identifier)) { // right now, only brand new contacts will be imported ... in the future, compare changes and ask for user input for tough cases
                     if (contact.areKeysAvailable([CNContactGivenNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor])) { // check they have required fields before fetching
                         
                         // TODO: profile photos?

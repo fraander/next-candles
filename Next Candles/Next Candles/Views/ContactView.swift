@@ -108,6 +108,10 @@ struct ContactView: View {
             Divider()
             
             setNotifButton
+            
+            Button("Copy Identifier", systemImage: "barcode.viewfinder") {
+                UIPasteboard.general.string = "nextcandles://open?contact=" + contact.identifier
+            }
         }
         .alert(item: $alert) { alert in
             Alert(

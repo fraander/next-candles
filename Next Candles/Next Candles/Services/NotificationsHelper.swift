@@ -9,10 +9,11 @@ import Foundation
 import UserNotifications
 
 extension UNMutableNotificationContent {
-    convenience init(title: String, body: String) {
+    convenience init(title: String, body: String, link: String) {
         self.init()
         self.title = title
         self.body = body
+        self.targetContentIdentifier = link
     }
 }
 
@@ -52,7 +53,7 @@ struct NotificationsHelper {
     ///   - name: Name of the person
     ///   - dateComponents: Month/Day of their birthday
     /// - Returns: ID of the notification which has been set
-    static func scheduleNotification(name: String, dateComponents: DateComponents, distanceFromBD: Int) async throws -> String {
+    static func scheduleNotification(name: String, dateComponents: DateComponents, distanceFromBD: Int, id: String) async throws -> String {
 
         let date = Calendar.current.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .nextTime) ?? Date()
 
@@ -64,7 +65,8 @@ struct NotificationsHelper {
         // set the title
         let title = "Birthday alert! 🥳"
         let body = distanceFromBD == 0 ? "\(name.last == "s" ? name + "'" : name + "'s") birthday is today." : "\(name.last == "s" ? name + "'" : name + "'s") birthday is on \(df.string(from: date)), which is \(distanceFromBD) \(distanceFromBD == 1 ? "day" : "days") away."
-        let notificationContent = UNMutableNotificationContent(title: title, body: body)
+        let url = "nextcandles://open?contact=" + id
+        let notificationContent = UNMutableNotificationContent(title: title, body: body, link: url)
         
         let calendarTrigger = UNCalendarNotificationTrigger(
             dateMatching: dateComponents,
@@ -73,6 +75,7 @@ struct NotificationsHelper {
         let notificationIdentifier = UUID().uuidString
         
         // 9. Create a notification request object
+        
         let notificationRequest = UNNotificationRequest(
             identifier: notificationIdentifier,
             content: notificationContent,
