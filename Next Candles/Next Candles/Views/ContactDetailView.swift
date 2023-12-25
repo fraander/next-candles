@@ -6,13 +6,19 @@
 //
 
 import SwiftUI
+import Contacts
+import ContactsUI
 
 struct ContactDetailView: View {
     
-    let contact: Contact
     
-    func action(systemName: String, text: String, bg: AnyGradient) -> some View {
-        return Button { } label: {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.modelContext) var modelContext
+    
+    var contact: Contact
+    
+    func customButton(systemName: String, text: String, bg: AnyGradient, action: @escaping () -> Void) -> some View {
+        return Button(action: action) {
             VStack {
                 Image(systemName: systemName)
                     .foregroundStyle(.white)
@@ -31,8 +37,8 @@ struct ContactDetailView: View {
         }
     }
     
-    func wideAction(systemName: String, text: String, bg: AnyGradient) -> some View {
-        return Button { } label: {
+    func customWideButton(systemName: String, text: String, bg: AnyGradient, action: @escaping () -> Void) -> some View {
+        return Button(action: action) {
             HStack(spacing: 16) {
                 VStack {
                     Image(systemName: systemName)
@@ -47,13 +53,18 @@ struct ContactDetailView: View {
                 
                 Text(text)
                     .font(.system(.title3, design: .rounded, weight: .medium))
-                    .foregroundStyle(.black.opacity(0.8))
+                    .foregroundStyle(.primary.opacity(0.8))
                 
                 Spacer()
             }
             .padding(8)
-            .background(.white)
-            .cornerRadius(20)
+            .background {
+                Group {
+                    colorScheme == .light ? Color.black : Color.white
+                }
+                .cornerRadius(20)
+                .shadow(color: .pink, radius: 4, x: 0, y: 0)
+            }
         }
     }
     
@@ -99,13 +110,35 @@ struct ContactDetailView: View {
                     .padding(.top, 12)
                 
                 HStack(spacing: 0) {
-                    action(systemName: "phone.fill", text: "Call", bg: Color.green.gradient)
+                    
+                    if (contact.contactAppIdentifier != nil) {
+                        customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
+                            
+                        }
+                        Spacer()
+                        customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
+                            
+                        }
+                        Spacer()
+                    }
+                    
+                    customButton(systemName: "bell.fill", text: contact.hasNotifs ? "Silence" : "Notify", bg: contact.hasNotifs ? Color.secondary.gradient : Color.yellow.gradient) {
+                        if (contact.hasNotifs) {
+                            if let n = contact.notif {
+                                NotificationsHelper.removeNotifs(notifIds: [n])
+                                contact.notif = nil
+                            }
+                        } else {
+                            Task {
+                                try await contact.setNotifs(dayRange: 0)
+                            }
+                        }
+                    }
+                    
                     Spacer()
-                    action(systemName: "message.fill", text: "Text", bg: Color.mint.gradient)
-                    Spacer()
-                    action(systemName: "bell.fill", text: "Notify", bg: Color.yellow.gradient)
-                    Spacer()
-                    action(systemName: "eye.slash.fill", text: "Hide", bg: Color.orange.gradient)
+                    customButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
+                        contact.hidden.toggle()
+                    }
                 }
                 .padding(.vertical, 12)
                 .padding(.horizontal)
@@ -113,9 +146,17 @@ struct ContactDetailView: View {
                 Divider()
                 
                 VStack(spacing: 12) {
-                    wideAction(systemName: "person.text.rectangle.fill", text: "Show in Contacts", bg: Color.secondary.gradient)
                     
-                    wideAction(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient)
+                    // TODO: Finish "edit in contacts" feature
+                    if let _ = contact.contactAppIdentifier {
+                        customWideButton(systemName: "person.text.rectangle.fill", text: "Edit in Contacts", bg: Color.secondary.gradient) {
+//                            CNContactViewController(for: c)
+                        }
+                    }
+                    
+                    customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
+                        modelContext.delete(contact)
+                    }
                 }
                 .padding()
             }
@@ -125,7 +166,7 @@ struct ContactDetailView: View {
         }
         .background {
             Rectangle()
-                .fill(Color.white.gradient)
+                .fill(colorScheme == .light ? Color.white.gradient : Color.black.gradient)
                 .ignoresSafeArea(.all, edges: .bottom)
         }
     }

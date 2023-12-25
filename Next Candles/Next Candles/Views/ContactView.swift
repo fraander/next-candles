@@ -102,8 +102,12 @@ struct ContactView: View {
             setNotifButton
         }
         .contextMenu {
-            hideButton
-            deleteButton
+            
+            if contact.contactAppIdentifier == nil {
+                deleteButton
+            } else {                
+                hideButton
+            }
             
             Divider()
             

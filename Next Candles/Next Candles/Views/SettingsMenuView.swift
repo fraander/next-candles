@@ -30,6 +30,26 @@ struct SettingsMenu: View {
             
             if (!allContacts.isEmpty) {
                 Divider()
+                
+                // TODO: add a loading page over the whole screen when this happens
+                Button("Notify all", systemImage: "bell.badge.fill") {
+                    allContacts.forEach { c in
+                        if !c.hasNotifs {
+                            Task { try await c.setNotifs(dayRange: 0) }
+                        }
+                    }
+                }
+                
+                Button("Notifs off", systemImage: "bell.slash.fill") {
+                    NotificationsHelper.removeAllNotifs()
+                }
+                
+                Button("Hide all", systemImage: "eye.slash") {
+                    allContacts.forEach { c in
+                        c.hidden = true
+                    }
+                }
+                
                 Button("Delete all", systemImage: "trash", role: .destructive) { showDeleteAll = true }
             }
             
