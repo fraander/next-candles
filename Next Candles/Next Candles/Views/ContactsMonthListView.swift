@@ -9,8 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct AlertItem: Identifiable {
+    typealias AlertAction = (title: String, action: () -> Void)
+    
     let id: UUID = .init()
     let title: String
+    let actions: [AlertAction]
+    
+    init(title: String, actions: [AlertAction] = []) {
+        self.title = title
+        self.actions = actions
+    }
 }
 
 struct ContactsMonthListView: View {
@@ -18,7 +26,6 @@ struct ContactsMonthListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var contacts: [Contact]
     @EnvironmentObject var settings: Settings
-    @State var alert: AlertItem? = nil
     
     init(month: Int) {
         _contacts = Query(filter: #Predicate<Contact> { contact in

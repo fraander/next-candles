@@ -17,8 +17,9 @@ extension UNMutableNotificationContent {
     }
 }
 
-struct NotificationsHelper {
+class NotificationsHelper: ObservableObject {
     
+    @Published var notifsIdCache: [String] = []
     static let nc = UNUserNotificationCenter.current()
     
     /// Request access from the user to provide notifications
@@ -107,5 +108,14 @@ struct NotificationsHelper {
     
     static func removeAllNotifs() {
         nc.removeAllPendingNotificationRequests()
+    }
+    
+    func notifFor(id: String) async -> Bool {
+        let requests = await NotificationsHelper.nc.pendingNotificationRequests()
+        return requests.contains { $0.identifier == id }
+    }
+    
+    static func fetchAllPending() async -> [String] {
+        return await NotificationsHelper.nc.pendingNotificationRequests().map(\.identifier)
     }
 }

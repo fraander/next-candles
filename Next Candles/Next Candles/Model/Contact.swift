@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import Contacts
 
 @Model
 class Contact: ObservableObject, Equatable {
@@ -20,6 +21,7 @@ class Contact: ObservableObject, Equatable {
     var hidden: Bool = false
     var notif: String?
     var contactAppIdentifier: String?
+    var phones: [String]
     
     var name: String {
         let formatter = PersonNameComponentsFormatter()
@@ -30,6 +32,18 @@ class Contact: ObservableObject, Equatable {
         components.nickname = nickname
         
         return formatter.string(from: components)
+    }
+    
+    var age: Int? {
+        if (year != nil) {
+            return Calendar.current.dateComponents(
+                [.year],
+                from: birthdate ?? Date(),
+                to: Date()
+            ).year
+        } else {
+            return nil
+        }
     }
     
     var birthdate: Date? {
@@ -82,7 +96,7 @@ class Contact: ObservableObject, Equatable {
         return false
     }
     
-    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notif: String? = nil) {
+    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notif: String? = nil, phones: [CNLabeledValue<CNPhoneNumber>] = []) {
         self.identifier = identifier ?? UUID().uuidString
         self.givenName = givenName
         self.familyName = familyName
@@ -91,6 +105,9 @@ class Contact: ObservableObject, Equatable {
         self.day = day
         self.year = year
         self.notif = notif
+        self.phones = phones.map{ cnpn in
+            return cnpn.value.stringValue
+        }
         
         if identifier != nil {
             self.contactAppIdentifier = identifier
@@ -108,5 +125,18 @@ class Contact: ObservableObject, Equatable {
         } catch {
             throw error
         }
+    }
+    
+    static func areDifferent(_ lhs: Contact, _ rhs: Contact) -> Bool {
+        return (
+            lhs.identifier != rhs.identifier ||
+            lhs.givenName != rhs.givenName ||
+            lhs.familyName != rhs.familyName ||
+            lhs.nickname != rhs.nickname ||
+            lhs.month != rhs.month ||
+            lhs.day != rhs.day ||
+            lhs.year != rhs.year ||
+            lhs.phones != rhs.phones
+        )
     }
 }

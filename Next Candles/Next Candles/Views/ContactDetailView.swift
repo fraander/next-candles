@@ -8,12 +8,41 @@
 import SwiftUI
 import Contacts
 import ContactsUI
+import SwiftData
+
+enum ContactSheetType: Identifiable {
+    var id: Self {
+        return self
+    }
+    
+    case call, text
+}
+
+struct PhoneSheet: View {
+    @Environment(\.openURL) var openURL
+    var contact: Contact
+    var sheetType: ContactSheetType
+    
+    var body: some View {
+        List(contact.phones, id: \.self) { phone in
+            Button(phone, systemImage: sheetType == .call ? "phone" : "message") {
+                if let url = URL(string: (sheetType == .call ? "tel://" : "sms:") + phone) {
+                    openURL.callAsFunction(url)
+                }
+            }
+            .foregroundStyle(.mint)
+        }
+    }
+}
 
 struct ContactDetailView: View {
     
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
+    
+    @State var phoneSheet: ContactSheetType = .call
+    @State var showPhoneSheet = false
     
     var contact: Contact
     
@@ -53,23 +82,26 @@ struct ContactDetailView: View {
                 
                 Text(text)
                     .font(.system(.title3, design: .rounded, weight: .medium))
-                    .foregroundStyle(.primary.opacity(0.8))
+                    .foregroundStyle(
+                        colorScheme == .light
+                        ? .black.opacity(0.8)
+                        : .white.opacity(0.8)
+                    )
                 
                 Spacer()
             }
             .padding(8)
             .background {
                 Group {
-                    colorScheme == .light ? Color.black : Color.white
+                    colorScheme == .light ? Color.white : Color.gray.opacity(0.3)
                 }
                 .cornerRadius(20)
-                .shadow(color: .pink, radius: 4, x: 0, y: 0)
             }
         }
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 8) {
             Rectangle()
                 .fill(Color.pink.gradient)
                 .ignoresSafeArea(.all, edges: .top)
@@ -79,7 +111,7 @@ struct ContactDetailView: View {
                 Image(systemName: "person.circle.fill")
                     .resizable()
                     .scaledToFit()
-                    .foregroundStyle(.white, .secondary)
+                    .foregroundStyle(.white, .gray)
                     .frame(width: 180, height: 180)
                     .background {
                         Circle().fill(.white)
@@ -93,34 +125,61 @@ struct ContactDetailView: View {
                     .font(.system(.largeTitle, design: .rounded, weight: .semibold))
                     .padding(.top, 12)
                 
-                Text((contact.birthdate ?? Date())
-                    .formatted(
-                        .dateTime
-                            .day()
-                            .month(
-                                .wide
-                            )
-                    )
-                )
-                .font(.system(.headline, design: .rounded, weight: .semibold))
-                .foregroundStyle(.secondary)
+                if let ca = (contact.age) {
+                    Text("\(ca) going on \(ca + 1)")
+                        .font(.system(.headline, design: .rounded, weight: .semibold))
+                        .italic()
+                        .foregroundStyle(.secondary)
+                    
+                }
                 
+                Group {
+                    if (contact.year != nil) {
+                        Text((contact.birthdate ?? Date()).formatted(
+                            .dateTime
+                                .day()
+                                .month(
+                                    .wide
+                                )
+                                .year()
+                        ))
+                    }
+                    
+                    if (contact.year == nil) {
+                        Text((contact.birthdate ?? Date()).formatted(
+                            .dateTime
+                                .day()
+                                .month(
+                                    .wide
+                                )
+                        ))
+                    }
+                }
+                .font(.system(.headline, design: .rounded, weight: .semibold))
+                .foregroundStyle(.white)
+                .padding()
+                .background {
+                    Capsule()
+                        .fill(.pink.gradient)
+                }
                 
                 Divider()
                     .padding(.top, 12)
                 
                 HStack(spacing: 0) {
                     
-                    if (contact.contactAppIdentifier != nil) {
-                        customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
-                            
-                        }
-                        Spacer()
-                        customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
-                            
-                        }
-                        Spacer()
+                    //                    if (contact.contactAppIdentifier != nil) {
+                    customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
+                        phoneSheet = .call
+                        showPhoneSheet.toggle()
                     }
+                    Spacer()
+                    customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
+                        phoneSheet = .text
+                        showPhoneSheet.toggle()
+                    }
+                    Spacer()
+                    //                    }
                     
                     customButton(systemName: "bell.fill", text: contact.hasNotifs ? "Silence" : "Notify", bg: contact.hasNotifs ? Color.secondary.gradient : Color.yellow.gradient) {
                         if (contact.hasNotifs) {
@@ -146,14 +205,6 @@ struct ContactDetailView: View {
                 Divider()
                 
                 VStack(spacing: 12) {
-                    
-                    // TODO: Finish "edit in contacts" feature
-                    if let _ = contact.contactAppIdentifier {
-                        customWideButton(systemName: "person.text.rectangle.fill", text: "Edit in Contacts", bg: Color.secondary.gradient) {
-//                            CNContactViewController(for: c)
-                        }
-                    }
-                    
                     customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
                         modelContext.delete(contact)
                     }
@@ -169,9 +220,29 @@ struct ContactDetailView: View {
                 .fill(colorScheme == .light ? Color.white.gradient : Color.black.gradient)
                 .ignoresSafeArea(.all, edges: .bottom)
         }
+        .sheet(isPresented: $showPhoneSheet) {
+            switch phoneSheet {
+            case .call:
+                PhoneSheet(contact: contact, sheetType: .call)
+                    .presentationDetents(
+                        [.height(180)]
+                    )
+            case .text:
+                PhoneSheet(contact: contact, sheetType: .text)
+                    .presentationDetents(
+                        [.height(180)]
+                    )
+            }
+        }
     }
 }
 
 #Preview {
-    ContactDetailView(contact: Contact())
+    
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Contact.self, configurations: config)
+    
+    let contact = Contact(givenName: "Frank", familyName: "Anderson", month: 2, day: 7, year: 2003)
+    return ContactDetailView(contact: contact)
+        .modelContainer(container)
 }

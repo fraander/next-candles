@@ -13,7 +13,7 @@ struct ContactView: View {
     
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var settings: Settings
-    @State var alert: AlertItem? = nil
+    @EnvironmentObject var alertRouter: AlertRouter
     var contact: Contact
     
     var hideButton: some View {
@@ -47,22 +47,22 @@ struct ContactView: View {
                         try await contact.setNotifs(dayRange: settings.dayRange)
                         print("Notifs set")
                     } catch {
-                        print(error.localizedDescription)
-                        alert = AlertItem(title: error.localizedDescription)
+                        alertRouter.alert = Alert(title: Text(error.localizedDescription))
                     }
                 }
             }
         }
-        .tint(.pink)
+        .tint(.yellow)
     }
     
     var body: some View {
         HStack {
             Text(contact.name)
+                .foregroundColor((contact.withinNextXDays(x: settings.dayRange)) ? .pink : .primary.opacity(0.8))
             #if os(macOS)
-                .font(.body)
+                .font(.system(.body, design: .rounded))
             #else
-                .font(.headline)
+                .font(.system(.headline, design: .rounded))
             #endif
                 .lineLimit(2)
                 .truncationMode(.tail)
@@ -79,13 +79,13 @@ struct ContactView: View {
                         )
                 )
                 .multilineTextAlignment(.leading)
-                .font(.subheadline)
-                .foregroundColor((contact.withinNextXDays(x: settings.dayRange)) ? .pink : .secondary)
+                .font(.system(.subheadline, design: .rounded, weight: .regular))
+                .foregroundColor(.secondary)
                 
                 if (contact.hasNotifs) {
                     Image(systemName: "bell.fill")
                         .font(.subheadline)
-                        .foregroundColor((contact.withinNextXDays(x: settings.dayRange)) ? .pink : .secondary)
+                        .foregroundColor(.secondary)
                 }
             }
             .padding(.trailing, 4)
@@ -103,11 +103,7 @@ struct ContactView: View {
         }
         .contextMenu {
             
-            if contact.contactAppIdentifier == nil {
-                deleteButton
-            } else {                
-                hideButton
-            }
+            hideButton
             
             Divider()
             
@@ -116,14 +112,6 @@ struct ContactView: View {
             Button("Copy Identifier", systemImage: "barcode.viewfinder") {
                 UIPasteboard.general.string = "nextcandles://open?contact=" + contact.identifier
             }
-        }
-        .alert(item: $alert) { alert in
-            Alert(
-                title: Text(alert.title),
-                dismissButton: .default(
-                    Text("Okay")
-                )
-            )
         }
     }
     

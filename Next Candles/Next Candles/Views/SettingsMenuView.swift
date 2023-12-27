@@ -16,14 +16,21 @@ struct SettingsMenu: View {
     @Query private var allContacts: [Contact]
     @Query(filter: #Predicate<Contact> { $0.hidden }) private var hiddenContacts: [Contact]
     @Binding var sheet: SheetType?
-    @State var showDeleteAll = false
+    @EnvironmentObject var alertRouter: AlertRouter
+    @EnvironmentObject var progressRouter: ProgressViewRouter
     @Binding var dayRangeAlert: Bool
+    @State var showResolveDiffs = false
+    @State var toResolve: [(Contact, Contact)] = []
+    
+    var allHidden: Bool {
+        return allContacts.filter{$0.hidden == false}.count == 0
+    }
     
     var body: some View {
         Menu("Settings", systemImage: "gear") {
             if (!hiddenContacts.isEmpty) {
                 Button("Hidden Birthdays", systemImage: "eye.slash", action: {sheet = .hidden})
-                Divider()                
+                Divider()
             }
             Button("Import from Contacts", systemImage: "doc.text.magnifyingglass") { fetch() }
             Button("Add Manually", systemImage: "person.fill.badge.plus") { sheet = .custom }
@@ -33,27 +40,44 @@ struct SettingsMenu: View {
                 
                 // TODO: add a loading page over the whole screen when this happens
                 Button("Notify all", systemImage: "bell.badge.fill") {
+                    progressRouter.isLoading = true
                     allContacts.forEach { c in
-                        if !c.hasNotifs {
+                        if !c.hasNotifs && !c.hidden {
                             Task { try await c.setNotifs(dayRange: 0) }
                         }
                     }
+                    progressRouter.isLoading = false
                 }
                 
                 Button("Notifs off", systemImage: "bell.slash.fill") {
-                    NotificationsHelper.removeAllNotifs()
+                    progressRouter.isLoading = true
+                    allContacts.forEach { c in
+                        NotificationsHelper.removeAllNotifs()
+                        c.notif = nil
+                    }
+                    progressRouter.isLoading = false
                 }
                 
-                Button("Hide all", systemImage: "eye.slash") {
+                Button(allHidden ? "Show All" : "Hide all", systemImage: allHidden ? "eye" : "eye.slash") {
+                    let ah = allHidden
                     allContacts.forEach { c in
-                        c.hidden = true
+                        c.hidden = ah ? false : true
                     }
                 }
                 
-                Button("Delete all", systemImage: "trash", role: .destructive) { showDeleteAll = true }
+                Button("Delete all", systemImage: "trash", role: .destructive) {
+                    alertRouter.alert = Alert(
+                        title: Text("Delete all Birthdays?"),
+                        primaryButton: .destructive(Text("Yes, delete")) {
+                            allContacts.forEach { modelContext.delete($0) }
+                            NotificationsHelper.removeAllNotifs()
+                        },
+                        secondaryButton: .cancel(Text("No, cancel"))
+                    )
+                }
             }
             
-            Divider() 
+            Divider()
             
             Button(!settings.janStart ? "Top: Current month" : "Top: January", systemImage: "platter.filled.top.and.arrow.up.iphone") {
                 settings.janStart.toggle()
@@ -64,26 +88,25 @@ struct SettingsMenu: View {
             }
         }
         .tint(.pink)
-        #if os(iOS)
+#if os(iOS)
         .labelStyle(.titleAndIcon)
-        #endif
-        .alert("Delete all Birthdays?", isPresented: $showDeleteAll) {
-            Button("No, cancel", role: .cancel, action: { showDeleteAll = false })
-            Button("Yes, delete", role: .destructive) {
-                allContacts.forEach { modelContext.delete($0) }
-                NotificationsHelper.removeAllNotifs()
-            }
+#endif
+        .sheet(isPresented: $showResolveDiffs) {
+            DiffView(toResolve: $toResolve)
         }
     }
     
     func fetch() {
         Task {
-            let fetched = try await ContactsUtils.fetch(existingContacts: allContacts)
-            if (fetched.count > 0) {
-                fetched.forEach { modelContext.insert($0) }
+            let (existing, diffs) = try await ContactsUtils.fetch(existingContacts: allContacts)
+            if (existing.count > 0) {
+                existing.forEach { modelContext.insert($0) }
+            } else if diffs.count != 0 {
+                showResolveDiffs = true
+                toResolve = diffs
             } else {
-                print("No new contacts were added.")
-            }
+                alertRouter.alert = Alert(title: Text("No new contacts to import."))
+            }            
         }
     }
 }

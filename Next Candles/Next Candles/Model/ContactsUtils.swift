@@ -8,27 +8,34 @@
 import Foundation
 import Contacts
 
+struct ContactFetchResponse {
+    let found: [Contact]
+    let diff: [Contact]
+}
+
 class ContactsUtils {
     // fetch the contacts from the system and create ContactWrappers from the useful ones
     // throws error if trouble fetching from System; returns [] if no valid contacts are found
-    static func fetch(existingContacts: [Contact]) async throws -> [Contact] {
+    static func fetch(existingContacts: [Contact]) async throws -> ([Contact], [(new: Contact, old: Contact)]) {
         var contacts: [Contact] = [] // fetched Contacts (that have valid birthdays and names)
+        var diffs: [(new: Contact, old: Contact)] = []
         
         let store = CNContactStore() // store to access system contacts
-        let fetchRequest = CNContactFetchRequest(keysToFetch: [CNContactGivenNameKey as CNKeyDescriptor, CNContactFamilyNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor, CNContactNicknameKey as CNKeyDescriptor, CNContactIdentifierKey as CNKeyDescriptor]) // attributes to request so that the size is small
+        let fetchRequest = CNContactFetchRequest(keysToFetch: [CNContactGivenNameKey as CNKeyDescriptor, CNContactFamilyNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor, CNContactNicknameKey as CNKeyDescriptor, CNContactIdentifierKey as CNKeyDescriptor, CNContactPhoneNumbersKey as CNKeyDescriptor]) // attributes to request so that the size is small
         
         do {
             try store.enumerateContacts(with: fetchRequest) { contact, _ in // iterate over every contact ...
                 
-                if !(existingContacts.map(\.identifier).contains(contact.identifier)) { // right now, only brand new contacts will be imported ... in the future, compare changes and ask for user input for tough cases
-                    if (contact.areKeysAvailable([CNContactGivenNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor])) { // check they have required fields before fetching
-                        
-                        // TODO: profile photos?
-                        
-                        // get each field and initialize
-                        contacts.append(
-                            Contact(identifier: contact.identifier, givenName: contact.givenName, familyName: contact.familyName, nickname: contact.nickname, month: contact.birthday?.month, day: contact.birthday?.day, year: contact.birthday?.year)
-                        )
+                // find (or don't find) existing contact
+                if let existing = existingContacts.first(where: {$0.identifier == contact.identifier}) {
+                    if let new = createContact(contact: contact) {
+                        if Contact.areDifferent(new, existing) {
+                            diffs.append((new, existing))
+                        }
+                    }
+                } else { // if new
+                    if let c = createContact(contact: contact) {
+                        contacts.append( c )
                     }
                 }
             }
@@ -36,7 +43,15 @@ class ContactsUtils {
             throw ContactCodingError.fetch // there was an issue fetching (because decode errors are handled in teh initializer)
         }
         
-        return contacts // looked over those contacts, let's play!
+        return (contacts, diffs) // looked over those contacts, let's play!
     }
     
+    static func createContact(contact: CNContact) -> Contact? {
+        if (contact.areKeysAvailable([CNContactGivenNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor]) && contact.birthday?.month != nil && contact.birthday?.day != nil) { // check they have required fields before fetching
+            // get each field and initialize
+            return Contact(identifier: contact.identifier, givenName: contact.givenName, familyName: contact.familyName, nickname: contact.nickname, month: contact.birthday?.month, day: contact.birthday?.day, year: contact.birthday?.year, phones: contact.phoneNumbers)
+        } else {
+            return nil
+        }
+    }
 }
