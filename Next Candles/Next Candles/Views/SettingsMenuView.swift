@@ -43,7 +43,7 @@ struct SettingsMenu: View {
                     progressRouter.isLoading = true
                     allContacts.forEach { c in
                         if !c.hasNotifs && !c.hidden {
-                            Task { try await c.setNotifs(dayRange: 0) }
+                            Task { try await c.setNotifs(distanceFromBD: 0) }
                         }
                     }
                     progressRouter.isLoading = false

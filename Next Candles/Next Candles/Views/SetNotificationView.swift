@@ -6,26 +6,25 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SetNotificationView: View {
     
-    //    var contact: Contact
+    var contact: Contact
     @Environment(\.dismiss) var dismiss
     
     @State var daysBefore = 14.0
-    var canSubmit: Bool { return false }
     
     var body: some View {
         
         VStack(spacing: 0) {
             
             HStack {
-                Button("Cancel") {dismiss()}
+                Button("Cancel") { dismiss() }
                     .foregroundColor(.secondary)
                 Spacer()
                 Button("Set", systemImage: "bell.fill", action: setNotif)
-                    .tint(.mint)
-                    .disabled(!canSubmit)
+                    .tint(.pink)
             }
             .font(.system(.body, design: .rounded, weight: .bold))
             .padding([.horizontal, .bottom])
@@ -33,6 +32,7 @@ struct SetNotificationView: View {
             Text("Set Notification")
                 .font(.system(.largeTitle, design: .rounded, weight: .bold))
         }
+        .padding(.top)
         
         Divider()
         
@@ -44,7 +44,7 @@ struct SetNotificationView: View {
                         lower: 0,
                         upper: 366,
                         increment: 1.0,
-                        tintColor: .secondary
+                        tintColor: .pink
                     )
                 } label: {
                     Text("Notify me ^[\(daysBefore, specifier: "%.0f") day](inflect: true) before")
@@ -56,10 +56,19 @@ struct SetNotificationView: View {
     }
     
     func setNotif() {
-        
+        Task {
+            try await contact.setNotifs(distanceFromBD: Int(daysBefore))
+            dismiss()
+        }
     }
 }
 
 #Preview {
-    SetNotificationView()
+    
+    
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Contact.self, configurations: config)
+    
+    return SetNotificationView(contact: Contact())
+        .modelContainer(container)
 }

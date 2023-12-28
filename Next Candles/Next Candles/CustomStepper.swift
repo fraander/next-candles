@@ -49,6 +49,11 @@ struct CustomStepper: View {
                 TextField("", text: $valueBuffer)
                     .focused($focused, equals: .typing)
                     .submitLabel(.done)
+                    .onSubmit {
+                        if valueBuffer == "" {
+                            valueBuffer = reset()
+                        }
+                    }
 #if os(iOS)
                     .keyboardType(.numberPad)
                     .numbersOnly($valueBuffer, allowedRange: lower ..< upper)
@@ -76,9 +81,23 @@ struct CustomStepper: View {
             }
         }
         .frame(width: 180, height: 40)
-        .task {
-            valueBuffer = String("\(value.rounded())".split(separator: ".").first ?? "0")
+        .onChange(of: valueBuffer) { oldValue, newValue in
+            if let v = Double(valueBuffer) {
+                if (lower..<upper).contains(v) {
+                    value = v
+                }
+            }
         }
+        .onChange(of: value) { oldValue, newValue in
+            valueBuffer = reset()
+        }
+        .task {
+            valueBuffer = reset()
+        }
+    }
+    
+    func reset() -> String {
+        return String("\(value.rounded())".split(separator: ".").first ?? "0")
     }
 }
 

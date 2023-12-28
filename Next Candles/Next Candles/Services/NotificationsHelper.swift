@@ -8,6 +8,18 @@
 import Foundation
 import UserNotifications
 
+struct GeneralizedError: LocalizedError {
+    let description: String
+    
+    init(_ description: String) {
+        self.description = description
+    }
+    
+    var errorDescription: String? {
+        description
+    }
+}
+
 extension UNMutableNotificationContent {
     convenience init(title: String, body: String, link: String) {
         self.init()
@@ -56,8 +68,18 @@ class NotificationsHelper: ObservableObject {
     /// - Returns: ID of the notification which has been set
     static func scheduleNotification(name: String, dateComponents: DateComponents, distanceFromBD: Int, id: String) async throws -> String {
 
-        let date = Calendar.current.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .nextTime) ?? Date()
-
+        guard let birthdate = Calendar.current.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .nextTime) else {
+            throw GeneralizedError("Invalid birthdate.")
+        }
+        guard var date = Calendar.current.date(byAdding: .day, value: (-1 * distanceFromBD), to: birthdate) else {
+            throw GeneralizedError("Invalid birthdate or invalid distance.")
+        }
+        if date < Date() {
+            if let d = Calendar.current.date(byAdding: .year, value: 1, to: date) {
+                date = d
+            }
+        }
+        
         // format the date into [M]/[D]
         let df = DateFormatter()
         df.locale = Locale.current

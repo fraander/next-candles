@@ -114,11 +114,11 @@ class Contact: ObservableObject, Equatable {
         }
     }
     
-    func setNotifs(dayRange: Int) async throws {
+    func setNotifs(distanceFromBD: Int) async throws {
         // Set notification for the day of
         let birthdateComponents = DateComponents(calendar: .current, month: self.month, day: self.day)
         do {
-            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: 0, id: self.identifier)
+            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: distanceFromBD, id: self.identifier)
             DispatchQueue.main.async {
                 self.notif = notifId
             }

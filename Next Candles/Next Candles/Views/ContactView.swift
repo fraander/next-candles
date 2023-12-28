@@ -16,6 +16,8 @@ struct ContactView: View {
     @EnvironmentObject var alertRouter: AlertRouter
     var contact: Contact
     
+    @State var setNotifSheet = false
+    
     var hideButton: some View {
         Button("Hide Birthday", systemImage: "eye.slash") { hide(contact)}
             .tint(.orange)
@@ -44,7 +46,7 @@ struct ContactView: View {
                     
                     print("Setting notifications")
                     do {
-                        try await contact.setNotifs(dayRange: settings.dayRange)
+                        try await contact.setNotifs(distanceFromBD: settings.dayRange)
                         print("Notifs set")
                     } catch {
                         alertRouter.alert = Alert(title: Text(error.localizedDescription))
@@ -100,6 +102,9 @@ struct ContactView: View {
         }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
             setNotifButton
+            Button("Set") {
+                setNotifSheet.toggle()
+            }
         }
         .contextMenu {
             
@@ -113,6 +118,7 @@ struct ContactView: View {
                 UIPasteboard.general.string = "nextcandles://open?contact=" + contact.identifier
             }
         }
+        .sheet(isPresented: $setNotifSheet) { SetNotificationView(contact: contact) }
     }
     
     func hide(_ contact: Contact) {

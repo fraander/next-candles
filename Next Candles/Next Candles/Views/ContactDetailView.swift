@@ -189,7 +189,7 @@ struct ContactDetailView: View {
                             }
                         } else {
                             Task {
-                                try await contact.setNotifs(dayRange: 0)
+                                try await contact.setNotifs(distanceFromBD: 0)
                             }
                         }
                     }
