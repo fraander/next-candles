@@ -12,6 +12,8 @@ import Combine
 
 struct NumbersOnlyViewModifier: ViewModifier {
     @Binding var text: String
+    var allowedRange: Range<Double>?
+    
     func body (content: Content) -> some View {
         content
         #if os(iOS)
@@ -20,15 +22,21 @@ struct NumbersOnlyViewModifier: ViewModifier {
             .onReceive (Just(text)) { newValue in
                 let filtered = newValue.filter { "0123456789".contains ($0)}
                 if filtered != newValue {
-                    self.text = filtered
+                    if let f = Double(filtered), let r = allowedRange {
+                        if allowedRange == nil || r.contains(f) {
+                            self.text = filtered
+                        }
+                    } else {
+                        self.text = filtered
+                    }
                 }
             }
     }
 }
 
 extension View {
-    func numbersOnly(_ text: Binding<String>) -> some View {
-        self.modifier(NumbersOnlyViewModifier(text: text))
+    func numbersOnly(_ text: Binding<String>, allowedRange: Range<Double>? = nil) -> some View {
+        self.modifier(NumbersOnlyViewModifier(text: text, allowedRange: allowedRange))
     }
 }
 

@@ -12,12 +12,13 @@ import Combine
 /*
  Enablers
  - Change how notifications are stored since you can reference differently now; store Notifs in UserDefaults and match identifier with notification's identifier to know if a contact has one set (Removes sync bugs)
+ - Detail view buttons can be either Menu or Button
  
  Features
  - Birthday notification reminders x days out (add to list and notify as many times as you'd like)
  - More timing customization on the notifications as well (probably give options at "time of set" in a sheet)
  - iCloud Sync with SwiftData
- - Detail view made adjustable to other screen sizes
+ - Detail view made adjustable to other screen sizes; show existing notifications on the screen
  */
 
 class AlertRouter: ObservableObject {
