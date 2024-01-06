@@ -12,6 +12,7 @@
 		BD168DD72892E69D0082E461 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD168DD62892E69D0082E461 /* Preview Assets.xcassets */; };
 		BD2D76C22B33A81E001AA86F /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2D76C12B33A81E001AA86F /* ContactDetailView.swift */; };
 		BD2D76C72B350F2B001AA86F /* NCAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */; };
+		BD889F042B49BDFF00046558 /* Date+DaysRelative.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */; };
 		BDB735642B1D67570079F35F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735632B1D67570079F35F /* Settings.swift */; };
 		BDB735682B1D7B240079F35F /* FormatterEmptyZero.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */; };
 		BDBE88DB2B23B8FF005D4C0F /* HighlightRangeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */; };
@@ -44,6 +45,7 @@
 		BD2D76C12B33A81E001AA86F /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		BD2D76C32B33C2BD001AA86F /* Next-Candles-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Next-Candles-Info.plist"; sourceTree = SOURCE_ROOT; };
 		BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCAppDelegate.swift; sourceTree = "<group>"; };
+		BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+DaysRelative.swift"; sourceTree = "<group>"; };
 		BDB735632B1D67570079F35F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterEmptyZero.swift; sourceTree = "<group>"; };
 		BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightRangeAlert.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				BDD9F7972B12B150002E69F0 /* LoadingState.swift */,
 				BDD9F7952B12B141002E69F0 /* SheetType.swift */,
 				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
+				BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */,
 				BDBE88DE2B23C41C005D4C0F /* Services */,
 				BDDFAAC328CF6082009FC717 /* Model */,
 				BDDFAAC228CF6076009FC717 /* Views */,
@@ -234,6 +237,7 @@
 				BDBE88E02B23CC66005D4C0F /* NotificationsHelper.swift in Sources */,
 				BDFE4DD32B0C494A0074D0A9 /* ContactListView.swift in Sources */,
 				BDD9F7942B12B0EA002E69F0 /* SheetRouter.swift in Sources */,
+				BD889F042B49BDFF00046558 /* Date+DaysRelative.swift in Sources */,
 				BDD9F7902B12AA37002E69F0 /* HiddenContactsView.swift in Sources */,
 				BDB735682B1D7B240079F35F /* FormatterEmptyZero.swift in Sources */,
 				BDB735642B1D67570079F35F /* Settings.swift in Sources */,

@@ -101,10 +101,11 @@ struct ContactView: View {
             deleteButton
         }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
-            setNotifButton
-            Button("Set") {
+//            setNotifButton
+            Button("Set", systemImage: contact.hasNotifs ? "bell.slash" : "bell") {
                 setNotifSheet.toggle()
             }
+            .tint(.yellow)
         }
         .contextMenu {
             
