@@ -27,16 +27,16 @@ struct SetNotificationView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
     }
     
-    func distance(notifDate: Date, contact c: Contact) -> String {
+    func distance(notifDate: Date, contact c: Contact) -> Int {
         let birthdate = Calendar.current.nextDate(after: Date(), matching: DateComponents(month: c.month, day: c.day), matchingPolicy: .nextTime) ?? Date()
-        let dist = Date.daysRelative(primaryDate: birthdate, otherDate: notifDate)
-        return String(dist)
+        let dist = Date.daysRelative(primaryDate: notifDate, otherDate: birthdate)
+        return dist < 0 ? dist + 365 : dist
     }
     
-    func message(notifDate: Date, contact c: Contact) -> String {
+    func message(notifDate: Date, contact c: Contact) -> Text {
         let dist = distance(notifDate: notifDate, contact: c)
         
-        return dist == "0" ? "On the day" : "^[\(dist)\u{00a0}day](inflect: true) before"
+        return dist == 0 ? Text("On the day") : Text("^[\(dist)\u{00a0}days](inflect: true) before")
     }
     
     var body: some View {
@@ -111,11 +111,11 @@ struct SetNotificationView: View {
                             Circle()
                                 .fill(Color.pink.opacity(0.5))
                                 .overlay {
-                                    Text(distance(notifDate: i.1, contact: contact))
+                                    Text("\(distance(notifDate: i.1, contact: contact))")
                                         .font(.system(.caption, design: .monospaced, weight: .bold))
                                 }
                                 .frame(width: 28, height: 28, alignment: .center)
-                            Text(message(notifDate: i.1, contact: contact))
+                            message(notifDate: i.1, contact: contact)
                                 .font(.system(.body, design: .rounded))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)

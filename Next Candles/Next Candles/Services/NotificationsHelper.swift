@@ -80,6 +80,8 @@ class NotificationsHelper: ObservableObject {
             }
         }
         
+        let newDateComponents = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute], from: date)
+        
         // format the date into [M]/[D]
         let df = DateFormatter()
         df.locale = Locale.current
@@ -92,7 +94,7 @@ class NotificationsHelper: ObservableObject {
         let notificationContent = UNMutableNotificationContent(title: title, body: body, link: url)
         
         let calendarTrigger = UNCalendarNotificationTrigger(
-            dateMatching: dateComponents,
+            dateMatching: newDateComponents,
             repeats: true
         )
         let notificationIdentifier = UUID().uuidString
