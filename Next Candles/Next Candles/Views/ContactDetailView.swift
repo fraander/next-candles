@@ -30,7 +30,7 @@ struct PhoneSheet: View {
                     openURL.callAsFunction(url)
                 }
             }
-            .foregroundStyle(.mint)
+            .foregroundStyle(sheetType == .call ? .green : .mint)
         }
     }
 }
@@ -38,8 +38,11 @@ struct PhoneSheet: View {
 struct ContactDetailView: View {
     
     
+    
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
+
+    @State var setNotifSheet = false
     
     @State var phoneSheet: ContactSheetType = .call
     @State var showPhoneSheet = false
@@ -181,17 +184,8 @@ struct ContactDetailView: View {
                     Spacer()
                     //                    }
                     
-                    customButton(systemName: "bell.fill", text: contact.hasNotifs ? "Silence" : "Notify", bg: contact.hasNotifs ? Color.secondary.gradient : Color.yellow.gradient) {
-                        if (contact.hasNotifs) {
-                            if let n = contact.notif {
-                                NotificationsHelper.removeNotifs(notifIds: [n])
-                                contact.notif = nil
-                            }
-                        } else {
-                            Task {
-                                try await contact.setNotifs(distanceFromBD: 0)
-                            }
-                        }
+                    customButton(systemName: "bell.fill", text: contact.hasNotifs ? "Silence" : "Notify", bg: Color.yellow.gradient) {
+                        setNotifSheet.toggle()
                     }
                     
                     Spacer()
@@ -234,6 +228,7 @@ struct ContactDetailView: View {
                     )
             }
         }
+        .sheet(isPresented: $setNotifSheet) { SetNotificationView(contact: contact) }
     }
 }
 

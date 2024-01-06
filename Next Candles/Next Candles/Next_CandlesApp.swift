@@ -44,6 +44,7 @@ struct Next_CandlesApp: App {
     var body: some Scene {
         WindowGroup {
             ContactListView()
+                .fontDesign(.rounded)
                 .modelContainer(for: Contact.self)
                 .environmentObject(settings)
                 .environmentObject(alertRouter)

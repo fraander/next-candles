@@ -48,7 +48,7 @@ struct SetNotificationView: View {
                 Button("Done", systemImage: "checkmark") {
                     dismiss()
                 }
-                .tint(.mint)
+                .tint(.pink)
             }
             .padding([.top, .horizontal])
             
@@ -83,7 +83,7 @@ struct SetNotificationView: View {
                 HStack {
                     Spacer()
                     
-                    Button("Add Notification", systemImage: "arrow.right") {
+                    Button("Add Notification", systemImage: "checkmark.circle") {
                         Task {
                             try await contact.setNotifs(distanceFromBD: Int(daysBefore))
                             notifsForContact = await fetchNotifsForContact()
@@ -91,7 +91,7 @@ struct SetNotificationView: View {
                     }
                     .buttonBorderShape(.capsule)
                     .buttonStyle(.bordered)
-                    .tint(.mint)
+                    .tint(.yellow)
                     .labelStyle(.titleAndIcon)
                         .padding(.bottom, 8)
                 }
@@ -105,41 +105,48 @@ struct SetNotificationView: View {
                 .padding(.horizontal)
             
             ScrollView(.vertical) {
-                ForEach(notifsForContact, id: \.0.self) { i in
-                    HStack {
+                if notifsForContact.isEmpty {
+                    Spacer(minLength: 48)
+                    ContentUnavailableView("No notifications are currently queued.", systemImage: "app.badge")
+                        .foregroundStyle(.secondary)
+                        .fontDesign(.rounded)
+                } else {
+                    ForEach(notifsForContact, id: \.0.self) { i in
                         HStack {
-                            Circle()
-                                .fill(Color.pink.opacity(0.5))
-                                .overlay {
-                                    Text("\(distance(notifDate: i.1, contact: contact))")
-                                        .font(.system(.caption, design: .monospaced, weight: .bold))
-                                }
-                                .frame(width: 28, height: 28, alignment: .center)
-                            message(notifDate: i.1, contact: contact)
-                                .font(.system(.body, design: .rounded))
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(10)
-                        .background {
-                            Capsule()
-                                .fill(.pink.opacity(0.2))
-                        }
-
-                        Button("Remove Notification", systemImage: "bell.slash") {
-                            Task {
-                                if let n = contact.notif {
-                                    NotificationsHelper.removeNotifs(notifIds: [n])
-                                    contact.notif = nil
-                                }
-                                notifsForContact = await fetchNotifsForContact()
+                            HStack {
+                                Circle()
+                                    .fill(Color.pink.opacity(0.5))
+                                    .overlay {
+                                        Text("\(distance(notifDate: i.1, contact: contact))")
+                                            .font(.system(.caption, design: .monospaced, weight: .bold))
+                                    }
+                                    .frame(width: 28, height: 28, alignment: .center)
+                                message(notifDate: i.1, contact: contact)
+                                    .font(.system(.body, design: .rounded))
                             }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(10)
+                            .background {
+                                Capsule()
+                                    .fill(.pink.opacity(0.2))
+                            }
+                            
+                            Button("Remove Notification", systemImage: "bell.slash") {
+                                Task {
+                                    if let n = contact.notif {
+                                        NotificationsHelper.removeNotifs(notifIds: [n])
+                                        contact.notif = nil
+                                    }
+                                    notifsForContact = await fetchNotifsForContact()
+                                }
+                            }
+                            .tint(.yellow)
+                            .buttonStyle(.bordered)
+                            .labelStyle(.iconOnly)
+                            .buttonBorderShape(.circle)
                         }
-                        .tint(.yellow)
-                        .buttonStyle(.bordered)
-                        .labelStyle(.iconOnly)
-                        .buttonBorderShape(.circle)
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 }
             }
         }
