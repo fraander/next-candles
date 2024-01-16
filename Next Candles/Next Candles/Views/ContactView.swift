@@ -77,7 +77,7 @@ struct ContactView: View {
                             .dateTime
                                 .day()
                                 .month(.abbreviated)
-                                .weekday(.wide)
+//                                .weekday(.wide)
                         )
                 )
                 .multilineTextAlignment(.leading)
@@ -107,18 +107,18 @@ struct ContactView: View {
             }
             .tint(.yellow)
         }
-        .contextMenu {
+//        .contextMenu {
+//            
+//            hideButton
+//            
+//            Divider()
             
-            hideButton
+//            setNotifButton
             
-            Divider()
-            
-            setNotifButton
-            
-            Button("Copy Identifier", systemImage: "barcode.viewfinder") {
-                UIPasteboard.general.string = "nextcandles://open?contact=" + contact.identifier
-            }
-        }
+//            Button("Copy Link", systemImage: "barcode.viewfinder") {
+//                UIPasteboard.general.string = "nextcandles://open?contact=" + contact.identifier
+//            }
+//        }
         .sheet(isPresented: $setNotifSheet) { SetNotificationView(contact: contact) }
     }
     

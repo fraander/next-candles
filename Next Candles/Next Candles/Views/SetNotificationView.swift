@@ -132,12 +132,21 @@ struct SetNotificationView: View {
                             }
                             
                             Button("Remove Notification", systemImage: "bell.slash") {
+                                
                                 Task {
+                                    notifsForContact.removeAll { j in
+                                        i == j
+                                    }
+                                    
+                                    // These processes don't work
                                     if let n = contact.notif {
                                         NotificationsHelper.removeNotifs(notifIds: [n])
                                         contact.notif = nil
                                     }
-                                    notifsForContact = await fetchNotifsForContact()
+                                    let fetched = await fetchNotifsForContact()
+                                    DispatchQueue.main.async {
+                                        notifsForContact = fetched
+                                    }
                                 }
                             }
                             .tint(.yellow)
