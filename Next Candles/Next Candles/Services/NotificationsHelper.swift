@@ -8,18 +8,6 @@
 import Foundation
 import UserNotifications
 
-struct GeneralizedError: LocalizedError {
-    let description: String
-    
-    init(_ description: String) {
-        self.description = description
-    }
-    
-    var errorDescription: String? {
-        description
-    }
-}
-
 extension UNMutableNotificationContent {
     convenience init(title: String, body: String, link: String) {
         self.init()

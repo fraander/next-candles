@@ -12,7 +12,13 @@
 		BD168DD72892E69D0082E461 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD168DD62892E69D0082E461 /* Preview Assets.xcassets */; };
 		BD2D76C22B33A81E001AA86F /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2D76C12B33A81E001AA86F /* ContactDetailView.swift */; };
 		BD2D76C72B350F2B001AA86F /* NCAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */; };
+		BD5D34302B65996A00B755D9 /* Next_Candles_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5D342F2B65996A00B755D9 /* Next_Candles_Tests.swift */; };
+		BD5D34372B65997D00B755D9 /* TestDateCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5D34362B65997D00B755D9 /* TestDateCalculations.swift */; };
+		BD5D34392B659A2C00B755D9 /* DateComponents+XDaysBefore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */; };
+		BD5D343A2B65A59300B755D9 /* DateComponents+XDaysBefore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */; };
 		BD889F042B49BDFF00046558 /* Date+DaysRelative.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */; };
+		BD9237572B65A7380043CE45 /* GeneralizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9237562B65A7380043CE45 /* GeneralizedError.swift */; };
+		BD9237582B65A7650043CE45 /* GeneralizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9237562B65A7380043CE45 /* GeneralizedError.swift */; };
 		BDB735642B1D67570079F35F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735632B1D67570079F35F /* Settings.swift */; };
 		BDB735682B1D7B240079F35F /* FormatterEmptyZero.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */; };
 		BDBE88DB2B23B8FF005D4C0F /* HighlightRangeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */; };
@@ -36,6 +42,16 @@
 		BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFE4DD42B0D53DD0074D0A9 /* ContactsUtils.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		BD5D34312B65996A00B755D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BD168DC32892E69C0082E461 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BD168DCA2892E69C0082E461;
+			remoteInfo = "Next Candles";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		BD168DCB2892E69C0082E461 /* Next Candles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Next Candles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Next_CandlesApp.swift; sourceTree = "<group>"; };
@@ -45,7 +61,12 @@
 		BD2D76C12B33A81E001AA86F /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		BD2D76C32B33C2BD001AA86F /* Next-Candles-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Next-Candles-Info.plist"; sourceTree = SOURCE_ROOT; };
 		BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCAppDelegate.swift; sourceTree = "<group>"; };
+		BD5D342D2B65996A00B755D9 /* Next Candles Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Next Candles Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BD5D342F2B65996A00B755D9 /* Next_Candles_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Next_Candles_Tests.swift; sourceTree = "<group>"; };
+		BD5D34362B65997D00B755D9 /* TestDateCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDateCalculations.swift; sourceTree = "<group>"; };
+		BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponents+XDaysBefore.swift"; sourceTree = "<group>"; };
 		BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+DaysRelative.swift"; sourceTree = "<group>"; };
+		BD9237562B65A7380043CE45 /* GeneralizedError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralizedError.swift; sourceTree = "<group>"; };
 		BDB735632B1D67570079F35F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormatterEmptyZero.swift; sourceTree = "<group>"; };
 		BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightRangeAlert.swift; sourceTree = "<group>"; };
@@ -77,6 +98,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BD5D342A2B65996A00B755D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -84,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				BD168DCD2892E69C0082E461 /* Next Candles */,
+				BD5D342E2B65996A00B755D9 /* Next Candles Tests */,
 				BD168DCC2892E69C0082E461 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -92,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				BD168DCB2892E69C0082E461 /* Next Candles.app */,
+				BD5D342D2B65996A00B755D9 /* Next Candles Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,6 +134,8 @@
 				BDD9F7952B12B141002E69F0 /* SheetType.swift */,
 				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
 				BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */,
+				BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */,
+				BD9237562B65A7380043CE45 /* GeneralizedError.swift */,
 				BDBE88DE2B23C41C005D4C0F /* Services */,
 				BDDFAAC328CF6082009FC717 /* Model */,
 				BDDFAAC228CF6076009FC717 /* Views */,
@@ -123,6 +155,15 @@
 				BD168DD62892E69D0082E461 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		BD5D342E2B65996A00B755D9 /* Next Candles Tests */ = {
+			isa = PBXGroup;
+			children = (
+				BD5D342F2B65996A00B755D9 /* Next_Candles_Tests.swift */,
+				BD5D34362B65997D00B755D9 /* TestDateCalculations.swift */,
+			);
+			path = "Next Candles Tests";
 			sourceTree = "<group>";
 		};
 		BDBE88DE2B23C41C005D4C0F /* Services */ = {
@@ -184,6 +225,24 @@
 			productReference = BD168DCB2892E69C0082E461 /* Next Candles.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BD5D342C2B65996A00B755D9 /* Next Candles Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD5D34352B65996A00B755D9 /* Build configuration list for PBXNativeTarget "Next Candles Tests" */;
+			buildPhases = (
+				BD5D34292B65996A00B755D9 /* Sources */,
+				BD5D342A2B65996A00B755D9 /* Frameworks */,
+				BD5D342B2B65996A00B755D9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BD5D34322B65996A00B755D9 /* PBXTargetDependency */,
+			);
+			name = "Next Candles Tests";
+			productName = "Next Candles Tests";
+			productReference = BD5D342D2B65996A00B755D9 /* Next Candles Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -191,11 +250,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1400;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					BD168DCA2892E69C0082E461 = {
 						CreatedOnToolsVersion = 14.0;
+					};
+					BD5D342C2B65996A00B755D9 = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = BD168DCA2892E69C0082E461;
 					};
 				};
 			};
@@ -213,6 +276,7 @@
 			projectRoot = "";
 			targets = (
 				BD168DCA2892E69C0082E461 /* Next Candles */,
+				BD5D342C2B65996A00B755D9 /* Next Candles Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -227,6 +291,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BD5D342B2B65996A00B755D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -234,6 +305,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD5D34392B659A2C00B755D9 /* DateComponents+XDaysBefore.swift in Sources */,
 				BDBE88E02B23CC66005D4C0F /* NotificationsHelper.swift in Sources */,
 				BDFE4DD32B0C494A0074D0A9 /* ContactListView.swift in Sources */,
 				BDD9F7942B12B0EA002E69F0 /* SheetRouter.swift in Sources */,
@@ -259,10 +331,30 @@
 				BDD9F7982B12B150002E69F0 /* LoadingState.swift in Sources */,
 				BDD438C92B3BB80D006C807D /* DiffView.swift in Sources */,
 				BDD9F78E2B12A9CB002E69F0 /* ContactsMonthListView.swift in Sources */,
+				BD9237572B65A7380043CE45 /* GeneralizedError.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BD5D34292B65996A00B755D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BD5D34302B65996A00B755D9 /* Next_Candles_Tests.swift in Sources */,
+				BD9237582B65A7650043CE45 /* GeneralizedError.swift in Sources */,
+				BD5D343A2B65A59300B755D9 /* DateComponents+XDaysBefore.swift in Sources */,
+				BD5D34372B65997D00B755D9 /* TestDateCalculations.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BD5D34322B65996A00B755D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BD168DCA2892E69C0082E461 /* Next Candles */;
+			targetProxy = BD5D34312B65996A00B755D9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		BD168DD82892E69D0082E461 /* Debug */ = {
@@ -462,6 +554,57 @@
 			};
 			name = Release;
 		};
+		BD5D34332B65996A00B755D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6ZT823VK2T;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.frank.Next-Candles-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Next Candles.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Next Candles";
+			};
+			name = Debug;
+		};
+		BD5D34342B65996A00B755D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6ZT823VK2T;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.frank.Next-Candles-Tests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Next Candles.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Next Candles";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -479,6 +622,15 @@
 			buildConfigurations = (
 				BD168DDB2892E69D0082E461 /* Debug */,
 				BD168DDC2892E69D0082E461 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BD5D34352B65996A00B755D9 /* Build configuration list for PBXNativeTarget "Next Candles Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BD5D34332B65996A00B755D9 /* Debug */,
+				BD5D34342B65996A00B755D9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
