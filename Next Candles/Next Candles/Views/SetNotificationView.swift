@@ -30,7 +30,7 @@ struct SetNotificationView: View {
     func distance(notifDate: Date, contact c: Contact) -> Int {
         let birthdate = Calendar.current.nextDate(after: Date(), matching: DateComponents(month: c.month, day: c.day), matchingPolicy: .nextTime) ?? Date()
         let dist = Date.daysRelative(primaryDate: notifDate, otherDate: birthdate)
-        return dist < 0 ? dist + 365 : dist
+        return dist < 0 ? dist + 365 : dist // sometimes this value is not 365 (leap years?) so find a calendar safe way of relativity edge case
     }
     
     func message(notifDate: Date, contact c: Contact) -> Text {
