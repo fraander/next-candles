@@ -5,6 +5,8 @@
 //  Created by Frank Anderson on 12/20/23.
 //
 
+// TODO: Refactor
+
 import SwiftUI
 import Contacts
 import ContactsUI

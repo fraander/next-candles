@@ -63,11 +63,13 @@ struct Next_CandlesApp: App {
                     Group {
                         if (progressRouter.isLoading) {
                             ZStack {
-                                Color.primary.opacity(0.1).allowsHitTesting(false)
+                                Color.secondary.opacity(0.4).allowsHitTesting(true)
                                 ProgressView()
                             }
+                            .ignoresSafeArea(.all)
                         }
                     }
+                    .animation(.easeInOut, value: progressRouter.isLoading)
                 }
 #if os(macOS)
                 .frame(minWidth: 320)

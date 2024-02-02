@@ -77,7 +77,6 @@ struct ContactView: View {
                             .dateTime
                                 .day()
                                 .month(.abbreviated)
-//                                .weekday(.wide)
                         )
                 )
                 .multilineTextAlignment(.leading)

@@ -38,7 +38,6 @@ struct SettingsMenu: View {
             if (!allContacts.isEmpty) {
                 Divider()
                 
-                // TODO: add a loading page over the whole screen when this happens
                 Button("Notify all", systemImage: "bell.badge.fill") {
                     progressRouter.isLoading = true
                     allContacts.forEach { c in
