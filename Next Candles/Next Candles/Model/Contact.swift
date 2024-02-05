@@ -19,7 +19,7 @@ class Contact: ObservableObject, Equatable {
     var day: Int?
     var year: Int?
     var hidden: Bool = false
-    var notif: String?
+//    var notif: String?
     var contactAppIdentifier: String?
     var phones: [String]
     
@@ -55,14 +55,6 @@ class Contact: ObservableObject, Equatable {
         return Calendar.current.date(from: components)
     }
     
-    var hasNotifs: Bool {
-        if notif == nil {
-            return false
-        } else {
-            return true
-        }
-    }
-    
     func withinNextXDays(x: Int) -> Bool {
         let currentDate = Date()
         let currentYear = Calendar.current.component(.year, from: Date())
@@ -96,7 +88,7 @@ class Contact: ObservableObject, Equatable {
         return false
     }
     
-    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, notif: String? = nil, phones: [CNLabeledValue<CNPhoneNumber>] = []) {
+    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, /*notif: String? = nil, */phones: [CNLabeledValue<CNPhoneNumber>] = []) {
         self.identifier = identifier ?? UUID().uuidString
         self.givenName = givenName
         self.familyName = familyName
@@ -104,7 +96,7 @@ class Contact: ObservableObject, Equatable {
         self.month = month
         self.day = day
         self.year = year
-        self.notif = notif
+//        self.notif = notif
         self.phones = phones.map{ cnpn in
             return cnpn.value.stringValue
         }
@@ -118,10 +110,10 @@ class Contact: ObservableObject, Equatable {
         // Set notification for the day of
         let birthdateComponents = DateComponents(calendar: .current, month: self.month, day: self.day)
         do {
-            let notifId = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: distanceFromBD, id: self.identifier)
-            DispatchQueue.main.async {
-                self.notif = notifId
-            }
+            let _ = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: distanceFromBD, id: self.identifier)
+//            DispatchQueue.main.async {
+//                self.notif = notifId
+//            }
         } catch {
             throw error
         }

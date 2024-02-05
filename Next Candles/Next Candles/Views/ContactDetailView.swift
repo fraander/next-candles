@@ -43,6 +43,7 @@ struct ContactDetailView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
+    @EnvironmentObject var settings: Settings
 
     @State var setNotifSheet = false
     
@@ -186,7 +187,7 @@ struct ContactDetailView: View {
                     Spacer()
                     //                    }
                     
-                    customButton(systemName: "bell.fill", text: contact.hasNotifs ? "Silence" : "Notify", bg: Color.yellow.gradient) {
+                    customButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
                         setNotifSheet.toggle()
                     }
                     
@@ -230,7 +231,7 @@ struct ContactDetailView: View {
                     )
             }
         }
-        .sheet(isPresented: $setNotifSheet) { SetNotificationView(contact: contact) }
+        .sheet(isPresented: $setNotifSheet) { SetNotificationView(distance: settings.dayRange, contact: contact) }
     }
 }
 

@@ -38,24 +38,9 @@ struct SettingsMenu: View {
             if (!allContacts.isEmpty) {
                 Divider()
                 
-                Button("Notify all", systemImage: "bell.badge.fill") {
-                    progressRouter.isLoading = true
-                    allContacts.forEach { c in
-                        if !c.hasNotifs && !c.hidden {
-                            Task { try await c.setNotifs(distanceFromBD: 0) }
-                        }
-                    }
-                    progressRouter.isLoading = false
-                }
-                
-                Button("Notifs off", systemImage: "bell.slash.fill") {
-                    progressRouter.isLoading = true
-                    allContacts.forEach { c in
-                        NotificationsHelper.removeAllNotifs()
-                        c.notif = nil
-                    }
-                    progressRouter.isLoading = false
-                }
+//                Button("Notifs off", systemImage: "bell.slash.fill") {
+//                    NotificationsHelper.removeAllNotifs()
+//                }
                 
                 Button(allHidden ? "Show All" : "Hide all", systemImage: allHidden ? "eye" : "eye.slash") {
                     let ah = allHidden
@@ -65,13 +50,15 @@ struct SettingsMenu: View {
                 }
                 
                 Button("Delete all", systemImage: "trash", role: .destructive) {
-                    alertRouter.alert = Alert(
-                        title: Text("Delete all Birthdays?"),
-                        primaryButton: .destructive(Text("Yes, delete")) {
-                            allContacts.forEach { modelContext.delete($0) }
-                            NotificationsHelper.removeAllNotifs()
-                        },
-                        secondaryButton: .cancel(Text("No, cancel"))
+                    alertRouter.setAlert(
+                        Alert(
+                            title: Text("Delete all Birthdays?"),
+                            primaryButton: .destructive(Text("Yes, delete")) {
+                                allContacts.forEach { modelContext.delete($0) }
+                                NotificationsHelper.removeAllNotifs()
+                            },
+                            secondaryButton: .cancel(Text("No, cancel"))
+                        )
                     )
                 }
             }
@@ -104,8 +91,10 @@ struct SettingsMenu: View {
                 showResolveDiffs = true
                 toResolve = diffs
             } else {
-                alertRouter.alert = Alert(title: Text("No new contacts to import."))
-            }            
+                alertRouter.setAlert(
+                    Alert(title: Text("No new contacts to import."))
+                )
+            }
         }
     }
 }

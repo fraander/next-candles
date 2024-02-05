@@ -17,6 +17,7 @@ struct ContactView: View {
     var contact: Contact
     
     @State var setNotifSheet = false
+    @State var notifsForContact = 0
     
     var hideButton: some View {
         Button("Hide Birthday", systemImage: "eye.slash") { hide(contact)}
@@ -25,36 +26,6 @@ struct ContactView: View {
     var deleteButton: some View {
         Button("Delete Birthday", systemImage: "trash", role: .destructive) { modelContext.delete(contact) }
             .tint(.red)
-    }
-    var setNotifButton: some View {
-        Button(
-            contact.hasNotifs ? "Remove Notifications" : "Set Notifications",
-            systemImage: contact.hasNotifs ? "bell.slash" : "bell"
-        ) {
-            if (contact.hasNotifs) {
-                if let n = contact.notif {
-                    NotificationsHelper.removeNotifs(notifIds: [n])
-                    contact.notif = nil
-                }
-                
-            } else {
-                
-                Task {
-                    print("ask access")
-                    let accessStatus = await NotificationsHelper.hasAccess()
-                    print(accessStatus)
-                    
-                    print("Setting notifications")
-                    do {
-                        try await contact.setNotifs(distanceFromBD: settings.dayRange)
-                        print("Notifs set")
-                    } catch {
-                        alertRouter.alert = Alert(title: Text(error.localizedDescription))
-                    }
-                }
-            }
-        }
-        .tint(.yellow)
     }
     
     var body: some View {
@@ -83,7 +54,7 @@ struct ContactView: View {
                 .font(.system(.subheadline, design: .rounded, weight: .regular))
                 .foregroundColor(.secondary)
                 
-                if (contact.hasNotifs) {
+                if (notifsForContact > 0) {
                     Image(systemName: "bell.fill")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -99,9 +70,39 @@ struct ContactView: View {
             
             deleteButton
         }
+        .onAppear {
+            Task {
+                notifsForContact = await notifsForContact()                
+            }
+        }
+        .onChange(of: setNotifSheet) {
+            Task {
+                notifsForContact = await notifsForContact()
+            }
+        }
+        .contextMenu {
+            Button("Copy Contact Link", systemImage: "barcode.viewfinder") {
+                
+                var components = URLComponents()
+                components.scheme = "nextcandles"
+                components.host = "action"
+                components.queryItems = [
+                    URLQueryItem(name: "id", value: contact.identifier),
+                    URLQueryItem(name: "day", value: "0"),
+                    URLQueryItem(name: "month", value: "0")
+                ]
+                
+                if let url = components.url?.absoluteString {
+                    UIPasteboard.general.string = url
+                } else {
+                    print("Error creating URL")
+                }
+                
+            }
+        }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
 //            setNotifButton
-            Button("Set", systemImage: contact.hasNotifs ? "bell.slash" : "bell") {
+            Button("Notifs", systemImage: "bell") {
                 setNotifSheet.toggle()
             }
             .tint(.yellow)
@@ -118,7 +119,16 @@ struct ContactView: View {
 //                UIPasteboard.general.string = "nextcandles://open?contact=" + contact.identifier
 //            }
 //        }
-        .sheet(isPresented: $setNotifSheet) { SetNotificationView(contact: contact) }
+        .sheet(isPresented: $setNotifSheet) { SetNotificationView(distance: settings.dayRange, contact: contact) }
+    }
+    
+    func notifsForContact() async -> Int {
+        let requests = await NotificationsHelper.nc.pendingNotificationRequests()
+        let identifiers = requests.compactMap {
+            NotifWrapper(id: $0.identifier, url: $0.content.targetContentIdentifier ?? "")
+        }
+        let filtered = identifiers.filter { $0.url.contains(contact.identifier) }
+        return filtered.count
     }
     
     func hide(_ contact: Contact) {

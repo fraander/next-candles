@@ -22,10 +22,13 @@ import Combine
  */
 
 class AlertRouter: ObservableObject {
-    @Published var alert: Alert? {
-        didSet { isPresented = alert != nil }
+    @Published private(set) var alert: Alert? = nil
+    @Published fileprivate(set) var isPresented = false
+    
+    func setAlert(_ alert: Alert) {
+        self.alert = alert
+        isPresented = true
     }
-    @Published var isPresented = false
 }
 
 class ProgressViewRouter: ObservableObject {

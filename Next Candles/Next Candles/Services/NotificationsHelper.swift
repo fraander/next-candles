@@ -63,9 +63,20 @@ class NotificationsHelper: ObservableObject {
             throw GeneralizedError("Invalid birthdate or invalid distance.")
         }
         if date < Date() {
-            if let d = Calendar.current.date(byAdding: .year, value: 1, to: date) {
-                date = d
+            
+            guard let yearLater = Calendar.current.date(byAdding: .year, value: 1, to: Date()) else {
+                throw GeneralizedError("Invalid date 1 year from today")
             }
+            
+            guard let newBirthdate = Calendar.current.nextDate(after: yearLater, matching: dateComponents, matchingPolicy: .nextTime) else {
+                throw GeneralizedError("Invalid birthdate.")
+            }
+            
+            guard let newDate = Calendar.current.date(byAdding: .day, value: (-1 * distanceFromBD), to: newBirthdate) else {
+                throw GeneralizedError("Invalid birthdate or invalid distance.")
+            }
+            
+            date = newDate
         }
         
         let newDateComponents = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute], from: date)
@@ -78,7 +89,20 @@ class NotificationsHelper: ObservableObject {
         // set the title
         let title = "Birthday alert! 🥳"
         let body = distanceFromBD == 0 ? "\(name.last == "s" ? name + "'" : name + "'s") birthday is today." : "\(name.last == "s" ? name + "'" : name + "'s") birthday is on \(df.string(from: date)), which is \(distanceFromBD) \(distanceFromBD == 1 ? "day" : "days") away."
-        let url = "nextcandles://open?contact=" + id
+        
+        var components = URLComponents()
+        components.scheme = "nextcandles"
+        components.host = "action"
+        components.queryItems = [
+            URLQueryItem(name: "id", value: id),
+            URLQueryItem(name: "day", value: String(describing: newDateComponents.day ?? 0)),
+            URLQueryItem(name: "month", value: String(describing: newDateComponents.month ?? 0))
+        ]
+        
+        
+        guard let url = components.url?.absoluteString else {
+            throw GeneralizedError("Invalid URL")
+        }
         let notificationContent = UNMutableNotificationContent(title: title, body: body, link: url)
         
         let calendarTrigger = UNCalendarNotificationTrigger(
@@ -120,6 +144,7 @@ class NotificationsHelper: ObservableObject {
     
     static func removeAllNotifs() {
         nc.removeAllPendingNotificationRequests()
+        nc.removeAllDeliveredNotifications()
     }
     
     func notifFor(id: String) async -> Bool {
