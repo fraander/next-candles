@@ -6,7 +6,11 @@
 //
 
 import Foundation
+#if os(iOS)
 import UIKit
+#elseif os(macOS)
+import UserNotifications
+#endif
 import SwiftUI
 
 
@@ -26,12 +30,32 @@ public class NotificationHandler: ObservableObject {
     }
 }
 
-class NCAppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-    
+
+#if os(iOS)
+typealias AppDelegate = UIApplicationDelegate
+typealias Application = UIApplication
+#elseif os(macOS)
+typealias AppDelegate = NSApplicationDelegate
+typealias Application = NSApplication
+#endif
+
+
+class NCAppDelegate: NSObject, AppDelegate, UNUserNotificationCenterDelegate {
+#if os(iOS)
     func application(
-        _ application: UIApplication,
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+        _ application: Application,
+        didFinishLaunchingWithOptions launchOptions: [Application.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
+        return launchAction()
+    }
+#elseif os(macOS)
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        let _ = launchAction()
+    }
+#endif
+    
+    
+    func launchAction() -> Bool {
         UNUserNotificationCenter.current().delegate = self
         
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]

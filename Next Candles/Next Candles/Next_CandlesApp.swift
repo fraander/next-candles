@@ -39,7 +39,11 @@ class ProgressViewRouter: ObservableObject {
 struct Next_CandlesApp: App {
     
     @Environment(\.openURL) var openURL
+    #if os(iOS)
     @UIApplicationDelegateAdaptor var appDelegate: NCAppDelegate
+    #elseif os(macOS)
+    @NSApplicationDelegateAdaptor var appDelegate: NCAppDelegate
+    #endif
     @StateObject var settings: Settings = Settings.load()
     @StateObject var alertRouter: AlertRouter = AlertRouter()
     @StateObject var progressRouter: ProgressViewRouter = ProgressViewRouter()

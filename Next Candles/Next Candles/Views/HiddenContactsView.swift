@@ -28,7 +28,9 @@ struct HiddenContactsView: View {
                     List(searchedContacts, id: \.self, selection: $selectedContacts) { contact in
                         ContactView(contact: contact)
                     }
+                    #if os(iOS)
                     .searchable(text: $searchString, placement: .navigationBarDrawer(displayMode: .always))
+                    #endif
                 }
             }
             .navigationTitle("Hidden")

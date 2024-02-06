@@ -38,11 +38,9 @@ struct PhoneSheet: View {
 }
 
 struct ContactDetailView: View {
-    
-    
-    
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
+    @Environment(\.horizontalSizeClass) var sizeClass
     @EnvironmentObject var settings: Settings
 
     @State var setNotifSheet = false
@@ -70,6 +68,9 @@ struct ContactDetailView: View {
                     .fill(bg)
             }
         }
+        #if os(macOS)
+        .buttonStyle(.plain)
+        #endif
     }
     
     func customWideButton(systemName: String, text: String, bg: AnyGradient, action: @escaping () -> Void) -> some View {
@@ -107,111 +108,135 @@ struct ContactDetailView: View {
     }
     
     var body: some View {
-        VStack(spacing: 8) {
-            Rectangle()
-                .fill(Color.pink.gradient)
-                .ignoresSafeArea(.all, edges: .top)
-                .frame(height: 180)
-            
-            Group {
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundStyle(.white, .gray)
-                    .frame(width: 180, height: 180)
-                    .background {
-                        Circle().fill(.white)
-                    }
-                    .overlay {
-                        Circle().stroke(.white, lineWidth: 12)
-                    }
-                
-                
-                Text(contact.name)
-                    .font(.system(.largeTitle, design: .rounded, weight: .semibold))
-                    .padding(.top, 12)
-                
-                if let ca = (contact.age) {
-                    Text("\(ca) going on \(ca + 1)")
-                        .font(.system(.headline, design: .rounded, weight: .semibold))
-                        .italic()
-                        .foregroundStyle(.secondary)
-                    
-                }
+        ScrollView {
+            VStack(spacing: 8) {
+                Rectangle()
+                    .fill(Color.pink.gradient)
+                    .ignoresSafeArea(.all, edges: .top)
+                    .frame(height: 240)
                 
                 Group {
-                    if (contact.year != nil) {
-                        Text((contact.birthdate ?? Date()).formatted(
-                            .dateTime
-                                .day()
-                                .month(
-                                    .wide
-                                )
-                                .year()
-                        ))
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundStyle(.white, .gray)
+                        .frame(width: 180, height: 180)
+                        .background { Circle().fill(.white) }
+                        .overlay { Circle().stroke(.white, lineWidth: 12) }
+                    
+                    Text(contact.name)
+                        .font(.system(.largeTitle, design: .rounded, weight: .semibold))
+                        .padding(.top, 12)
+                    
+                    if let ca = (contact.age) {
+                        Text("\(ca) going on \(ca + 1)")
+                            .font(.system(.headline, design: .rounded, weight: .semibold))
+                            .italic()
+                            .foregroundStyle(.secondary)
+                        
                     }
                     
-                    if (contact.year == nil) {
-                        Text((contact.birthdate ?? Date()).formatted(
-                            .dateTime
-                                .day()
-                                .month(
-                                    .wide
-                                )
-                        ))
+                    Group {
+                        if (contact.year != nil) {
+                            Text((contact.birthdate ?? Date()).formatted(.dateTime.day().month(.wide).year()))
+                        }
+                        
+                        if (contact.year == nil) {
+                            Text((contact.birthdate ?? Date()).formatted(.dateTime.day().month(.wide)))
+                        }
                     }
-                }
-                .font(.system(.headline, design: .rounded, weight: .semibold))
-                .foregroundStyle(.white)
-                .padding()
-                .background {
-                    Capsule()
-                        .fill(.pink.gradient)
-                }
-                
-                Divider()
-                    .padding(.top, 12)
-                
-                HStack(spacing: 0) {
+                    .font(.system(.headline, design: .rounded, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .padding()
+                    .background { Capsule().fill(.pink.gradient) }
                     
-                    //                    if (contact.contactAppIdentifier != nil) {
-                    customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
-                        phoneSheet = .call
-                        showPhoneSheet.toggle()
-                    }
-                    Spacer()
-                    customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
-                        phoneSheet = .text
-                        showPhoneSheet.toggle()
-                    }
-                    Spacer()
-                    //                    }
+                    Divider()
+                        .padding(.top, 12)
                     
-                    customButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
-                        setNotifSheet.toggle()
+#if os(macOS)
+                    HStack {
+                        customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
+                            phoneSheet = .call
+                            showPhoneSheet.toggle()
+                        }
+                        customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
+                            phoneSheet = .text
+                            showPhoneSheet.toggle()
+                        }
+                        customButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
+                            setNotifSheet.toggle()
+                        }
+                        customButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
+                            contact.hidden.toggle()
+                        }
+                        
+                        customButton(systemName: "trash.fill", text: "Delete", bg: Color.pink.gradient) {
+                            modelContext.delete(contact)
+                        }
                     }
-                    
-                    Spacer()
-                    customButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
-                        contact.hidden.toggle()
+                    .padding()
+#else
+                    if sizeClass == .compact {
+                        HStack(spacing: 0) {
+                            customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
+                                phoneSheet = .call
+                                showPhoneSheet.toggle()
+                            }
+                            Spacer()
+                            customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
+                                phoneSheet = .text
+                                showPhoneSheet.toggle()
+                            }
+                            Spacer()
+                            customButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
+                                setNotifSheet.toggle()
+                            }
+                            Spacer()
+                            customButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
+                                contact.hidden.toggle()
+                            }
+                        }
+                        .padding(.vertical, 12)
+                        .padding(.horizontal)
+                        
+                        Divider()
+                        
+                        VStack(spacing: 12) {
+                            customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
+                                modelContext.delete(contact)
+                            }
+                        }
+                        .padding()
+                    } else {
+                        VStack {
+                            customWideButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
+                                phoneSheet = .call
+                                showPhoneSheet.toggle()
+                            }
+                            customWideButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
+                                phoneSheet = .text
+                                showPhoneSheet.toggle()
+                            }
+                            customWideButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
+                                setNotifSheet.toggle()
+                            }
+                            customWideButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
+                                contact.hidden.toggle()
+                            }
+                            
+                            customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
+                                modelContext.delete(contact)
+                            }
+                        }
+                        .padding()
                     }
+#endif
                 }
-                .padding(.vertical, 12)
-                .padding(.horizontal)
-                
-                Divider()
-                
-                VStack(spacing: 12) {
-                    customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
-                        modelContext.delete(contact)
-                    }
-                }
-                .padding()
+                .offset(y: -120)
+                Spacer()
             }
-            .offset(y: -120)
-            
-            Spacer()
         }
+        .ignoresSafeArea(.all)
         .background {
             Rectangle()
                 .fill(colorScheme == .light ? Color.white.gradient : Color.black.gradient)

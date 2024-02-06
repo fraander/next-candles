@@ -92,8 +92,12 @@ struct ContactView: View {
                     URLQueryItem(name: "month", value: "0")
                 ]
                 
-                if let url = components.url?.absoluteString {
-                    UIPasteboard.general.string = url
+                if let url = components.url {
+                    #if os(iOS)
+                    UIPasteboard.general.string = url.absoluteString
+                    #elseif os(macOS)
+                    NSPasteboard.general.setString(url.absoluteString, forType: .string)
+                    #endif
                 } else {
                     print("Error creating URL")
                 }
