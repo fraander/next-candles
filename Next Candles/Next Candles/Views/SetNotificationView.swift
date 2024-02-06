@@ -31,6 +31,28 @@ struct SetNotificationView: View {
     var body: some View {
         
         VStack {
+            HStack {
+                if (!notifs.contains { nw in
+                    if let nd = notifDate(from: nw.url), let dist = difference(notifDate: nd, birthMonth: contact.month, birthDay: contact.day) {
+                        return dist == 0
+                    } else { return false }
+                }) {
+                    Button("Notify day of", systemImage: "birthday.cake") {
+                        Task { await setNotification(dist: 0) }
+                    }
+                    .tint(.yellow)
+                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.bordered)
+                }
+                
+                Spacer()
+                
+                Button("Done", systemImage: "checkmark") { dismiss() }
+                    .tint(.mint)
+                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.bordered)
+            }
+            .padding([.horizontal, .top])
             Text(contact.name)
                 .font(.system(.headline, design: .rounded, weight: .bold))
                 .padding(.top, 25)
@@ -71,7 +93,7 @@ struct SetNotificationView: View {
                 Spacer()
                 
                 Button("Set Notification", systemImage: "bell.fill") {
-                    Task { await setNotification() }
+                    Task { await setNotification(dist: distance) }
                 }
                 .buttonBorderShape(.capsule)
                 .buttonStyle(.bordered)
@@ -223,9 +245,9 @@ struct SetNotificationView: View {
         return sortNotifWrappers(output)
     }
     
-    func setNotification() async {
+    func setNotification(dist: Double) async {
         do {
-            try await contact.setNotifs(distanceFromBD: Int(distance))
+            try await contact.setNotifs(distanceFromBD: Int(dist))
             notifs = await notifsForContact()
         } catch {
             alertRouter.setAlert(
