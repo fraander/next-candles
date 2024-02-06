@@ -93,11 +93,10 @@ struct SetNotificationView: View {
             } else {
                 List {
                     ForEach(notifs) { notif in
-                        #warning("add day-of support!")
                         HStack {
                             if let notifDate = notifDate(from: notif.url) {
                                 if let dist = difference(notifDate: notifDate, birthMonth: contact.month, birthDay: contact.day) {
-                                    Text("^[\(dist) day](inflect: true) before")
+                                    Text(dist == 0 ? "On the day" : "^[\(dist) day](inflect: true) before")
                                     Spacer()
                                 } else {
                                     Text("INVALID DATE COMPARISON")
@@ -160,8 +159,13 @@ struct SetNotificationView: View {
         }
     }
     
-    #warning("day of is not supported right here")
     func difference(notifDate: Date, birthMonth: Int?, birthDay: Int?) -> Int? {
+        
+        let notifDateComponents = Calendar.current.dateComponents([.day, .month], from: notifDate)
+        if (notifDateComponents.day == birthDay && notifDateComponents.month == birthMonth) {
+            return 0
+        }
+        
         let bdc = DateComponents(month: birthMonth, day: birthDay)
         guard let nextBd = Calendar.current.nextDate(after: notifDate, matching: bdc, matchingPolicy: .nextTime),
               let dist = Calendar.current.dateComponents([.day], from: notifDate, to: nextBd).day else {
