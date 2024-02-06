@@ -37,7 +37,7 @@ struct SetNotificationView: View {
                         return dist == 0
                     } else { return false }
                 }) {
-                    Button("Notify day of", systemImage: "birthday.cake") {
+                    Button("Notify day of", systemImage: "birthday.cake.fill") {
                         Task { await setNotification(dist: 0) }
                     }
                     .tint(.yellow)
@@ -55,7 +55,7 @@ struct SetNotificationView: View {
             .padding([.horizontal, .top])
             Text(contact.name)
                 .font(.system(.headline, design: .rounded, weight: .bold))
-                .padding(.top, 25)
+                .padding(.top)
             if let cbd = contact.birthdate {
                 Text(cbd.formatted(.dateTime.day().month(.wide)))
                     .font(.system(.subheadline, design: .rounded, weight: .regular))

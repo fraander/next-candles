@@ -101,24 +101,45 @@ struct ContactView: View {
             }
         }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
-//            setNotifButton
             Button("Notifs", systemImage: "bell") {
                 setNotifSheet.toggle()
             }
             .tint(.yellow)
+            
+            if notifsForContact == 0 {
+                Button("Set day of", systemImage: "birthday.cake.fill") {
+                    Task { 
+                        await setNotification(dist: 0)
+                        alertRouter.setAlert( Alert(title: Text("Set notification for the day of!")) )
+                    }
+                }
+                .tint(.secondary)
+            } else {
+                Button("Remove all notifs", systemImage: "bell.slash") {
+                    alertRouter.setAlert(
+                        Alert(
+                            title: Text("Remove all notifications for \(contact.name)?"),
+                            primaryButton: .destructive(
+                                Text("Remove"),
+                                action: {
+                                    Task {
+                                        let requests = await NotificationsHelper.nc.pendingNotificationRequests()
+                                        let identifiers = requests.compactMap {
+                                            NotifWrapper(id: $0.identifier, url: $0.content.targetContentIdentifier ?? "")
+                                        }
+                                        let filtered = identifiers.filter { $0.url.contains(contact.identifier) }
+                                        let mapped = filtered.map { $0.id }
+                                        NotificationsHelper.removeNotifs(notifIds: mapped)
+                                    }
+                                }
+                            ),
+                            secondaryButton: .cancel()
+                        )
+                    )
+                }
+                .tint(.secondary)
+            }
         }
-//        .contextMenu {
-//            
-//            hideButton
-//            
-//            Divider()
-            
-//            setNotifButton
-            
-//            Button("Copy Link", systemImage: "barcode.viewfinder") {
-//                UIPasteboard.general.string = "nextcandles://open?contact=" + contact.identifier
-//            }
-//        }
         .sheet(isPresented: $setNotifSheet) { SetNotificationView(distance: settings.dayRange, contact: contact) }
     }
     
@@ -129,6 +150,20 @@ struct ContactView: View {
         }
         let filtered = identifiers.filter { $0.url.contains(contact.identifier) }
         return filtered.count
+    }
+    
+    func setNotification(dist: Double) async {
+        do {
+            try await contact.setNotifs(distanceFromBD: Int(dist))
+            notifsForContact = await notifsForContact()
+        } catch {
+            alertRouter.setAlert(
+                Alert(
+                    title: Text("Failed to set notification"),
+                    dismissButton: .default(Text("Okay"))
+                )
+            )
+        }
     }
     
     func hide(_ contact: Contact) {
