@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct HiddenContactsView: View {
-    
+    @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @Query(filter: #Predicate<Contact> { $0.hidden }, sort: [SortDescriptor(\.familyName), SortDescriptor(\.givenName)]) private var contacts: [Contact]
     @State var selectedContacts = Set<Contact>()
@@ -24,6 +24,9 @@ struct HiddenContactsView: View {
             VStack {
                 if (contacts.isEmpty) {
                     ContentUnavailableView("No birthdays are hidden", systemImage: "eye.slash", description: Text("You can swipe a birthday from right to left and tap the \(Image(systemName: "eye.slash")) icon to hide."))
+                        .onAppear {
+                            dismiss()
+                        }
                 } else {
                     List(searchedContacts, id: \.self, selection: $selectedContacts) { contact in
                         ContactView(contact: contact)

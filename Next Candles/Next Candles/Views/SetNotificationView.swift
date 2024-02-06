@@ -62,24 +62,31 @@ struct SetNotificationView: View {
                     .foregroundStyle(.secondary)
             }
             
-            LabeledContent {
-                CustomStepper(
-                    value: $distance,
-                    lower: 0,
-                    upper: 365,
-                    increment: 1.0,
-                    tintColor: .pink
-                )
-            } label: {
-                Group {
-                    Text("Notify me \n")
-                    + Text("^[\(distance, specifier: "%.0f")\u{00a0}day](inflect: true)")
-                        .foregroundStyle(.pink)
-                    + Text(" before")
+            Group {
+                LabeledContent {
+                    CustomStepper(
+                        value: $distance,
+                        lower: 0,
+                        upper: 365,
+                        increment: 1.0,
+                        tintColor: .pink
+                    )
+                } label: {
+                    HStack {
+                        Group {
+                            Text("Notify me \n")
+                            + Text("^[\(distance, specifier: "%.0f")\u{00a0}day](inflect: true)")
+                                .foregroundStyle(.pink)
+                            + Text(" before")
+                        }
+                        .font(.system(.body, design: .rounded, weight: .regular))
+                        .padding(.vertical, 8)
+                        Spacer()
+                    }
                 }
-                .font(.system(.body, design: .rounded, weight: .regular))
-                .padding(.vertical, 8)
+               
             }
+            
             .padding(.horizontal)
             .padding(.top, 10)
             

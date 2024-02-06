@@ -21,32 +21,66 @@ enum ContactSheetType: Identifiable {
 }
 
 struct PhoneSheet: View {
+    @Environment(\.dismiss) var dismiss
     @Environment(\.openURL) var openURL
+    @Environment(\.horizontalSizeClass) var sizeClass
     var contact: Contact
     var sheetType: ContactSheetType
     
     var body: some View {
-        List(contact.phones, id: \.self) { phone in
-            Button(phone, systemImage: sheetType == .call ? "phone" : "message") {
-                if let url = URL(string: (sheetType == .call ? "tel://" : "sms:") + phone) {
-                    openURL.callAsFunction(url)
+        VStack {
+            if (contact.phones.isEmpty) {
+                ContentUnavailableView("No phone numbers found.", systemImage: "phone.bubble.fill")
+            } else {
+                Group {
+                    HStack {
+                        Spacer()
+                        Button("Done", systemImage: "checkmark") { dismiss() }
+#if os(macOS)
+                            .buttonStyle(.borderless)
+#elseif os(iOS)
+                            .buttonStyle(.bordered)
+#endif
+                            .buttonBorderShape(.capsule)
+                            .tint(sheetType == .call ? .green : .mint)
+                    }
+                    .overlay { 
+                        Text(sheetType == .call ? "Call" : "Text")
+                            .font(.system(.title, design: .rounded, weight: .bold))
+                    }
+                    .padding([.top, .horizontal])
+                    .padding(.bottom, 5)
+                    
+                    List(contact.phones, id: \.self) { phone in
+                        Button(phone, systemImage: sheetType == .call ? "phone" : "message") {
+                            if let url = URL(string: (sheetType == .call ? "tel://" : "sms:") + phone) {
+                                openURL.callAsFunction(url)
+                            }
+                        }
+                        .foregroundStyle(sheetType == .call ? .green : .mint)
+#if os(macOS)
+                            .buttonStyle(.borderless)
+#elseif os(iOS)
+                            .buttonStyle(.bordered)
+#endif
+                    }
                 }
             }
-            .foregroundStyle(sheetType == .call ? .green : .mint)
         }
     }
 }
 
 struct ContactDetailView: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @Environment(\.horizontalSizeClass) var sizeClass
     @EnvironmentObject var settings: Settings
 
     @State var setNotifSheet = false
-    
-    @State var phoneSheet: ContactSheetType = .call
-    @State var showPhoneSheet = false
+
+    @State var showCallSheet = false
+    @State var showTextSheet = false
     
     var contact: Contact
     
@@ -156,18 +190,17 @@ struct ContactDetailView: View {
 #if os(macOS)
                     HStack {
                         customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
-                            phoneSheet = .call
-                            showPhoneSheet.toggle()
+                            showCallSheet.toggle()
                         }
                         customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
-                            phoneSheet = .text
-                            showPhoneSheet.toggle()
+                            showTextSheet.toggle()
                         }
                         customButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
                             setNotifSheet.toggle()
                         }
                         customButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
                             contact.hidden.toggle()
+                            dismiss()
                         }
                         
                         customButton(systemName: "trash.fill", text: "Delete", bg: Color.pink.gradient) {
@@ -179,13 +212,11 @@ struct ContactDetailView: View {
                     if sizeClass == .compact {
                         HStack(spacing: 0) {
                             customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
-                                phoneSheet = .call
-                                showPhoneSheet.toggle()
+                                showCallSheet.toggle()
                             }
                             Spacer()
                             customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
-                                phoneSheet = .text
-                                showPhoneSheet.toggle()
+                                showTextSheet.toggle()
                             }
                             Spacer()
                             customButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
@@ -194,6 +225,7 @@ struct ContactDetailView: View {
                             Spacer()
                             customButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
                                 contact.hidden.toggle()
+                                dismiss()
                             }
                         }
                         .padding(.vertical, 12)
@@ -210,18 +242,17 @@ struct ContactDetailView: View {
                     } else {
                         VStack {
                             customWideButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
-                                phoneSheet = .call
-                                showPhoneSheet.toggle()
+                                showCallSheet.toggle()
                             }
                             customWideButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
-                                phoneSheet = .text
-                                showPhoneSheet.toggle()
+                                showTextSheet.toggle()
                             }
                             customWideButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
                                 setNotifSheet.toggle()
                             }
                             customWideButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
                                 contact.hidden.toggle()
+                                dismiss()
                             }
                             
                             customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
@@ -242,19 +273,19 @@ struct ContactDetailView: View {
                 .fill(colorScheme == .light ? Color.white.gradient : Color.black.gradient)
                 .ignoresSafeArea(.all, edges: .bottom)
         }
-        .sheet(isPresented: $showPhoneSheet) {
-            switch phoneSheet {
-            case .call:
-                PhoneSheet(contact: contact, sheetType: .call)
-                    .presentationDetents(
-                        [.height(180)]
-                    )
-            case .text:
-                PhoneSheet(contact: contact, sheetType: .text)
-                    .presentationDetents(
-                        [.height(180)]
-                    )
-            }
+        .sheet(isPresented: $showCallSheet) {
+            PhoneSheet(contact: contact, sheetType: .call)
+                .frame(minWidth: 300, minHeight: 300)
+                .presentationDetents(
+                    [.height(180)]
+                )
+        }
+        .sheet(isPresented: $showTextSheet) {
+            PhoneSheet(contact: contact, sheetType: .text)
+                .frame(minWidth: 300, minHeight: 300)
+                .presentationDetents(
+                    [.height(180)]
+                )
         }
         .sheet(isPresented: $setNotifSheet) { SetNotificationView(distance: settings.dayRange, contact: contact) }
     }
