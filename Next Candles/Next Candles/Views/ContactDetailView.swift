@@ -30,7 +30,7 @@ struct PhoneSheet: View {
     var body: some View {
         VStack {
             if (contact.phones.isEmpty) {
-                ContentUnavailableView("No phone numbers found.", systemImage: "phone.bubble.fill")
+                ContentUnavailableView("No phone numbers found.", systemImage: sheetType == .call ? "phone.bubble.fill" : "message.badge.filled.fill")
             } else {
                 Group {
                     HStack {

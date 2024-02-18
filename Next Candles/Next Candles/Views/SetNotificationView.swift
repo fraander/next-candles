@@ -28,6 +28,8 @@ struct SetNotificationView: View {
     
     @State var notifs: [NotifWrapper] = []
     
+    @State var time: Date = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTime) ?? Date()
+    
     var body: some View {
         
         VStack {
@@ -38,7 +40,12 @@ struct SetNotificationView: View {
                     } else { return false }
                 }) {
                     Button("Notify day of", systemImage: "birthday.cake.fill") {
-                        Task { await setNotification(dist: 0) }
+                        let comps = Calendar.current.dateComponents([.hour, .minute], from: time)
+                        if let hour = comps.hour, let minute = comps.minute {
+                            Task { await setNotification(dist: 0, hour: hour, minute: minute) }
+                        } else {
+                            alertRouter.setAlert(Alert(title: Text("Error setting notification at the given time.")))
+                        }
                     }
                     .tint(.yellow)
                     .buttonBorderShape(.capsule)
@@ -80,13 +87,19 @@ struct SetNotificationView: View {
                             + Text(" before")
                         }
                         .font(.system(.body, design: .rounded, weight: .regular))
-                        .padding(.vertical, 8)
                         Spacer()
                     }
                 }
-               
+                
+                DatePicker(
+                    "Time of notification:",
+                    selection: $time,
+                    in: Date()...,
+                    displayedComponents: .hourAndMinute
+                )
+                .tint(.pink)
+                .padding(.bottom, 6)
             }
-            
             .padding(.horizontal)
             .padding(.top, 10)
             
@@ -100,7 +113,13 @@ struct SetNotificationView: View {
                 Spacer()
                 
                 Button("Set Notification", systemImage: "bell.fill") {
-                    Task { await setNotification(dist: distance) }
+                    let comps = Calendar.current.dateComponents([.hour, .minute], from: time)
+                    if let hour = comps.hour, let minute = comps.minute {
+                        Task { await setNotification(dist: distance, hour: hour, minute: minute) }
+                    } else {
+                        alertRouter.setAlert(Alert(title: Text("Error setting notification at the given time.")))
+                    }
+                    
                 }
                 .buttonBorderShape(.capsule)
                 .buttonStyle(.bordered)
@@ -125,7 +144,10 @@ struct SetNotificationView: View {
                         HStack {
                             if let notifDate = notifDate(from: notif.url) {
                                 if let dist = difference(notifDate: notifDate, birthMonth: contact.month, birthDay: contact.day) {
-                                    Text(dist == 0 ? "On the day" : "^[\(dist) day](inflect: true) before")
+                                    Group {
+                                        Text(dist == 0 ? "On the day" : "^[\(dist) day](inflect: true) before")
+                                        + Text(", \(notifDate.formatted(date: .omitted, time: Date.FormatStyle.TimeStyle.shortened))")
+                                    }
                                     Spacer()
                                 } else {
                                     Text("INVALID DATE COMPARISON")
@@ -222,11 +244,19 @@ struct SetNotificationView: View {
               let monthString = components.queryItems?.first(where: {
                   $0.name == "month"
               })?.value,
+              let hourString = components.queryItems?.first(where: {
+                  $0.name == "hour"
+              })?.value,
+              let minuteString = components.queryItems?.first(where: {
+                  $0.name == "minute"
+              })?.value,
               let day = Int(dayString),
               let month = Int(monthString),
+              let hour = Int(hourString),
+              let minute = Int(minuteString),
               let result = Calendar.current.nextDate(
                 after: Date(),
-                matching: DateComponents(month: month, day: day),
+                matching: DateComponents(month: month, day: day, hour: hour, minute: minute),
                 matchingPolicy: .nextTime
               ) else { return nil }
         
@@ -252,9 +282,9 @@ struct SetNotificationView: View {
         return sortNotifWrappers(output)
     }
     
-    func setNotification(dist: Double) async {
+    func setNotification(dist: Double, hour: Int, minute: Int) async {
         do {
-            try await contact.setNotifs(distanceFromBD: Int(dist))
+            try await contact.setNotifs(distanceFromBD: Int(dist), hour: hour, minute: minute)
             notifs = await notifsForContact()
         } catch {
             alertRouter.setAlert(

@@ -113,7 +113,7 @@ struct ContactView: View {
             if notifsForContact == 0 {
                 Button("Set day of", systemImage: "birthday.cake.fill") {
                     Task { 
-                        await setNotification(dist: 0)
+                        await setNotification(dist: 0, hour: 0, minute: 0)
                         alertRouter.setAlert( Alert(title: Text("Set notification for the day of!")) )
                     }
                 }
@@ -134,6 +134,8 @@ struct ContactView: View {
                                         let filtered = identifiers.filter { $0.url.contains(contact.identifier) }
                                         let mapped = filtered.map { $0.id }
                                         NotificationsHelper.removeNotifs(notifIds: mapped)
+                                        
+                                        notifsForContact = await notifsForContact()
                                     }
                                 }
                             ),
@@ -156,9 +158,9 @@ struct ContactView: View {
         return filtered.count
     }
     
-    func setNotification(dist: Double) async {
+    func setNotification(dist: Double, hour: Int, minute: Int) async {
         do {
-            try await contact.setNotifs(distanceFromBD: Int(dist))
+            try await contact.setNotifs(distanceFromBD: Int(dist), hour: hour, minute: minute)
             notifsForContact = await notifsForContact()
         } catch {
             alertRouter.setAlert(

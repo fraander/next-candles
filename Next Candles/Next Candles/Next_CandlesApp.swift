@@ -10,15 +10,9 @@ import UserNotifications
 import Combine
 
 /*
- Enablers
- - Change how notifications are stored since you can reference differently now; store Notifs in UserDefaults and match identifier with notification's identifier to know if a contact has one set (Removes sync bugs)
- - Detail view buttons can be either Menu or Button
- 
  Features
  - iCloud Sync with SwiftData
- - Detail view made adjustable to other screen sizes; show existing notifications on the screen
  - Refactor helper functions; simplify code and views
- - Calculate date relative more correctly
  */
 
 class AlertRouter: ObservableObject {

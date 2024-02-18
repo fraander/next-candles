@@ -54,7 +54,10 @@ class NotificationsHelper: ObservableObject {
     ///   - name: Name of the person
     ///   - dateComponents: Month/Day of their birthday
     /// - Returns: ID of the notification which has been set
-    static func scheduleNotification(name: String, dateComponents: DateComponents, distanceFromBD: Int, id: String) async throws -> String {
+    static func scheduleNotification(name: String, dateComponents: DateComponents, distanceFromBD: Int, id: String, hour: Int, minute: Int) async throws -> String {
+        
+        print("datecompoentns", dateComponents)
+        print("dist", distanceFromBD)
 
         guard let birthdate = Calendar.current.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .nextTime) else {
             throw GeneralizedError("Invalid birthdate.")
@@ -62,6 +65,9 @@ class NotificationsHelper: ObservableObject {
         guard var date = Calendar.current.date(byAdding: .day, value: (-1 * distanceFromBD), to: birthdate) else {
             throw GeneralizedError("Invalid birthdate or invalid distance.")
         }
+        
+        print("date", date)
+        
         if date < Date() {
             
             guard let yearLater = Calendar.current.date(byAdding: .year, value: 1, to: Date()) else {
@@ -79,7 +85,11 @@ class NotificationsHelper: ObservableObject {
             date = newDate
         }
         
-        let newDateComponents = Calendar.current.dateComponents([.day, .month, .year, .hour, .minute], from: date)
+        var newDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
+        newDateComponents.hour = hour
+        newDateComponents.minute = minute
+        
+        print("new dc", newDateComponents)
         
         // format the date into [M]/[D]
         let df = DateFormatter()
@@ -88,7 +98,7 @@ class NotificationsHelper: ObservableObject {
         
         // set the title
         let title = "Birthday alert! 🥳"
-        let body = distanceFromBD == 0 ? "\(name.last == "s" ? name + "'" : name + "'s") birthday is today." : "\(name.last == "s" ? name + "'" : name + "'s") birthday is on \(df.string(from: date)), which is \(distanceFromBD) \(distanceFromBD == 1 ? "day" : "days") away."
+        let body = distanceFromBD == 0 ? "\(name.last == "s" ? name + "'" : name + "'s") birthday is today." : "\(name.last == "s" ? name + "'" : name + "'s") birthday is on \(df.string(from: birthdate)), which is \(distanceFromBD) \(distanceFromBD == 1 ? "day" : "days") away."
         
         var components = URLComponents()
         components.scheme = "nextcandles"
@@ -96,7 +106,9 @@ class NotificationsHelper: ObservableObject {
         components.queryItems = [
             URLQueryItem(name: "id", value: id),
             URLQueryItem(name: "day", value: String(describing: newDateComponents.day ?? 0)),
-            URLQueryItem(name: "month", value: String(describing: newDateComponents.month ?? 0))
+            URLQueryItem(name: "month", value: String(describing: newDateComponents.month ?? 0)),
+            URLQueryItem(name: "hour", value: String(describing: newDateComponents.hour ?? 0)),
+            URLQueryItem(name: "minute", value: String(describing: newDateComponents.minute ?? 0))
         ]
         
         
