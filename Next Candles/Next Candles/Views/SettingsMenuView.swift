@@ -11,6 +11,7 @@ import SwiftData
 struct SettingsMenu: View {
     
     @Environment(\.dismiss) var dismiss
+    @Environment(\.scenePhase) var scenePhase
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject private var settings: Settings
     @Query private var allContacts: [Contact]
@@ -73,6 +74,14 @@ struct SettingsMenu: View {
                 dayRangeAlert.toggle()
             }
         }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                fetch(showNoNewAlert: false)
+            }
+        }
+//        .onAppear {
+//            fetch(showNoNewAlert: false)
+//        }
         .tint(.pink)
 #if os(iOS)
         .labelStyle(.titleAndIcon)
@@ -82,7 +91,7 @@ struct SettingsMenu: View {
         }
     }
     
-    func fetch() {
+    func fetch(showNoNewAlert: Bool = true) {
         Task {
             let (existing, diffs) = try await ContactsUtils.fetch(existingContacts: allContacts)
             if (existing.count > 0) {
@@ -91,9 +100,11 @@ struct SettingsMenu: View {
                 showResolveDiffs = true
                 toResolve = diffs
             } else {
-                alertRouter.setAlert(
-                    Alert(title: Text("No new contacts to import."))
-                )
+                if showNoNewAlert {
+                    alertRouter.setAlert(
+                        Alert(title: Text("No new contacts to import."))
+                    )
+                }
             }
         }
     }

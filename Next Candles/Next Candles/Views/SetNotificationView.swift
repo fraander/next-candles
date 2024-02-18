@@ -156,13 +156,14 @@ struct SetNotificationView: View {
                                     Spacer()
                                 }
                                 
-                                Text(notifDate.formatted(
-                                    .dateTime
-                                        .day()
-                                        .month(
-                                            .wide
-                                        )
-                                ))
+                                Group {
+                                    Text("Next: ")
+                                    + Text(notifDate.formatted(
+                                        .dateTime
+                                            .day()
+                                            .month(.wide)
+                                            .year()))
+                                }
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             } else {

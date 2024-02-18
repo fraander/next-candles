@@ -13,6 +13,7 @@ import Combine
  Features
  - iCloud Sync with SwiftData
  - Refactor helper functions; simplify code and views
+ - Fix date math (and ensure reusability of same relativity functions)
  */
 
 class AlertRouter: ObservableObject {

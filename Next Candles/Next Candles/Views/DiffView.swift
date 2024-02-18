@@ -34,10 +34,15 @@ struct DiffView: View {
                     + Text("\(Image(systemName: "checkmark.circle.fill")) Update")
                         .foregroundStyle(.mint)
                         .bold()
-                    + Text(" to approve changes.")
+                    + Text(" to approve changes. \nTap ")
+                    + Text("Done")
+                        .foregroundStyle(.mint)
+                        .bold()
+                    + Text(" when you're finished.")
                 }
                 .font(.system(.caption, design: .rounded, weight: .semibold))
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
                 .padding(.bottom)
             }
             
@@ -55,11 +60,11 @@ struct DiffView: View {
                         } description: {
                             Text("All updates resolved.")
                                 .foregroundStyle(.secondary)
-                        } actions: {
+                        } /* actions: {
                             Button("Done", systemImage: "checkmark", action: {dismiss()})
                                 .tint(.mint)
                                 .buttonStyle(.bordered)
-                        }
+                        } */
                     }
                     
                     ForEach(toResolve, id: \.0.identifier) { new, old in
