@@ -26,3 +26,10 @@ Display when the next birthdays in your Contacts are coming up, and receive noti
      <td align="center">Easy-to-reach settings!</td>
   </tr>
  </table>
+
+## Support
+For support, please [create a new Issue](https://github.com/fraander/next-candles/issues/new/choose) in this repository.
+
+ ## Privacy Policy
+ The developer does not collect information about users who use this application. Use the app only for its intended purposes.
+
