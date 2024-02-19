@@ -81,6 +81,11 @@ struct ContactView: View {
                 notifsForContact = await notifsHelper.notifsFor(contact: contact).count
             }
         }
+        .onChange(of: notifsHelper.notifsCache) {
+            Task {
+                notifsForContact = await notifsHelper.notifsFor(contact: contact).count
+            }
+        }
         .contextMenu {
             Button("Copy Contact Link", systemImage: "barcode.viewfinder") {
                 

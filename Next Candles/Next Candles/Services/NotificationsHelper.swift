@@ -17,6 +17,11 @@ extension UNMutableNotificationContent {
     }
 }
 
+struct NotifWrapper: Identifiable, Equatable {
+    let id: String
+    let url: String
+}
+
 class NotificationsHelper: ObservableObject {
     
     @Published var notifsCache: [NotifWrapper] = []
@@ -64,46 +69,20 @@ class NotificationsHelper: ObservableObject {
         let ndComps = DateComponents(month: dateComponents.month, day: dateComponents.day, hour: hour, minute: minute)
         
         var date = Date()
-        if let nextBd = Calendar.current.nextDate(after: Date(), matching: ndComps, matchingPolicy: .nextTime) {
-            if let notifDate = Calendar.current.date(byAdding: .day, value: -1 * distanceFromBD, to: nextBd) {
-                if notifDate < Date() { // if notifDate has already passed
-                    // calculate again
-                    if let nextNextBd = Calendar.current.nextDate(after: nextBd, matching: ndComps, matchingPolicy: .nextTime) {
-                        if let nextNotifDate = Calendar.current.date(byAdding: .day, value: -1 * distanceFromBD, to: nextNextBd) {
-                            // schedule at nextNotifDate
-                            date = nextNotifDate
-                        }
-                    }
-                } else {
-                    // schedule at notifDate
-                    date = notifDate
+        if let nextBd = Calendar.current.nextDate(after: Date(), matching: ndComps, matchingPolicy: .nextTime), let notifDate = Calendar.current.date(byAdding: .day, value: -1 * distanceFromBD, to: nextBd) {
+            if notifDate < Date() { // if notifDate has already passed
+                // calculate again
+                if let nextNextBd = Calendar.current.nextDate(after: nextBd, matching: ndComps, matchingPolicy: .nextTime), let nextNotifDate = Calendar.current.date(byAdding: .day, value: -1 * distanceFromBD, to: nextNextBd) {
+                    date = nextNotifDate // schedule at nextNotifDate
                 }
+            } else {
+                date = notifDate // schedule at notifDate
             }
         }
         
         guard let birthdate = Calendar.current.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .nextTime) else {
             throw GeneralizedError("Invalid birthdate.")
         }
-//        guard var date = Calendar.current.date(byAdding: .day, value: (-1 * distanceFromBD), to: birthdate) else {
-//            throw GeneralizedError("Invalid birthdate or invalid distance.")
-//        }
-//        
-//        if date < Date() {
-//            
-//            guard let yearLater = Calendar.current.date(byAdding: .year, value: 1, to: Date()) else {
-//                throw GeneralizedError("Invalid date 1 year from today")
-//            }
-//            
-//            guard let newBirthdate = Calendar.current.nextDate(after: yearLater, matching: dateComponents, matchingPolicy: .nextTime) else {
-//                throw GeneralizedError("Invalid birthdate.")
-//            }
-//            
-//            guard let newDate = Calendar.current.date(byAdding: .day, value: (-1 * distanceFromBD), to: newBirthdate) else {
-//                throw GeneralizedError("Invalid birthdate or invalid distance.")
-//            }
-//            
-//            date = newDate
-//        }
         
         var newDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
         newDateComponents.hour = hour
@@ -253,7 +232,7 @@ class NotificationsHelper: ObservableObject {
     
     func difference(notifDate: Date, birthMonth: Int?, birthDay: Int?) -> Int? {
         
-        let notifDateComponents = Calendar.current.dateComponents([.day, .month], from: notifDate)
+        let notifDateComponents = Calendar.current.dateComponents([.year, .day, .month], from: notifDate)
         guard let notifDateWithoutTime = Calendar.current.date(from: notifDateComponents) else {
             return nil
         }
@@ -266,6 +245,8 @@ class NotificationsHelper: ObservableObject {
               let dist = Calendar.current.dateComponents([.day], from: notifDateWithoutTime, to: nextBd).day else {
             return nil
         }
+        
+        print(nextBd, dist)
         
         return dist
     }

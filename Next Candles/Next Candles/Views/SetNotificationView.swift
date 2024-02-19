@@ -9,11 +9,6 @@ import SwiftUI
 import SwiftData
 import NotificationCenter
 
-struct NotifWrapper: Identifiable {
-    let id: String
-    let url: String
-}
-
 struct SetNotificationView: View {
     
     var contact: Contact
