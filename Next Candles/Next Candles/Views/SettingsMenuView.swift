@@ -40,7 +40,7 @@ struct SettingsMenu: View {
             if (!allContacts.isEmpty) {
                 Divider()
                 
-                Button("Remove all notifications", systemImage: "bell.slash.fill", role: .destructive) {
+                Button("Remove all notifications", systemImage: "bell.slash") {
                     alertRouter.setAlert(
                         Alert(
                             title: Text("Remove all notifications?"),
@@ -75,7 +75,7 @@ struct SettingsMenu: View {
             
             Divider()
             
-            Button(!settings.janStart ? "Top: Current month" : "Top: January", systemImage: "platter.filled.top.and.arrow.up.iphone") {
+            Button("Top Month: \(!settings.janStart ? "Current" : "January")", systemImage: "platter.filled.top.and.arrow.up.iphone") {
                 settings.janStart.toggle()
             }
             

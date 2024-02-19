@@ -21,7 +21,7 @@ struct ContactView: View {
     @State var notifsForContact = 0
     
     var hideButton: some View {
-        Button("Hide Birthday", systemImage: "eye.slash") { hide(contact)}
+        Button("Hide Birthday", systemImage: contact.hidden ? "eye" : "eye.slash") { hide(contact)}
             .tint(.orange)
     }
     var deleteButton: some View {

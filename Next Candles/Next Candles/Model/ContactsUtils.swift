@@ -21,7 +21,7 @@ class ContactsUtils {
         var diffs: [(new: Contact, old: Contact)] = []
         
         let store = CNContactStore() // store to access system contacts
-        let fetchRequest = CNContactFetchRequest(keysToFetch: [CNContactGivenNameKey as CNKeyDescriptor, CNContactFamilyNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor, CNContactNicknameKey as CNKeyDescriptor, CNContactIdentifierKey as CNKeyDescriptor, CNContactPhoneNumbersKey as CNKeyDescriptor]) // attributes to request so that the size is small
+        let fetchRequest = CNContactFetchRequest(keysToFetch: [CNContactGivenNameKey as CNKeyDescriptor, CNContactFamilyNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor, CNContactNicknameKey as CNKeyDescriptor, CNContactIdentifierKey as CNKeyDescriptor, CNContactPhoneNumbersKey as CNKeyDescriptor, CNContactImageDataKey as CNKeyDescriptor, CNContactEmailAddressesKey as CNKeyDescriptor]) // attributes to request so that the size is small
         
         do {
             try store.enumerateContacts(with: fetchRequest) { contact, _ in // iterate over every contact ...
@@ -49,7 +49,7 @@ class ContactsUtils {
     static func createContact(contact: CNContact) -> Contact? {
         if (contact.areKeysAvailable([CNContactGivenNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor]) && contact.birthday?.month != nil && contact.birthday?.day != nil) { // check they have required fields before fetching
             // get each field and initialize
-            return Contact(identifier: contact.identifier, givenName: contact.givenName, familyName: contact.familyName, nickname: contact.nickname, month: contact.birthday?.month, day: contact.birthday?.day, year: contact.birthday?.year, phones: contact.phoneNumbers)
+            return Contact(identifier: contact.identifier, givenName: contact.givenName, familyName: contact.familyName, nickname: contact.nickname, month: contact.birthday?.month, day: contact.birthday?.day, year: contact.birthday?.year, phones: contact.phoneNumbers, emails: contact.emailAddresses, image: contact.imageData)
         } else {
             return nil
         }

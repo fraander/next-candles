@@ -138,6 +138,22 @@ struct DiffView: View {
                                             }
                                         }
                                     }
+                                    
+                                    if old.emails != new.emails {
+                                        Text("Email Addresses:")
+                                        ForEach(new.emails, id: \.self) { email in
+                                            if (!old.emails.contains(email)) {
+                                                Text("   \(email)")
+                                                    .font(.caption)
+                                            }
+                                        }
+                                    }
+                                    
+                                    if old.image != new.image {
+                                        Text("Image updated")
+                                            .font(.caption)
+                                            .italic()
+                                    }
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding()
@@ -159,6 +175,8 @@ struct DiffView: View {
                                 found?.year = new.year
                                 found?.nickname = new.nickname
                                 found?.phones = new.phones
+                                found?.image = new.image
+                                found?.emails = new.emails
                                 
                                 // Remove from queue
                                 toResolve.removeAll { contacts in

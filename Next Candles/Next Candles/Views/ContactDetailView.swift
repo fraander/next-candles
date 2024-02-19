@@ -12,75 +12,19 @@ import Contacts
 import ContactsUI
 import SwiftData
 
-enum ContactSheetType: Identifiable {
-    var id: Self {
-        return self
-    }
-    
-    case call, text
-}
-
-struct PhoneSheet: View {
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.openURL) var openURL
-    @Environment(\.horizontalSizeClass) var sizeClass
-    var contact: Contact
-    var sheetType: ContactSheetType
-    
-    var body: some View {
-        VStack {
-            if (contact.phones.isEmpty) {
-                ContentUnavailableView("No phone numbers found.", systemImage: sheetType == .call ? "phone.bubble.fill" : "message.badge.filled.fill")
-            } else {
-                Group {
-                    HStack {
-                        Spacer()
-                        Button("Done", systemImage: "checkmark") { dismiss() }
-#if os(macOS)
-                            .buttonStyle(.borderless)
-#elseif os(iOS)
-                            .buttonStyle(.bordered)
-#endif
-                            .buttonBorderShape(.capsule)
-                            .tint(sheetType == .call ? .green : .mint)
-                    }
-                    .overlay { 
-                        Text(sheetType == .call ? "Call" : "Text")
-                            .font(.system(.title, design: .rounded, weight: .bold))
-                    }
-                    .padding([.top, .horizontal])
-                    .padding(.bottom, 5)
-                    
-                    List(contact.phones, id: \.self) { phone in
-                        Button(phone, systemImage: sheetType == .call ? "phone" : "message") {
-                            if let url = URL(string: (sheetType == .call ? "tel://" : "sms:") + phone) {
-                                openURL.callAsFunction(url)
-                            }
-                        }
-                        .foregroundStyle(sheetType == .call ? .green : .mint)
-#if os(macOS)
-                            .buttonStyle(.borderless)
-#elseif os(iOS)
-                            .buttonStyle(.bordered)
-#endif
-                    }
-                }
-            }
-        }
-    }
-}
-
 struct ContactDetailView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     @Environment(\.horizontalSizeClass) var sizeClass
+    @EnvironmentObject var alertRouter: AlertRouter
     @EnvironmentObject var settings: Settings
 
     @State var setNotifSheet = false
 
     @State var showCallSheet = false
     @State var showTextSheet = false
+    @State var showEmailSheet = false
     
     var contact: Contact
     
@@ -150,13 +94,22 @@ struct ContactDetailView: View {
                     .frame(height: 240)
                 
                 Group {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .foregroundStyle(.white, .gray)
-                        .frame(width: 180, height: 180)
-                        .background { Circle().fill(.white) }
-                        .overlay { Circle().stroke(.white, lineWidth: 12) }
+                    Group {
+                        if let imageData = contact.image, let uiImage = UIImage(data: imageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFill()
+                                .clipShape(.circle)
+                        } else {
+                            Image(systemName: "person.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundStyle(.white, .gray)
+                        }
+                    }
+                    .frame(width: 180, height: 180)
+                    .background { Circle().fill(.white) }
+                    .overlay { Circle().stroke(.white, lineWidth: 12) }
                     
                     Text(contact.name)
                         .font(.system(.largeTitle, design: .rounded, weight: .semibold))
@@ -219,13 +172,12 @@ struct ContactDetailView: View {
                                 showTextSheet.toggle()
                             }
                             Spacer()
-                            customButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
-                                setNotifSheet.toggle()
+                            customButton(systemName: "paperplane.fill", text: "Email", bg: Color.blue.gradient) {
+                                showEmailSheet.toggle()
                             }
                             Spacer()
-                            customButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
-                                contact.hidden.toggle()
-                                dismiss()
+                            customButton(systemName: "bell.fill", text: "Notify", bg: Color.yellow.gradient) {
+                                setNotifSheet.toggle()
                             }
                         }
                         .padding(.vertical, 12)
@@ -234,7 +186,20 @@ struct ContactDetailView: View {
                         Divider()
                         
                         VStack(spacing: 12) {
+                            customWideButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
+                                contact.hidden.toggle()
+                                dismiss()
+                            }
+                            
                             customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
+                                alertRouter.setAlert(
+                                    Alert(
+                                        title: Text("Delete this Contact from Next Candles?"),
+                                        message: Text("Does not delete from the Contacts app"),
+                                        primaryButton: .destructive(Text("Delete")),
+                                        secondaryButton: .cancel()
+                                    )
+                                )
                                 modelContext.delete(contact)
                             }
                         }
@@ -247,7 +212,10 @@ struct ContactDetailView: View {
                             customWideButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
                                 showTextSheet.toggle()
                             }
-                            customWideButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
+                            customWideButton(systemName: "paperplane.fill", text: "Email", bg: Color.blue.gradient) {
+                                showEmailSheet.toggle()
+                            }
+                            customWideButton(systemName: "bell.fill", text: "Notify", bg: Color.yellow.gradient) {
                                 setNotifSheet.toggle()
                             }
                             customWideButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
@@ -256,6 +224,14 @@ struct ContactDetailView: View {
                             }
                             
                             customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
+                                alertRouter.setAlert(
+                                    Alert(
+                                        title: Text("Delete this Contact from Next Candles?"),
+                                        message: Text("Does not delete from the Contacts app"),
+                                        primaryButton: .destructive(Text("Delete")),
+                                        secondaryButton: .cancel()
+                                    )
+                                )
                                 modelContext.delete(contact)
                             }
                         }
@@ -273,18 +249,25 @@ struct ContactDetailView: View {
                 .fill(colorScheme == .light ? Color.white.gradient : Color.black.gradient)
                 .ignoresSafeArea(.all, edges: .bottom)
         }
+        .sheet(isPresented: $showEmailSheet) {
+            EmailSheet(contact: contact)
+                .frame(minWidth: 300, minHeight: 300)
+                .presentationDetents(
+                    [.height(300)]
+                )
+        }
         .sheet(isPresented: $showCallSheet) {
             PhoneSheet(contact: contact, sheetType: .call)
                 .frame(minWidth: 300, minHeight: 300)
                 .presentationDetents(
-                    [.height(180)]
+                    [.height(300)]
                 )
         }
         .sheet(isPresented: $showTextSheet) {
             PhoneSheet(contact: contact, sheetType: .text)
                 .frame(minWidth: 300, minHeight: 300)
                 .presentationDetents(
-                    [.height(180)]
+                    [.height(300)]
                 )
         }
         .sheet(isPresented: $setNotifSheet) { SetNotificationView(distance: settings.dayRange, contact: contact) }

@@ -82,6 +82,18 @@ struct AddManuallyView: View {
     var body: some View {
     
             VStack {
+                HStack {
+                    Button("Cancel") { dismiss() }
+                        .tint(.secondary)
+                    Spacer()
+                }
+                .overlay {
+                    Text("Add New")
+                        .font(.system(.title, design: .rounded, weight: .bold))
+                }
+                .padding([.top, .horizontal])
+                .padding(.vertical, 5)
+                
                 Form {
                     Section("Name") {
                         TextField("Given name", text: $givenName)

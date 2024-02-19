@@ -16,9 +16,10 @@
 		BD5D34372B65997D00B755D9 /* TestDateCalculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5D34362B65997D00B755D9 /* TestDateCalculations.swift */; };
 		BD5D34392B659A2C00B755D9 /* DateComponents+XDaysBefore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */; };
 		BD5D343A2B65A59300B755D9 /* DateComponents+XDaysBefore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */; };
+		BD63D3CF2B83C8800086F73B /* PhoneSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD63D3CE2B83C8800086F73B /* PhoneSheet.swift */; };
+		BD63D3D22B83CF100086F73B /* EmailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD63D3D12B83CF100086F73B /* EmailSheet.swift */; };
 		BD889F042B49BDFF00046558 /* Date+DaysRelative.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */; };
 		BD9237572B65A7380043CE45 /* GeneralizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9237562B65A7380043CE45 /* GeneralizedError.swift */; };
-		BD9237582B65A7650043CE45 /* GeneralizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9237562B65A7380043CE45 /* GeneralizedError.swift */; };
 		BDB735642B1D67570079F35F /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735632B1D67570079F35F /* Settings.swift */; };
 		BDB735682B1D7B240079F35F /* FormatterEmptyZero.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB735672B1D7B240079F35F /* FormatterEmptyZero.swift */; };
 		BDBE88DB2B23B8FF005D4C0F /* HighlightRangeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDBE88DA2B23B8FF005D4C0F /* HighlightRangeAlert.swift */; };
@@ -36,7 +37,6 @@
 		BDD9F79E2B12B7CA002E69F0 /* AddManuallyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F79D2B12B7CA002E69F0 /* AddManuallyView.swift */; };
 		BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */; };
 		BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */; };
-		BDFA5A0D29FD8C6200634AE1 /* ContactsFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFA5A0C29FD8C6200634AE1 /* ContactsFeed.swift */; };
 		BDFE4DD12B0C48680074D0A9 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFE4DD02B0C48680074D0A9 /* Contact.swift */; };
 		BDFE4DD32B0C494A0074D0A9 /* ContactListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFE4DD22B0C494A0074D0A9 /* ContactListView.swift */; };
 		BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFE4DD42B0D53DD0074D0A9 /* ContactsUtils.swift */; };
@@ -65,6 +65,8 @@
 		BD5D342F2B65996A00B755D9 /* Next_Candles_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Next_Candles_Tests.swift; sourceTree = "<group>"; };
 		BD5D34362B65997D00B755D9 /* TestDateCalculations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDateCalculations.swift; sourceTree = "<group>"; };
 		BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponents+XDaysBefore.swift"; sourceTree = "<group>"; };
+		BD63D3CE2B83C8800086F73B /* PhoneSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneSheet.swift; sourceTree = "<group>"; };
+		BD63D3D12B83CF100086F73B /* EmailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailSheet.swift; sourceTree = "<group>"; };
 		BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+DaysRelative.swift"; sourceTree = "<group>"; };
 		BD9237562B65A7380043CE45 /* GeneralizedError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralizedError.swift; sourceTree = "<group>"; };
 		BDB735632B1D67570079F35F /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
@@ -84,7 +86,6 @@
 		BDD9F79D2B12B7CA002E69F0 /* AddManuallyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddManuallyView.swift; sourceTree = "<group>"; };
 		BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCodingError.swift; sourceTree = "<group>"; };
 		BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStepper.swift; sourceTree = "<group>"; };
-		BDFA5A0C29FD8C6200634AE1 /* ContactsFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsFeed.swift; sourceTree = "<group>"; };
 		BDFE4DD02B0C48680074D0A9 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		BDFE4DD22B0C494A0074D0A9 /* ContactListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListView.swift; sourceTree = "<group>"; };
 		BDFE4DD42B0D53DD0074D0A9 /* ContactsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsUtils.swift; sourceTree = "<group>"; };
@@ -130,21 +131,14 @@
 			isa = PBXGroup;
 			children = (
 				BD2D76C32B33C2BD001AA86F /* Next-Candles-Info.plist */,
-				BDD9F7972B12B150002E69F0 /* LoadingState.swift */,
-				BDD9F7952B12B141002E69F0 /* SheetType.swift */,
-				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
-				BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */,
-				BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */,
-				BD9237562B65A7380043CE45 /* GeneralizedError.swift */,
+				BD63D3D02B83C8A50086F73B /* Extensions */,
 				BDBE88DE2B23C41C005D4C0F /* Services */,
 				BDDFAAC328CF6082009FC717 /* Model */,
 				BDDFAAC228CF6076009FC717 /* Views */,
 				BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */,
-				BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */,
 				BD168DD22892E69D0082E461 /* Assets.xcassets */,
 				BD168DD42892E69D0082E461 /* Next_Candles.entitlements */,
 				BD168DD52892E69D0082E461 /* Preview Content */,
-				BDFA5A0C29FD8C6200634AE1 /* ContactsFeed.swift */,
 			);
 			path = "Next Candles";
 			sourceTree = "<group>";
@@ -166,9 +160,19 @@
 			path = "Next Candles Tests";
 			sourceTree = "<group>";
 		};
+		BD63D3D02B83C8A50086F73B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				BD889F032B49BDFF00046558 /* Date+DaysRelative.swift */,
+				BD5D34382B659A2C00B755D9 /* DateComponents+XDaysBefore.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		BDBE88DE2B23C41C005D4C0F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */,
 				BDB735632B1D67570079F35F /* Settings.swift */,
 				BDBE88DF2B23CC66005D4C0F /* NotificationsHelper.swift */,
 			);
@@ -178,6 +182,9 @@
 		BDDFAAC228CF6076009FC717 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */,
+				BD63D3CE2B83C8800086F73B /* PhoneSheet.swift */,
+				BD63D3D12B83CF100086F73B /* EmailSheet.swift */,
 				BDD9F79D2B12B7CA002E69F0 /* AddManuallyView.swift */,
 				BDD9F79B2B12B6C9002E69F0 /* LoadingContactsView.swift */,
 				BDD9F7992B12B2E1002E69F0 /* SettingsMenuView.swift */,
@@ -197,6 +204,9 @@
 		BDDFAAC328CF6082009FC717 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BDD9F7972B12B150002E69F0 /* LoadingState.swift */,
+				BD9237562B65A7380043CE45 /* GeneralizedError.swift */,
+				BDD9F7952B12B141002E69F0 /* SheetType.swift */,
 				BDFE4DD02B0C48680074D0A9 /* Contact.swift */,
 				BDFE4DD42B0D53DD0074D0A9 /* ContactsUtils.swift */,
 				BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */,
@@ -314,7 +324,7 @@
 				BDB735682B1D7B240079F35F /* FormatterEmptyZero.swift in Sources */,
 				BDB735642B1D67570079F35F /* Settings.swift in Sources */,
 				BDD9F79A2B12B2E1002E69F0 /* SettingsMenuView.swift in Sources */,
-				BDFA5A0D29FD8C6200634AE1 /* ContactsFeed.swift in Sources */,
+				BD63D3CF2B83C8800086F73B /* PhoneSheet.swift in Sources */,
 				BDFE4DD12B0C48680074D0A9 /* Contact.swift in Sources */,
 				BD2D76C22B33A81E001AA86F /* ContactDetailView.swift in Sources */,
 				BDD438CB2B3CF3B7006C807D /* SetNotificationView.swift in Sources */,
@@ -325,6 +335,7 @@
 				BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */,
 				BD2D76C72B350F2B001AA86F /* NCAppDelegate.swift in Sources */,
 				BDD9F7922B12AAA1002E69F0 /* ContactView.swift in Sources */,
+				BD63D3D22B83CF100086F73B /* EmailSheet.swift in Sources */,
 				BDD9F79E2B12B7CA002E69F0 /* AddManuallyView.swift in Sources */,
 				BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */,
 				BDD9F79C2B12B6C9002E69F0 /* LoadingContactsView.swift in Sources */,
@@ -340,7 +351,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD5D34302B65996A00B755D9 /* Next_Candles_Tests.swift in Sources */,
-				BD9237582B65A7650043CE45 /* GeneralizedError.swift in Sources */,
 				BD5D343A2B65A59300B755D9 /* DateComponents+XDaysBefore.swift in Sources */,
 				BD5D34372B65997D00B755D9 /* TestDateCalculations.swift in Sources */,
 			);

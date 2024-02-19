@@ -21,7 +21,10 @@ class Contact: ObservableObject, Equatable {
     var hidden: Bool = false
 //    var notif: String?
     var contactAppIdentifier: String?
-    var phones: [String]
+    var phones: [String] = []
+    var emails: [String] = []
+    
+    @Attribute(.externalStorage) var image: Data?
     
     var name: String {
         let formatter = PersonNameComponentsFormatter()
@@ -88,7 +91,7 @@ class Contact: ObservableObject, Equatable {
         return false
     }
     
-    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, /*notif: String? = nil, */phones: [CNLabeledValue<CNPhoneNumber>] = []) {
+    init(identifier: String? = nil,givenName: String? = nil, familyName: String? = nil, nickname: String? = nil, month: Int? = nil, day: Int? = nil, year: Int? = nil, /*notif: String? = nil, */phones: [CNLabeledValue<CNPhoneNumber>] = [], emails: [CNLabeledValue<NSString>] = [], image: Data? = nil) {
         self.identifier = identifier ?? UUID().uuidString
         self.givenName = givenName
         self.familyName = familyName
@@ -96,10 +99,13 @@ class Contact: ObservableObject, Equatable {
         self.month = month
         self.day = day
         self.year = year
-//        self.notif = notif
         self.phones = phones.map{ cnpn in
             return cnpn.value.stringValue
         }
+        self.emails = emails.compactMap { cnlv in
+            cnlv.value as String
+        }
+        self.image = image
         
         if identifier != nil {
             self.contactAppIdentifier = identifier
@@ -115,7 +121,9 @@ class Contact: ObservableObject, Equatable {
             lhs.month != rhs.month ||
             lhs.day != rhs.day ||
             lhs.year != rhs.year ||
-            lhs.phones != rhs.phones
+            lhs.phones != rhs.phones ||
+            lhs.image != rhs.image ||
+            lhs.emails != rhs.emails
         )
     }
 }
