@@ -19,6 +19,7 @@ struct SetNotificationView: View {
     var contact: Contact
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var alertRouter: AlertRouter
+    @EnvironmentObject var notifsHelper: NotificationsHelper
     @State var distance: Double = 4
     
     init(distance: Int, contact: Contact) {
@@ -35,7 +36,7 @@ struct SetNotificationView: View {
         VStack {
             HStack {
                 if (!notifs.contains { nw in
-                    if let nd = notifDate(from: nw.url), let dist = difference(notifDate: nd, birthMonth: contact.month, birthDay: contact.day) {
+                    if let nd = notifsHelper.notifDate(from: nw.url), let dist = notifsHelper.difference(notifDate: nd, birthMonth: contact.month, birthDay: contact.day) {
                         return dist == 0
                     } else { return false }
                 }) {
@@ -142,8 +143,8 @@ struct SetNotificationView: View {
                 List {
                     ForEach(notifs) { notif in
                         HStack {
-                            if let notifDate = notifDate(from: notif.url) {
-                                if let dist = difference(notifDate: notifDate, birthMonth: contact.month, birthDay: contact.day) {
+                            if let notifDate = notifsHelper.notifDate(from: notif.url) {
+                                if let dist = notifsHelper.difference(notifDate: notifDate, birthMonth: contact.month, birthDay: contact.day) {
                                     Group {
                                         Text(dist == 0 ? "On the day" : "^[\(dist) day](inflect: true) before")
                                         + Text(", \(notifDate.formatted(date: .omitted, time: Date.FormatStyle.TimeStyle.shortened))")
@@ -174,8 +175,8 @@ struct SetNotificationView: View {
                             }
                             
                             Button("Remove", systemImage: "bell.slash") {
-                                NotificationsHelper.removeNotifs(notifIds: [notif.id])
-                                Task { notifs = await notifsForContact() }
+                                notifsHelper.removeNotifs(notifIds: [notif.id])
+                                Task { notifs = await notifsHelper.notifsFor(contact: contact) }
                             }
                             .labelStyle(.iconOnly)
                             .font(.caption)
@@ -186,107 +187,22 @@ struct SetNotificationView: View {
                     }
                     .onDelete { offsets in
                         offsets.forEach { offset in
-                            NotificationsHelper.removeNotifs(notifIds: [notifs[offset].id])
+                            notifsHelper.removeNotifs(notifIds: [notifs[offset].id])
                         }
-                        Task { notifs = await notifsForContact() }
+                        Task { notifs = await notifsHelper.notifsFor(contact: contact) }
                     }
                 }
             }
         }
         .task {
-            notifs = await notifsForContact()
-        }
+            notifs = await notifsHelper.notifsFor(contact: contact) }
     }
     
-    func sortNotifWrappers(_ notifs: [NotifWrapper]) -> [NotifWrapper] {
-        return notifs.sorted {
-            if let lhs = notifDate(from: $0.url),
-               let rhs = notifDate(from: $1.url),
-               let lhsDist = difference(notifDate: lhs, birthMonth: contact.month, birthDay: contact.day),
-               let rhsDist = difference(notifDate: rhs, birthMonth: contact.month, birthDay: contact.day) {
-                return lhsDist < rhsDist
-            } else {
-                return false
-            }
-        }
-    }
-    
-    func difference(notifDate: Date, birthMonth: Int?, birthDay: Int?) -> Int? {
-        
-        let notifDateComponents = Calendar.current.dateComponents([.day, .month], from: notifDate)
-        if (notifDateComponents.day == birthDay && notifDateComponents.month == birthMonth) {
-            return 0
-        }
-        
-        let bdc = DateComponents(month: birthMonth, day: birthDay)
-        guard let nextBd = Calendar.current.nextDate(after: notifDate, matching: bdc, matchingPolicy: .nextTime),
-              let dist = Calendar.current.dateComponents([.day], from: notifDate, to: nextBd).day else {
-            return nil
-        }
-        
-        if dist < 0 {
-            print(nextBd.description, notifDate.description)
-            return dist
-        } else {
-            return dist
-        }
-        
-    }
-    
-    func notifDate(from urlString: String) -> Date? {
-        guard let url = URL(string: urlString),
-              let components = URLComponents(
-                url: url,
-                resolvingAgainstBaseURL: true
-              ),
-              let dayString = components.queryItems?.first(where: {
-                  $0.name == "day"
-              })?.value,
-              let monthString = components.queryItems?.first(where: {
-                  $0.name == "month"
-              })?.value,
-              let hourString = components.queryItems?.first(where: {
-                  $0.name == "hour"
-              })?.value,
-              let minuteString = components.queryItems?.first(where: {
-                  $0.name == "minute"
-              })?.value,
-              let day = Int(dayString),
-              let month = Int(monthString),
-              let hour = Int(hourString),
-              let minute = Int(minuteString),
-              let result = Calendar.current.nextDate(
-                after: Date(),
-                matching: DateComponents(month: month, day: day, hour: hour, minute: minute),
-                matchingPolicy: .nextTime
-              ) else { return nil }
-        
-        return result
-    }
-    
-    func notifsForContact() async -> [NotifWrapper] {
-        let requests = await NotificationsHelper.nc.pendingNotificationRequests()
-        let identifiers = requests.compactMap {
-            NotifWrapper(id: $0.identifier, url: $0.content.targetContentIdentifier ?? "")
-        }
-        let filtered = identifiers.filter { $0.url.contains(contact.identifier) }
-        
-        var output: [NotifWrapper] = []
-        filtered.forEach { nw in
-            if !(output.contains { $0.url == nw.url }) {
-                output.append(nw)
-            } else {
-                NotificationsHelper.removeNotifs(notifIds: [nw.id])
-            }
-        }
-        
-        return sortNotifWrappers(output)
-    }
     
     func setNotification(dist: Double, hour: Int, minute: Int) async {
         do {
-            try await contact.setNotifs(distanceFromBD: Int(dist), hour: hour, minute: minute)
-            notifs = await notifsForContact()
+            try await notifsHelper.setNotifFor(contact: contact, distanceFromBD: Int(dist), hour: hour, minute: minute)
+            notifs = await notifsHelper.notifsFor(contact: contact)
         } catch {
             alertRouter.setAlert(
                 Alert(
@@ -300,14 +216,14 @@ struct SetNotificationView: View {
     func removeAllNotifsForContact() {
         // remove all notifs for this contact
         notifs.forEach { _ in
-            NotificationsHelper.removeNotifs(notifIds: notifs.compactMap { nw in
+            notifsHelper.removeNotifs(notifIds: notifs.compactMap { nw in
                 nw.id
             })
         }
         
         // refresh
         Task {
-            notifs = await notifsForContact()
+            notifs = await notifsHelper.notifsFor(contact: contact)
         }
     }
 }

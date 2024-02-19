@@ -14,6 +14,7 @@ struct ContactView: View {
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var alertRouter: AlertRouter
+    @EnvironmentObject var notifsHelper: NotificationsHelper
     var contact: Contact
     
     @State var setNotifSheet = false
@@ -72,12 +73,12 @@ struct ContactView: View {
         }
         .onAppear {
             Task {
-                notifsForContact = await notifsForContact()                
+                notifsForContact = await notifsHelper.notifsFor(contact: contact).count
             }
         }
         .onChange(of: setNotifSheet) {
             Task {
-                notifsForContact = await notifsForContact()
+                notifsForContact = await notifsHelper.notifsFor(contact: contact).count
             }
         }
         .contextMenu {
@@ -127,15 +128,15 @@ struct ContactView: View {
                                 Text("Remove"),
                                 action: {
                                     Task {
-                                        let requests = await NotificationsHelper.nc.pendingNotificationRequests()
+                                        let requests = await notifsHelper.nc.pendingNotificationRequests()
                                         let identifiers = requests.compactMap {
                                             NotifWrapper(id: $0.identifier, url: $0.content.targetContentIdentifier ?? "")
                                         }
                                         let filtered = identifiers.filter { $0.url.contains(contact.identifier) }
                                         let mapped = filtered.map { $0.id }
-                                        NotificationsHelper.removeNotifs(notifIds: mapped)
+                                        notifsHelper.removeNotifs(notifIds: mapped)
                                         
-                                        notifsForContact = await notifsForContact()
+                                        notifsForContact = await notifsFor(contact: contact)
                                     }
                                 }
                             ),
@@ -149,8 +150,8 @@ struct ContactView: View {
         .sheet(isPresented: $setNotifSheet) { SetNotificationView(distance: settings.dayRange, contact: contact) }
     }
     
-    func notifsForContact() async -> Int {
-        let requests = await NotificationsHelper.nc.pendingNotificationRequests()
+    func notifsFor(contact: Contact) async -> Int {
+        let requests = await notifsHelper.nc.pendingNotificationRequests()
         let identifiers = requests.compactMap {
             NotifWrapper(id: $0.identifier, url: $0.content.targetContentIdentifier ?? "")
         }
@@ -160,8 +161,8 @@ struct ContactView: View {
     
     func setNotification(dist: Double, hour: Int, minute: Int) async {
         do {
-            try await contact.setNotifs(distanceFromBD: Int(dist), hour: hour, minute: minute)
-            notifsForContact = await notifsForContact()
+            try await notifsHelper.setNotifFor(contact: contact, distanceFromBD: Int(dist), hour: hour, minute: minute)
+            notifsForContact = await notifsFor(contact: contact)
         } catch {
             alertRouter.setAlert(
                 Alert(

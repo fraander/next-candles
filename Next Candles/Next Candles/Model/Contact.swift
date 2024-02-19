@@ -106,19 +106,6 @@ class Contact: ObservableObject, Equatable {
         }
     }
     
-    func setNotifs(distanceFromBD: Int, hour: Int, minute: Int) async throws {
-        // Set notification for the day of
-        let birthdateComponents = DateComponents(calendar: .current, month: self.month, day: self.day)
-        do {
-            let _ = try await NotificationsHelper.scheduleNotification(name: self.name, dateComponents: birthdateComponents, distanceFromBD: distanceFromBD, id: self.identifier, hour: hour, minute: minute)
-//            DispatchQueue.main.async {
-//                self.notif = notifId
-//            }
-        } catch {
-            throw error
-        }
-    }
-    
     static func areDifferent(_ lhs: Contact, _ rhs: Contact) -> Bool {
         return (
             lhs.identifier != rhs.identifier ||

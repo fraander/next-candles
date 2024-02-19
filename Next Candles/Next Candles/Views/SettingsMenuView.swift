@@ -14,6 +14,7 @@ struct SettingsMenu: View {
     @Environment(\.scenePhase) var scenePhase
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject private var settings: Settings
+    @EnvironmentObject private var notifsHelper: NotificationsHelper
     @Query private var allContacts: [Contact]
     @Query(filter: #Predicate<Contact> { $0.hidden }) private var hiddenContacts: [Contact]
     @Binding var sheet: SheetType?
@@ -39,9 +40,9 @@ struct SettingsMenu: View {
             if (!allContacts.isEmpty) {
                 Divider()
                 
-//                Button("Notifs off", systemImage: "bell.slash.fill") {
-//                    NotificationsHelper.removeAllNotifs()
-//                }
+                Button("Remove all notifications", systemImage: "bell.slash.fill") {
+                    notifsHelper.removeAllNotifs()
+                }
                 
                 Button(allHidden ? "Show All" : "Hide all", systemImage: allHidden ? "eye" : "eye.slash") {
                     let ah = allHidden
@@ -56,7 +57,7 @@ struct SettingsMenu: View {
                             title: Text("Delete all Birthdays?"),
                             primaryButton: .destructive(Text("Yes, delete")) {
                                 allContacts.forEach { modelContext.delete($0) }
-                                NotificationsHelper.removeAllNotifs()
+                                notifsHelper.removeAllNotifs()
                             },
                             secondaryButton: .cancel(Text("No, cancel"))
                         )

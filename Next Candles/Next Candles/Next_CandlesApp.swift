@@ -42,6 +42,7 @@ struct Next_CandlesApp: App {
     @StateObject var settings: Settings = Settings.load()
     @StateObject var alertRouter: AlertRouter = AlertRouter()
     @StateObject var progressRouter: ProgressViewRouter = ProgressViewRouter()
+    @StateObject var notifsHelper: NotificationsHelper = .init()
     
     var body: some Scene {
         WindowGroup {
@@ -51,6 +52,7 @@ struct Next_CandlesApp: App {
                 .environmentObject(settings)
                 .environmentObject(alertRouter)
                 .environmentObject(progressRouter)
+                .environmentObject(notifsHelper)
                 .onNotification { response in
                     if let u = response.notification.request.content.targetContentIdentifier {
                         if let url = URL(string: u) {
@@ -77,6 +79,7 @@ struct Next_CandlesApp: App {
                 .frame(minWidth: 320)
                 .onAppear {
                     let _ = NSApplication.shared.windows.map { $0.tabbingMode = .disallowed }
+                    Task { await notifHelper.refreshCache() }
                 }
 #endif
                 .accentColor(Color.pink)
