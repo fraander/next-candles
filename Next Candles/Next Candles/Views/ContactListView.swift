@@ -113,12 +113,7 @@ struct ContactListView: View {
             return
         }
         
-        guard let action = components.host, action == "open" else {
-            print("Unknown URL, we can't handle this one!")
-            return
-        }
-        
-        guard let contactId = components.queryItems?.first(where: { $0.name == "contact" })?.value else {
+        guard let contactId = components.queryItems?.first(where: { $0.name == "id" })?.value else {
             print("Contact id not found")
             return
         }

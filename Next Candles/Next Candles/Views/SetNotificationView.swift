@@ -9,183 +9,222 @@ import SwiftUI
 import SwiftData
 import NotificationCenter
 
+struct NotifWrapper: Identifiable {
+    let id: String
+    let url: String
+}
+
 struct SetNotificationView: View {
     
     var contact: Contact
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var alertRouter: AlertRouter
+    @EnvironmentObject var notifsHelper: NotificationsHelper
+    @State var distance: Double = 4
     
-    @State var daysBefore = 14.0
-    @State var notifsForContact: [(UUID, Date)] = []
-    
-    func sectionHeader(title: () -> String) -> some View {
-        Text(title())
-            .textCase(.uppercase)
-            .font(.system(.caption, design: .monospaced, weight: .regular))
-            .foregroundColor(.secondary)
-            .padding(.top, 10)
-            .frame(maxWidth: .infinity, alignment: .leading)
+    init(distance: Int, contact: Contact) {
+        self.contact = contact
+        _distance = State(initialValue: Double(distance))
     }
     
-    func distance(notifDate: Date, contact c: Contact) -> Int {
-        let birthdate = Calendar.current.nextDate(after: Date(), matching: DateComponents(month: c.month, day: c.day), matchingPolicy: .nextTime) ?? Date()
-        let dist = Date.daysRelative(primaryDate: notifDate, otherDate: birthdate)
-        return dist < 0 ? dist + 365 : dist
-    }
+    @State var notifs: [NotifWrapper] = []
     
-    func message(notifDate: Date, contact c: Contact) -> Text {
-        let dist = distance(notifDate: notifDate, contact: c)
-        
-        return dist == 0 ? Text("On the day") : Text("^[\(dist)\u{00a0}days](inflect: true) before")
-    }
+    @State var time: Date = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTime) ?? Date()
     
     var body: some View {
         
         VStack {
-            // TITLE
             HStack {
-                Spacer()
-                Button("Done", systemImage: "checkmark") {
-                    dismiss()
-                }
-                .tint(.pink)
-            }
-            .padding([.top, .horizontal])
-            
-            Text("Notifications")
-                .font(.system(.largeTitle, design: .rounded, weight: .bold))
-                .padding(.top, 10)
-            
-            Divider()
-            
-            // NOTIFY BEFORE
-            VStack {
-                sectionHeader { "Set Notification" }
-                
-                HStack {
-                    LabeledContent {
-                        CustomStepper(
-                            value: $daysBefore,
-                            lower: 0,
-                            upper: 366,
-                            increment: 1.0,
-                            tintColor: .pink
-                        )
-                    } label: {
-                        Group {
-                            Text("Notify me \n") + Text("^[\(daysBefore, specifier: "%.0f")\u{00a0}day](inflect: true)").foregroundStyle(.pink) + Text(" before")
-                        }
-                        .font(.system(.body, design: .rounded, weight: .regular))
-                        .padding(.vertical, 8)
-                    }
-                }
-                
-                HStack {
-                    Spacer()
-                    
-                    Button("Add Notification", systemImage: "checkmark.circle") {
-                        Task {
-                            try await contact.setNotifs(distanceFromBD: Int(daysBefore))
-                            notifsForContact = await fetchNotifsForContact()
+                if (!notifs.contains { nw in
+                    if let nd = notifsHelper.notifDate(from: nw.url), let dist = notifsHelper.difference(notifDate: nd, birthMonth: contact.month, birthDay: contact.day) {
+                        return dist == 0
+                    } else { return false }
+                }) {
+                    Button("Notify day of", systemImage: "birthday.cake.fill") {
+                        let comps = Calendar.current.dateComponents([.hour, .minute], from: time)
+                        if let hour = comps.hour, let minute = comps.minute {
+                            Task { await setNotification(dist: 0, hour: hour, minute: minute) }
+                        } else {
+                            alertRouter.setAlert(Alert(title: Text("Error setting notification at the given time.")))
                         }
                     }
+                    .tint(.yellow)
                     .buttonBorderShape(.capsule)
                     .buttonStyle(.bordered)
-                    .tint(.yellow)
-                    .labelStyle(.titleAndIcon)
-                        .padding(.bottom, 8)
                 }
                 
+                Spacer()
+                
+                Button("Done", systemImage: "checkmark") { dismiss() }
+                    .tint(.mint)
+                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.bordered)
+            }
+            .padding([.horizontal, .top])
+            Text(contact.name)
+                .font(.system(.headline, design: .rounded, weight: .bold))
+                .padding(.top)
+            if let cbd = contact.birthdate {
+                Text(cbd.formatted(.dateTime.day().month(.wide)))
+                    .font(.system(.subheadline, design: .rounded, weight: .regular))
+                    .foregroundStyle(.secondary)
+            }
+            
+            Group {
+                LabeledContent {
+                    CustomStepper(
+                        value: $distance,
+                        lower: 0,
+                        upper: 365,
+                        increment: 1.0,
+                        tintColor: .pink
+                    )
+                } label: {
+                    HStack {
+                        Group {
+                            Text("Notify me \n")
+                            + Text("^[\(distance, specifier: "%.0f")\u{00a0}day](inflect: true)")
+                                .foregroundStyle(.pink)
+                            + Text(" before")
+                        }
+                        .font(.system(.body, design: .rounded, weight: .regular))
+                        Spacer()
+                    }
+                }
+                
+                DatePicker(
+                    "Time of notification:",
+                    selection: $time,
+                    in: Date()...,
+                    displayedComponents: .hourAndMinute
+                )
+                .tint(.pink)
+                .padding(.bottom, 6)
             }
             .padding(.horizontal)
+            .padding(.top, 10)
             
-            Divider()
+            HStack {
+                
+                Button("Reset", systemImage: "bell.slash", role: .destructive, action: removeAllNotifsForContact)
+                    .buttonBorderShape(.capsule)
+                    .buttonStyle(.bordered)
+                    .tint(.pink)
+                
+                Spacer()
+                
+                Button("Set Notification", systemImage: "bell.fill") {
+                    let comps = Calendar.current.dateComponents([.hour, .minute], from: time)
+                    if let hour = comps.hour, let minute = comps.minute {
+                        Task { await setNotification(dist: distance, hour: hour, minute: minute) }
+                    } else {
+                        alertRouter.setAlert(Alert(title: Text("Error setting notification at the given time.")))
+                    }
+                    
+                }
+                .buttonBorderShape(.capsule)
+                .buttonStyle(.bordered)
+                .tint(.mint)
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 10)
             
-            sectionHeader { "Existing Notifications" }
-                .padding(.horizontal)
-            
-            ScrollView(.vertical) {
-                if notifsForContact.isEmpty {
-                    Spacer(minLength: 48)
-                    ContentUnavailableView("No notifications are currently queued.", systemImage: "app.badge")
-                        .foregroundStyle(.secondary)
-                        .fontDesign(.rounded)
-                } else {
-                    ForEach(notifsForContact, id: \.0.self) { i in
+            if notifs.isEmpty {
+                ContentUnavailableView(
+                    "No notifications set",
+                    systemImage: "bell.slash",
+                    description: Text("Click ")
+                    + Text("\(Image(systemName: "bell.fill")) Set Notification")
+                        .foregroundStyle(.mint)
+                        .bold()
+                    + Text(" to create a notification for this contact.")
+                )
+            } else {
+                List {
+                    ForEach(notifs) { notif in
                         HStack {
-                            HStack {
-                                Circle()
-                                    .fill(Color.pink.opacity(0.5))
-                                    .overlay {
-                                        Text("\(distance(notifDate: i.1, contact: contact))")
-                                            .font(.system(.caption, design: .monospaced, weight: .bold))
+                            if let notifDate = notifsHelper.notifDate(from: notif.url) {
+                                if let dist = notifsHelper.difference(notifDate: notifDate, birthMonth: contact.month, birthDay: contact.day) {
+                                    Group {
+                                        Text(dist == 0 ? "On the day" : "^[\(dist) day](inflect: true) before")
+                                        + Text(", \(notifDate.formatted(date: .omitted, time: Date.FormatStyle.TimeStyle.shortened))")
                                     }
-                                    .frame(width: 28, height: 28, alignment: .center)
-                                message(notifDate: i.1, contact: contact)
-                                    .font(.system(.body, design: .rounded))
-                            }
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(10)
-                            .background {
-                                Capsule()
-                                    .fill(.pink.opacity(0.2))
+                                    Spacer()
+                                } else {
+                                    Text("INVALID DATE COMPARISON")
+                                        .foregroundStyle(.pink)
+                                        .font(.system(.body, design: .rounded, weight: .bold))
+                                    Spacer()
+                                }
+                                
+                                Group {
+                                    Text("Next: ")
+                                    + Text(notifDate.formatted(
+                                        .dateTime
+                                            .day()
+                                            .month(.wide)
+                                            .year()))
+                                }
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            } else {
+                                Text("INVALID NOTIFICATION DATE")
+                                    .foregroundStyle(.pink)
+                                    .font(.system(.body, design: .rounded, weight: .bold))
+                                Spacer()
                             }
                             
-                            Button("Remove Notification", systemImage: "bell.slash") {
-                                
-                                Task {
-                                    notifsForContact.removeAll { j in
-                                        i == j
-                                    }
-                                    
-                                    // These processes don't work
-                                    if let n = contact.notif {
-                                        NotificationsHelper.removeNotifs(notifIds: [n])
-                                        contact.notif = nil
-                                    }
-                                    let fetched = await fetchNotifsForContact()
-                                    DispatchQueue.main.async {
-                                        notifsForContact = fetched
-                                    }
-                                }
+                            Button("Remove", systemImage: "bell.slash") {
+                                notifsHelper.removeNotifs(notifIds: [notif.id])
+                                Task { notifs = await notifsHelper.notifsFor(contact: contact) }
                             }
-                            .tint(.yellow)
-                            .buttonStyle(.bordered)
                             .labelStyle(.iconOnly)
+                            .font(.caption)
+                            .tint(.pink)
                             .buttonBorderShape(.circle)
+                            .buttonStyle(.bordered)
                         }
-                        .padding(.horizontal)
+                    }
+                    .onDelete { offsets in
+                        offsets.forEach { offset in
+                            notifsHelper.removeNotifs(notifIds: [notifs[offset].id])
+                        }
+                        Task { notifs = await notifsHelper.notifsFor(contact: contact) }
                     }
                 }
             }
         }
         .task {
-            notifsForContact = await fetchNotifsForContact()
+            notifs = await notifsHelper.notifsFor(contact: contact) }
+    }
+    
+    
+    func setNotification(dist: Double, hour: Int, minute: Int) async {
+        do {
+            try await notifsHelper.setNotifFor(contact: contact, distanceFromBD: Int(dist), hour: hour, minute: minute)
+            notifs = await notifsHelper.notifsFor(contact: contact)
+        } catch {
+            alertRouter.setAlert(
+                Alert(
+                    title: Text("Failed to set notification"),
+                    dismissButton: .default(Text("Okay"))
+                )
+            )
         }
     }
     
-    func setNotif() {
+    func removeAllNotifsForContact() {
+        // remove all notifs for this contact
+        notifs.forEach { _ in
+            notifsHelper.removeNotifs(notifIds: notifs.compactMap { nw in
+                nw.id
+            })
+        }
+        
+        // refresh
         Task {
-            try await contact.setNotifs(distanceFromBD: Int(daysBefore))
-            dismiss()
-            notifsForContact = await fetchNotifsForContact()
+            notifs = await notifsHelper.notifsFor(contact: contact)
         }
-    }
-    
-    func fetchNotifsForContact() async -> [(UUID, Date)] {
-        let requests = await NotificationsHelper.nc.pendingNotificationRequests()
-        //        let notifs = requests.filter { $0.content.targetContentIdentifier == contact.identifier }
-        let notifs = requests.filter { $0.content.targetContentIdentifier?.replacingOccurrences(of: "nextcandles://open?contact=", with: "") == contact.identifier
-        }
-        
-        let dates: [Date] = notifs.compactMap { unr in
-            if let c = (unr.trigger as? UNCalendarNotificationTrigger)?.nextTriggerDate() {
-                return c
-            } 
-            return nil
-        }
-        
-        return dates.map { (UUID(), $0) }
     }
 }
 
@@ -195,6 +234,6 @@ struct SetNotificationView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Contact.self, configurations: config)
     
-    return SetNotificationView(contact: Contact())
+    return SetNotificationView(distance: 15, contact: Contact())
         .modelContainer(container)
 }

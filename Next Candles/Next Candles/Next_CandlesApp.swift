@@ -10,22 +10,20 @@ import UserNotifications
 import Combine
 
 /*
- Enablers
- - Change how notifications are stored since you can reference differently now; store Notifs in UserDefaults and match identifier with notification's identifier to know if a contact has one set (Removes sync bugs)
- - Detail view buttons can be either Menu or Button
- 
  Features
  - iCloud Sync with SwiftData
- - Detail view made adjustable to other screen sizes; show existing notifications on the screen
  - Refactor helper functions; simplify code and views
- - Calculate date relative more correctly
+ - Fix date math (and ensure reusability of same relativity functions)
  */
 
 class AlertRouter: ObservableObject {
-    @Published var alert: Alert? {
-        didSet { isPresented = alert != nil }
+    @Published private(set) var alert: Alert? = nil
+    @Published fileprivate(set) var isPresented = false
+    
+    func setAlert(_ alert: Alert) {
+        self.alert = alert
+        isPresented = true
     }
-    @Published var isPresented = false
 }
 
 class ProgressViewRouter: ObservableObject {
@@ -36,10 +34,15 @@ class ProgressViewRouter: ObservableObject {
 struct Next_CandlesApp: App {
     
     @Environment(\.openURL) var openURL
+    #if os(iOS)
     @UIApplicationDelegateAdaptor var appDelegate: NCAppDelegate
+    #elseif os(macOS)
+    @NSApplicationDelegateAdaptor var appDelegate: NCAppDelegate
+    #endif
     @StateObject var settings: Settings = Settings.load()
     @StateObject var alertRouter: AlertRouter = AlertRouter()
     @StateObject var progressRouter: ProgressViewRouter = ProgressViewRouter()
+    @StateObject var notifsHelper: NotificationsHelper = .init()
     
     var body: some Scene {
         WindowGroup {
@@ -49,6 +52,7 @@ struct Next_CandlesApp: App {
                 .environmentObject(settings)
                 .environmentObject(alertRouter)
                 .environmentObject(progressRouter)
+                .environmentObject(notifsHelper)
                 .onNotification { response in
                     if let u = response.notification.request.content.targetContentIdentifier {
                         if let url = URL(string: u) {
@@ -63,16 +67,19 @@ struct Next_CandlesApp: App {
                     Group {
                         if (progressRouter.isLoading) {
                             ZStack {
-                                Color.primary.opacity(0.1).allowsHitTesting(false)
+                                Color.secondary.opacity(0.4).allowsHitTesting(true)
                                 ProgressView()
                             }
+                            .ignoresSafeArea(.all)
                         }
                     }
+                    .animation(.easeInOut, value: progressRouter.isLoading)
                 }
 #if os(macOS)
                 .frame(minWidth: 320)
                 .onAppear {
                     let _ = NSApplication.shared.windows.map { $0.tabbingMode = .disallowed }
+                    Task { await notifHelper.refreshCache() }
                 }
 #endif
                 .accentColor(Color.pink)

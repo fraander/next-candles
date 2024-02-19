@@ -11,8 +11,10 @@ import SwiftData
 struct SettingsMenu: View {
     
     @Environment(\.dismiss) var dismiss
+    @Environment(\.scenePhase) var scenePhase
     @Environment(\.modelContext) var modelContext
     @EnvironmentObject private var settings: Settings
+    @EnvironmentObject private var notifsHelper: NotificationsHelper
     @Query private var allContacts: [Contact]
     @Query(filter: #Predicate<Contact> { $0.hidden }) private var hiddenContacts: [Contact]
     @Binding var sheet: SheetType?
@@ -38,24 +40,8 @@ struct SettingsMenu: View {
             if (!allContacts.isEmpty) {
                 Divider()
                 
-                // TODO: add a loading page over the whole screen when this happens
-                Button("Notify all", systemImage: "bell.badge.fill") {
-                    progressRouter.isLoading = true
-                    allContacts.forEach { c in
-                        if !c.hasNotifs && !c.hidden {
-                            Task { try await c.setNotifs(distanceFromBD: 0) }
-                        }
-                    }
-                    progressRouter.isLoading = false
-                }
-                
-                Button("Notifs off", systemImage: "bell.slash.fill") {
-                    progressRouter.isLoading = true
-                    allContacts.forEach { c in
-                        NotificationsHelper.removeAllNotifs()
-                        c.notif = nil
-                    }
-                    progressRouter.isLoading = false
+                Button("Remove all notifications", systemImage: "bell.slash.fill") {
+                    notifsHelper.removeAllNotifs()
                 }
                 
                 Button(allHidden ? "Show All" : "Hide all", systemImage: allHidden ? "eye" : "eye.slash") {
@@ -66,13 +52,15 @@ struct SettingsMenu: View {
                 }
                 
                 Button("Delete all", systemImage: "trash", role: .destructive) {
-                    alertRouter.alert = Alert(
-                        title: Text("Delete all Birthdays?"),
-                        primaryButton: .destructive(Text("Yes, delete")) {
-                            allContacts.forEach { modelContext.delete($0) }
-                            NotificationsHelper.removeAllNotifs()
-                        },
-                        secondaryButton: .cancel(Text("No, cancel"))
+                    alertRouter.setAlert(
+                        Alert(
+                            title: Text("Delete all Birthdays?"),
+                            primaryButton: .destructive(Text("Yes, delete")) {
+                                allContacts.forEach { modelContext.delete($0) }
+                                notifsHelper.removeAllNotifs()
+                            },
+                            secondaryButton: .cancel(Text("No, cancel"))
+                        )
                     )
                 }
             }
@@ -87,6 +75,14 @@ struct SettingsMenu: View {
                 dayRangeAlert.toggle()
             }
         }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active {
+                fetch(showNoNewAlert: false)
+            }
+        }
+//        .onAppear {
+//            fetch(showNoNewAlert: false)
+//        }
         .tint(.pink)
 #if os(iOS)
         .labelStyle(.titleAndIcon)
@@ -96,7 +92,7 @@ struct SettingsMenu: View {
         }
     }
     
-    func fetch() {
+    func fetch(showNoNewAlert: Bool = true) {
         Task {
             let (existing, diffs) = try await ContactsUtils.fetch(existingContacts: allContacts)
             if (existing.count > 0) {
@@ -105,8 +101,12 @@ struct SettingsMenu: View {
                 showResolveDiffs = true
                 toResolve = diffs
             } else {
-                alertRouter.alert = Alert(title: Text("No new contacts to import."))
-            }            
+                if showNoNewAlert {
+                    alertRouter.setAlert(
+                        Alert(title: Text("No new contacts to import."))
+                    )
+                }
+            }
         }
     }
 }
