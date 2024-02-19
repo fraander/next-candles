@@ -94,13 +94,6 @@ struct CustomStepper: View {
         .task {
             valueBuffer = reset()
         }
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                Button("Done") {
-                    focused = nil
-                }
-            }
-        }
     }
     
     func reset() -> String {

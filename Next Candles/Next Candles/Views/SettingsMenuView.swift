@@ -40,8 +40,16 @@ struct SettingsMenu: View {
             if (!allContacts.isEmpty) {
                 Divider()
                 
-                Button("Remove all notifications", systemImage: "bell.slash.fill") {
-                    notifsHelper.removeAllNotifs()
+                Button("Remove all notifications", systemImage: "bell.slash.fill", role: .destructive) {
+                    alertRouter.setAlert(
+                        Alert(
+                            title: Text("Remove all notifications?"),
+                            primaryButton: .destructive(Text("Yes, remove")) {
+                                notifsHelper.removeAllNotifs()
+                            },
+                            secondaryButton: .cancel(Text("No, cancel"))
+                        )
+                    )
                 }
                 
                 Button(allHidden ? "Show All" : "Hide all", systemImage: allHidden ? "eye" : "eye.slash") {
