@@ -118,9 +118,13 @@ struct ContactView: View {
             
             if notifsForContact == 0 {
                 Button("Set day of", systemImage: "birthday.cake.fill") {
-                    Task { 
-                        await setNotification(dist: 0, hour: 0, minute: 0)
-                        alertRouter.setAlert( Alert(title: Text("Set notification for the day of!")) )
+                    Task {
+                        do {
+                            try await setNotification(dist: 0, time: settings.defaultTime)
+                            alertRouter.setAlert( Alert(title: Text("Set notification for the day of!")) )
+                        } catch {
+                            alertRouter.setAlert(Alert(title: Text("Error setting notification at the given time.")))
+                        }
                     }
                 }
                 .tint(.secondary)
@@ -152,7 +156,7 @@ struct ContactView: View {
                 .tint(.secondary)
             }
         }
-        .sheet(isPresented: $setNotifSheet) { SetNotificationView(distance: settings.dayRange, contact: contact) }
+        .sheet(isPresented: $setNotifSheet) { SetNotificationView(settings: settings, contact: contact) }
     }
     
     func notifsFor(contact: Contact) async -> Int {
@@ -162,6 +166,15 @@ struct ContactView: View {
         }
         let filtered = identifiers.filter { $0.url.contains(contact.identifier) }
         return filtered.count
+    }
+    
+    func setNotification(dist: Double, time: Date) async throws {
+        let comps = Calendar.current.dateComponents([.hour, .minute], from: time)
+        if let hour = comps.hour, let minute = comps.minute {
+            await setNotification(dist: 0, hour: hour, minute: minute)
+        } else {
+            throw GeneralizedError("Error setting notification at the given time.")
+        }
     }
     
     func setNotification(dist: Double, hour: Int, minute: Int) async {

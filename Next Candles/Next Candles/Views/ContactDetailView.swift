@@ -270,7 +270,7 @@ struct ContactDetailView: View {
                     [.height(300)]
                 )
         }
-        .sheet(isPresented: $setNotifSheet) { SetNotificationView(distance: settings.dayRange, contact: contact) }
+        .sheet(isPresented: $setNotifSheet) { SetNotificationView(settings: settings, contact: contact) }
     }
 }
 

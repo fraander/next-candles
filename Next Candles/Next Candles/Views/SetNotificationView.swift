@@ -15,16 +15,18 @@ struct SetNotificationView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var alertRouter: AlertRouter
     @EnvironmentObject var notifsHelper: NotificationsHelper
+    @EnvironmentObject var settings: Settings
     @State var distance: Double = 4
     
-    init(distance: Int, contact: Contact) {
+    init(settings: Settings, contact: Contact) {
         self.contact = contact
-        _distance = State(initialValue: Double(distance))
+        _distance = State(initialValue: Double(settings.dayRange))
+        _time = State(initialValue: settings.defaultTime)
     }
     
     @State var notifs: [NotifWrapper] = []
     
-    @State var time: Date = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTime) ?? Date()
+    @State var time: Date// = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTime) ?? Date()
     
     var body: some View {
         
@@ -93,6 +95,9 @@ struct SetNotificationView: View {
                     in: Date()...,
                     displayedComponents: .hourAndMinute
                 )
+                .onChange(of: time) { old, new in
+                    settings.defaultTime = new
+                }
                 .tint(.pink)
                 .padding(.bottom, 6)
             }
@@ -229,6 +234,6 @@ struct SetNotificationView: View {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Contact.self, configurations: config)
     
-    return SetNotificationView(distance: 15, contact: Contact())
+    return SetNotificationView(settings: Settings(), contact: Contact())
         .modelContainer(container)
 }

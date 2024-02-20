@@ -52,36 +52,37 @@ class Settings: ObservableObject, Codable, Equatable {
         return Settings()
     }
     
-    @Published var janStart = false {
-        didSet {
-            Settings.save(settings: self)
-        }
-    }
-    @Published var dayRange = 20 {
-        didSet {
-            Settings.save(settings: self)
-        }
-    }
-    
     init() {
-        self.janStart = false
-        self.dayRange = 20
+        janStart = false
+        dayRange = 20
+        defaultTime = Calendar.current.nextDate(after: Date(), matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTime) ?? Date()
     }
     
-    init(dayRangeAlert: Bool = false, janStart: Bool = false, dayRange: Int = 20) {
-        self.janStart = janStart
-        self.dayRange = dayRange
+    @Published var janStart: Bool {
+        didSet {
+            Settings.save(settings: self)
+        }
     }
-    
+    @Published var dayRange: Int {
+        didSet {
+            Settings.save(settings: self)
+        }
+    }
+    @Published var defaultTime: Date {
+        didSet {
+            Settings.save(settings: self)
+        }
+    }
     
     required init(from decoder: Decoder) throws {
-        do {
+//        do {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.janStart = try container.decode(Bool.self, forKey: .janStart)
             self.dayRange = try container.decode(Int.self, forKey: .dayRange)
-        } catch {
-            print(error.localizedDescription)
-        }
+            self.defaultTime = try container.decode(Date.self, forKey: .defaultTime)
+//        } catch {
+//            print(error.localizedDescription)
+//        }
         
     }
     
@@ -90,11 +91,13 @@ class Settings: ObservableObject, Codable, Equatable {
         
         try container.encode(janStart, forKey: .janStart)
         try container.encode(dayRange, forKey: .dayRange)
+        try container.encode(defaultTime, forKey: .defaultTime)
     }
     
     enum CodingKeys: CodingKey{
         case janStart
         case dayRange
+        case defaultTime
     }
 }
 
