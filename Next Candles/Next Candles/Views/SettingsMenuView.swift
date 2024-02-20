@@ -84,13 +84,10 @@ struct SettingsMenu: View {
             }
         }
         .onChange(of: scenePhase) { oldPhase, newPhase in
-            if newPhase == .active {
+            if newPhase == .active && !allContacts.isEmpty {
                 fetch(showNoNewAlert: false)
             }
         }
-//        .onAppear {
-//            fetch(showNoNewAlert: false)
-//        }
         .tint(.pink)
 #if os(iOS)
         .labelStyle(.titleAndIcon)

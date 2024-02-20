@@ -46,7 +46,11 @@ struct ContactListView: View {
     
     var noContactsView: some View {
         VStack {
-            ContentUnavailableView("No birthdays found", systemImage: "birthday.cake", description: Text("Import Birthdays from Contacts or add some manually in Settings \(Image(systemName: "gear"))"))
+            ContentUnavailableView(
+                "No birthdays found",
+                systemImage: "birthday.cake",
+                description: Text("In **Settings \(Image(systemName: "gear"))**, you can add birthdays with **Import from Contacts \(Image(systemName: "doc.text.magnifyingglass"))** or **Add Manually \(Image(systemName: "person.fill.badge.plus"))**.")
+            )
         }
     }
     
@@ -82,7 +86,9 @@ struct ContactListView: View {
             //            .navigationTitle("")
 #endif
             .toolbar {
-                SettingsMenu(sheet: $sheet, dayRangeAlert: $dayRangeAlert)
+                ToolbarItem(placement: .topBarTrailing) {
+                    SettingsMenu(sheet: $sheet, dayRangeAlert: $dayRangeAlert)
+                }
             }
             .overlay {
                 LoadingContactsView(loadingContacts: loadingContacts)
