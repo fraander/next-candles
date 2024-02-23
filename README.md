@@ -1,3 +1,5 @@
+**Next Candles is available on the App Store for iOS and iPadOS! [_Click here to download_](https://apps.apple.com/us/app/next-candles/id6474628145)**
+
 <img src="https://github.com/fraander/next-candles/blob/main/Next%20Candles/Next%20Candles/Assets.xcassets/AppIcon.appiconset/256.png" height="auto" width="100"/>
 
 # Next Candles
