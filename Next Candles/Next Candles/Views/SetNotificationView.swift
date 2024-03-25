@@ -33,7 +33,7 @@ struct SetNotificationView: View {
         VStack {
             HStack {
                 if (!notifs.contains { nw in
-                    if let nd = notifsHelper.notifDate(from: nw.url), let dist = notifsHelper.difference(notifDate: nd, birthMonth: contact.month, birthDay: contact.day) {
+                    if let nd = NotificationsHelper.notifDate(from: nw.url), let dist = notifsHelper.difference(notifDate: nd, birthMonth: contact.month, birthDay: contact.day) {
                         return dist == 0
                     } else { return false }
                 }) {
@@ -143,7 +143,7 @@ struct SetNotificationView: View {
                 List {
                     ForEach(notifs) { notif in
                         HStack {
-                            if let notifDate = notifsHelper.notifDate(from: notif.url) {
+                            if let notifDate = NotificationsHelper.notifDate(from: notif.url) {
                                 if let dist = notifsHelper.difference(notifDate: notifDate, birthMonth: contact.month, birthDay: contact.day) {
                                     Group {
                                         Text(dist == 0 ? "On the day" : "^[\(dist) day](inflect: true) before")

@@ -18,7 +18,16 @@ struct ContactView: View {
     var contact: Contact
     
     @State var setNotifSheet = false
-    @State var notifsForContact = 0
+    @State var notifsForContact: [NotifWrapper] = []
+    
+    var notifForDayOf: Bool {
+        return notifsForContact.contains { nw in
+            if let nd = NotificationsHelper.notifDate(from: nw.url) {
+                let ndTruncated = Calendar.current.dateComponents([.day, .month], from: nd)
+                return ndTruncated.day == contact.day && ndTruncated.month == contact.month
+            } else { return false }
+        }
+    }
     
     var hideButton: some View {
         Button("Hide Birthday", systemImage: contact.hidden ? "eye" : "eye.slash") { hide(contact)}
@@ -55,7 +64,13 @@ struct ContactView: View {
                 .font(.system(.subheadline, design: .rounded, weight: .regular))
                 .foregroundColor(.secondary)
                 
-                if (notifsForContact > 0) {
+                if (notifForDayOf) {
+                    Image(systemName: "birthday.cake.fill")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                
+                if ((notifForDayOf && notifsForContact.count > 1) || (!notifForDayOf && notifsForContact.count > 0)) {
                     Image(systemName: "bell.fill")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
@@ -73,17 +88,17 @@ struct ContactView: View {
         }
         .onAppear {
             Task {
-                notifsForContact = await notifsHelper.notifsFor(contact: contact).count
+                notifsForContact = await notifsHelper.notifsFor(contact: contact)
             }
         }
         .onChange(of: setNotifSheet) {
             Task {
-                notifsForContact = await notifsHelper.notifsFor(contact: contact).count
+                notifsForContact = await notifsHelper.notifsFor(contact: contact)
             }
         }
         .onChange(of: notifsHelper.notifsCache) {
             Task {
-                notifsForContact = await notifsHelper.notifsFor(contact: contact).count
+                notifsForContact = await notifsHelper.notifsFor(contact: contact)
             }
         }
         .contextMenu {
@@ -116,7 +131,7 @@ struct ContactView: View {
             }
             .tint(.yellow)
             
-            if notifsForContact == 0 {
+            if !notifForDayOf {
                 Button("Set day of", systemImage: "birthday.cake.fill") {
                     Task {
                         do {
@@ -159,13 +174,13 @@ struct ContactView: View {
         .sheet(isPresented: $setNotifSheet) { SetNotificationView(settings: settings, contact: contact) }
     }
     
-    func notifsFor(contact: Contact) async -> Int {
+    func notifsFor(contact: Contact) async -> [NotifWrapper] {
         let requests = await notifsHelper.nc.pendingNotificationRequests()
         let identifiers = requests.compactMap {
             NotifWrapper(id: $0.identifier, url: $0.content.targetContentIdentifier ?? "")
         }
         let filtered = identifiers.filter { $0.url.contains(contact.identifier) }
-        return filtered.count
+        return filtered
     }
     
     func setNotification(dist: Double, time: Date) async throws {

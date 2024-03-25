@@ -58,6 +58,10 @@ class NotificationsHelper: ObservableObject {
         }
     }
     
+    static func birthdateNotif(dateComponents: DateComponents) throws -> Date? {
+        return Calendar.current.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .nextTime)
+    }
+    
     
     /// Sets a notification for the given person on the given day/month
     /// - Parameters:
@@ -80,7 +84,7 @@ class NotificationsHelper: ObservableObject {
             }
         }
         
-        guard let birthdate = Calendar.current.nextDate(after: Date(), matching: dateComponents, matchingPolicy: .nextTime) else {
+        guard let birthdate = try NotificationsHelper.birthdateNotif(dateComponents: dateComponents) else {
             throw GeneralizedError("Invalid birthdate.")
         }
         
@@ -188,8 +192,8 @@ class NotificationsHelper: ObservableObject {
     
     func sortNotifWrappers(_ notifs: [NotifWrapper], contact: Contact) -> [NotifWrapper] {
         return notifs.sorted {
-            if let lhs = notifDate(from: $0.url),
-               let rhs = notifDate(from: $1.url),
+            if let lhs = NotificationsHelper.notifDate(from: $0.url),
+               let rhs = NotificationsHelper.notifDate(from: $1.url),
                let lhsDist = difference(notifDate: lhs, birthMonth: contact.month, birthDay: contact.day),
                let rhsDist = difference(notifDate: rhs, birthMonth: contact.month, birthDay: contact.day) {
                 return lhsDist < rhsDist
@@ -199,7 +203,7 @@ class NotificationsHelper: ObservableObject {
         }
     }
     
-    func notifDate(from urlString: String) -> Date? {
+    static func notifDate(from urlString: String) -> Date? {
         guard let url = URL(string: urlString),
               let components = URLComponents(
                 url: url,
