@@ -99,7 +99,7 @@ class NotificationsHelper: ObservableObject {
         
         // set the title
         let title = "Birthday alert! 🥳"
-        let body = distanceFromBD == 0 ? "\(name.last == "s" ? name + "'" : name + "'s") birthday is today." : "\(name.last == "s" ? name + "'" : name + "'s") birthday is on \(df.string(from: birthdate)), which is \(distanceFromBD) \(distanceFromBD == 1 ? "day" : "days") away."
+        let body = (distanceFromBD == 0) ? "\(name.last == "s" ? name + "'" : name + "'s") birthday is today." : "\(name.last == "s" ? name + "'" : name + "'s") birthday is on \(df.string(from: birthdate)), which is \(distanceFromBD) \(distanceFromBD == 1 ? "day" : "days") away."
         
         var components = URLComponents()
         components.scheme = "nextcandles"
