@@ -39,6 +39,7 @@
 		BDD9F79E2B12B7CA002E69F0 /* AddManuallyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F79D2B12B7CA002E69F0 /* AddManuallyView.swift */; };
 		BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */; };
 		BDDFAACD28CF6B32009FC717 /* CustomStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */; };
+		BDE244B62BB3896300120D5D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BDE244B52BB3896200120D5D /* PrivacyInfo.xcprivacy */; };
 		BDFE4DD12B0C48680074D0A9 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFE4DD02B0C48680074D0A9 /* Contact.swift */; };
 		BDFE4DD32B0C494A0074D0A9 /* ContactListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFE4DD22B0C494A0074D0A9 /* ContactListView.swift */; };
 		BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDFE4DD42B0D53DD0074D0A9 /* ContactsUtils.swift */; };
@@ -89,6 +90,7 @@
 		BDD9F79D2B12B7CA002E69F0 /* AddManuallyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddManuallyView.swift; sourceTree = "<group>"; };
 		BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCodingError.swift; sourceTree = "<group>"; };
 		BDDFAACC28CF6B32009FC717 /* CustomStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStepper.swift; sourceTree = "<group>"; };
+		BDE244B52BB3896200120D5D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		BDFE4DD02B0C48680074D0A9 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		BDFE4DD22B0C494A0074D0A9 /* ContactListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListView.swift; sourceTree = "<group>"; };
 		BDFE4DD42B0D53DD0074D0A9 /* ContactsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsUtils.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */,
 				BD2D76C62B350F2B001AA86F /* NCAppDelegate.swift */,
 				BD2D76C32B33C2BD001AA86F /* Next-Candles-Info.plist */,
+				BDE244B52BB3896200120D5D /* PrivacyInfo.xcprivacy */,
 				BD63D3D02B83C8A50086F73B /* Extensions */,
 				BDBE88DE2B23C41C005D4C0F /* Services */,
 				BDDFAAC328CF6082009FC717 /* Model */,
@@ -302,6 +305,7 @@
 			files = (
 				BD9B08DE2B9E170B009BA365 /* TODO.md in Resources */,
 				BD168DD72892E69D0082E461 /* Preview Assets.xcassets in Resources */,
+				BDE244B62BB3896300120D5D /* PrivacyInfo.xcprivacy in Resources */,
 				BD168DD32892E69D0082E461 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -514,17 +518,19 @@
 				INFOPLIST_KEY_NSContactsUsageDescription = "Need to access contacts in order to read birthdays.";
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "frank.Next-Candles";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -553,17 +559,19 @@
 				INFOPLIST_KEY_NSContactsUsageDescription = "Need to access contacts in order to read birthdays.";
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "frank.Next-Candles";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
