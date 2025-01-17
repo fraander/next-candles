@@ -1,6 +1,6 @@
 **Next Candles is available on the App Store for iOS and iPadOS! [_Click here to download_](https://apps.apple.com/us/app/next-candles/id6474628145)**
 
-<img src="https://github.com/fraander/next-candles/blob/main/Next%20Candles/Next%20Candles/Assets.xcassets/AppIcon.appiconset/256.png" height="auto" width="100"/>
+<img src="https://github.com/fraander/next-candles/blob/main/Next%20Candles/Next%20Candles/Assets.xcassets/AppIcon.appiconset/1024%202.png" height="auto" width="100"/>
 
 # Next Candles
 Display when the next birthdays in your Contacts are coming up, and receive notifications leading up to the date.
