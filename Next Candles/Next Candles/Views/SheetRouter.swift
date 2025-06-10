@@ -7,6 +7,20 @@
 
 import SwiftUI
 
+enum SheetType: Identifiable {
+    
+    case custom, hidden, contact(Contact)
+    
+    var id: String {
+        switch self {
+        case .custom: return "custom"
+        case .hidden: return "hidden"
+        case .contact(let contact): return "contact_\(contact.id)"
+        }
+    }
+}
+
+
 struct SheetRouter: View {
     
     @Binding var item: SheetType?
@@ -15,9 +29,8 @@ struct SheetRouter: View {
         switch item {
         case .custom: AddManuallyView()
         case .hidden: HiddenContactsView()
-        case .none:
-            Text("")
-//            ContentUnavailableView("No sheet selected", systemImage: "wand.and.rays")
+        case .none: Text("")
+        case .contact(let contact): ContactDetailView(contact: contact)
         }
     }
 }

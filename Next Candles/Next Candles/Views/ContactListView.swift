@@ -63,7 +63,7 @@ struct ContactListView: View {
                     List {
                         ForEach(months, id: \.self) { month in
                             Section("\(Calendar.current.monthSymbols[month-1])") {
-                                ContactsMonthListView(month: month)
+                                ContactsMonthListView(month: month, sheet: $sheet)
                                     .id(month)
                             }
                         }
@@ -80,11 +80,6 @@ struct ContactListView: View {
                 }
                 
             }
-#if os(iOS)
-            .navigationTitle(path.isEmpty ? "Next Candles" : "Back")
-            //            #else
-            //            .navigationTitle("")
-#endif
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     SettingsMenu(sheet: $sheet, dayRangeAlert: $dayRangeAlert)
@@ -95,6 +90,9 @@ struct ContactListView: View {
             }
             .sheet(item: $sheet) { item in
                 SheetRouter(item: $sheet)
+                    .presentationBackground(.regularMaterial)
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.fraction(0.999)])
             }
             .alert("Highlight Range", isPresented: $dayRangeAlert) {
                 HighlightRangeAlert()
@@ -108,6 +106,7 @@ struct ContactListView: View {
             }
         }
         .accentColor(path.isEmpty ? .pink : .white)
+        .navigationTitle("Next Candles")
     }
     
     private func handleIncomingURL(_ url: URL) {
@@ -133,9 +132,35 @@ struct ContactListView: View {
 }
 
 #Preview {
+    
+    @Previewable @StateObject var settings: Settings = Settings.load()
+    @Previewable @StateObject var alertRouter: AlertRouter = AlertRouter()
+    @Previewable @StateObject var progressRouter: ProgressViewRouter = ProgressViewRouter()
+    @Previewable @StateObject var notifsHelper: NotificationsHelper = .init()
+    
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: Contact.self, configurations: config)
     
-    return ContactListView()
+    ContactListView()
         .modelContainer(container)
+        .environmentObject(settings)
+        .environmentObject(alertRouter)
+        .environmentObject(progressRouter)
+        .environmentObject(notifsHelper)
+        .task {
+            for _ in 0..<100 {
+                container.mainContext.insert(
+                    Contact(
+                        identifier: "ID1234",
+                        givenName: "John",
+                        familyName: "Doe",
+                        month: 2,
+                        day: 4,
+                        year: 2010,
+                        phones: [],
+                        emails: [],
+                    )
+                )
+            }
+        }
 }

@@ -22,6 +22,7 @@ struct NotifWrapper: Identifiable, Equatable {
     let url: String
 }
 
+@MainActor
 class NotificationsHelper: ObservableObject {
     
     @Published var notifsCache: [NotifWrapper] = []

@@ -9,8 +9,9 @@ import Foundation
 import SwiftData
 import Contacts
 
+
 @Model
-class Contact: ObservableObject, Equatable {
+class Contact: ObservableObject, Equatable, Identifiable {
     var identifier: String
     var givenName: String?
     var familyName: String?

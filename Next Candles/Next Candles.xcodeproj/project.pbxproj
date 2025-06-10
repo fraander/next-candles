@@ -32,7 +32,6 @@
 		BDD9F7902B12AA37002E69F0 /* HiddenContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F78F2B12AA37002E69F0 /* HiddenContactsView.swift */; };
 		BDD9F7922B12AAA1002E69F0 /* ContactView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F7912B12AAA1002E69F0 /* ContactView.swift */; };
 		BDD9F7942B12B0EA002E69F0 /* SheetRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F7932B12B0EA002E69F0 /* SheetRouter.swift */; };
-		BDD9F7962B12B141002E69F0 /* SheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F7952B12B141002E69F0 /* SheetType.swift */; };
 		BDD9F7982B12B150002E69F0 /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F7972B12B150002E69F0 /* LoadingState.swift */; };
 		BDD9F79A2B12B2E1002E69F0 /* SettingsMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F7992B12B2E1002E69F0 /* SettingsMenuView.swift */; };
 		BDD9F79C2B12B6C9002E69F0 /* LoadingContactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD9F79B2B12B6C9002E69F0 /* LoadingContactsView.swift */; };
@@ -82,7 +81,6 @@
 		BDD9F78F2B12AA37002E69F0 /* HiddenContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenContactsView.swift; sourceTree = "<group>"; };
 		BDD9F7912B12AAA1002E69F0 /* ContactView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactView.swift; sourceTree = "<group>"; };
 		BDD9F7932B12B0EA002E69F0 /* SheetRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetRouter.swift; sourceTree = "<group>"; };
-		BDD9F7952B12B141002E69F0 /* SheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetType.swift; sourceTree = "<group>"; };
 		BDD9F7972B12B150002E69F0 /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
 		BDD9F7992B12B2E1002E69F0 /* SettingsMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsMenuView.swift; sourceTree = "<group>"; };
 		BDD9F79B2B12B6C9002E69F0 /* LoadingContactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingContactsView.swift; sourceTree = "<group>"; };
@@ -210,7 +208,6 @@
 			children = (
 				BDD9F7972B12B150002E69F0 /* LoadingState.swift */,
 				BD9237562B65A7380043CE45 /* GeneralizedError.swift */,
-				BDD9F7952B12B141002E69F0 /* SheetType.swift */,
 				BDFE4DD02B0C48680074D0A9 /* Contact.swift */,
 				BDFE4DD42B0D53DD0074D0A9 /* ContactsUtils.swift */,
 				BDDFAAC028CF605B009FC717 /* ContactCodingError.swift */,
@@ -265,7 +262,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					BD168DCA2892E69C0082E461 = {
 						CreatedOnToolsVersion = 14.0;
@@ -334,7 +331,6 @@
 				BDFE4DD12B0C48680074D0A9 /* Contact.swift in Sources */,
 				BD2D76C22B33A81E001AA86F /* ContactDetailView.swift in Sources */,
 				BDD438CB2B3CF3B7006C807D /* SetNotificationView.swift in Sources */,
-				BDD9F7962B12B141002E69F0 /* SheetType.swift in Sources */,
 				BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */,
 				BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */,
 				BDBE88DB2B23B8FF005D4C0F /* HighlightRangeAlert.swift in Sources */,
@@ -409,6 +405,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -472,6 +469,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -505,7 +503,6 @@
 				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Next Candles/Preview Content\"";
-				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				ENABLE_HARDENED_RUNTIME = YES;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
@@ -546,7 +543,6 @@
 				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Next Candles/Preview Content\"";
-				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				ENABLE_HARDENED_RUNTIME = YES;
 				"ENABLE_HARDENED_RUNTIME[sdk=macosx*]" = YES;
 				ENABLE_PREVIEWS = YES;
@@ -581,7 +577,6 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -607,7 +602,6 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6ZT823VK2T;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
