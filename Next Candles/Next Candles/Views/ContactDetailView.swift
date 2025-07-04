@@ -7,24 +7,13 @@
 
 import SwiftUI
 
-/*
- List(contact.emails, id: \.self) { email in
-     Button(email, systemImage: "paperplane.fill") {
-         if let url = URL(string: ("mailto:") + email) {
-             openURL.callAsFunction(url)
-         }
-     }
-     .foregroundStyle(.blue)
- }
- */
-
 struct ContactDetailView: View {
-    @Environment(\.horizontalSizeClass) var sizeClass
-    @Environment(\.openURL) var openURL
+    @Environment(Router.self) var router
+    @Environment(\.modelContext) var modelContext
+    
+    @State var showDeleteConfirmation = false
     
     var contact: Contact
-    
-    @State var showPhoneActions = false
     
     var profileImage: some View {
         Group {
@@ -44,12 +33,10 @@ struct ContactDetailView: View {
         .background { Circle().fill(.white) }
         .overlay { Circle().stroke(.white, lineWidth: 12) }
     }
-    
     var contactName: some View {
         Text(contact.name)
             .font(.system(.largeTitle, design: .rounded, weight: .semibold))
     }
-    
     var contactAge: some View {
         Group {
             if let ca = (contact.age) {
@@ -60,7 +47,6 @@ struct ContactDetailView: View {
             }
         }
     }
-    
     var contactBirth: some View {
         Group {
             if (contact.year != nil) {
@@ -83,60 +69,45 @@ struct ContactDetailView: View {
     var smallButtons: some View {
         HStack(spacing: 0) {
             if !contact.phones.isEmpty {
-                SmallButton(
+                
+                SmallMenu(
                     text: "Call",
                     systemName: "phone.fill",
                     bg: Color.green.gradient
-                ) { showPhoneActions.toggle() }
-                    .confirmationDialog(
-                        "Phone Numbers",
-                        isPresented: $showPhoneActions) {
-                            ForEach(contact.emails, id: \.self) { email in
-                                Button(email, systemImage: "paperplane.fill") {
-                                    if let url = URL(string: ("mailto:") + email) {
-                                        openURL.callAsFunction(url)
-                                    }
-                                }
-                                .foregroundStyle(.blue)
-                            }
-                        }
+                ) {
+                    ContactActions(prefix: "tel://", choices: contact.phones, symbolName: "phone.fill", color: .green)
+                }
                 
                 Spacer()
                 
-                SmallButton(
+                SmallMenu(
                     text: "Text",
                     systemName: "message.fill",
                     bg: Color.mint.gradient
                 ) {
-                    
+                    ContactActions(prefix: "sms:", choices: contact.phones, symbolName: "message.fill", color: .mint)
                 }
                 
                 Spacer()
             }
             
             if !contact.emails.isEmpty {
-                SmallButton(
+                SmallMenu(
                     text: "Email",
                     systemName: "paperplane.fill",
                     bg: Color.blue.gradient
                 ) {
-                    
-                }
-                
-                Spacer()
-            }
-            
-            
-            if !(contact.emails.isEmpty && contact.phones.isEmpty) {
-                SmallButton(
-                    text: "Notify",
-                    systemName: "bell.fill",
-                    bg: Color.yellow.gradient
-                ) {
-                    
+                    ContactActions(prefix: "mailto:", choices: contact.emails, symbolName: "paperplane.fill", color: .blue)
                 }
             }
         }
+        .padding()
+    }
+    
+    var notifs: some View {
+        #warning("TODO: rewrite notif manager; ui for managing")
+        Text("notifs")
+            .padding()
     }
     
     var largeButtons: some View {
@@ -155,14 +126,27 @@ struct ContactDetailView: View {
                 text: contact.hidden ? "Show" : "Hide",
                 systemName: contact.hidden ? "eye.fill" : "eye.slash.fill",
                 bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient
-            ) { }
+            ) {
+                contact.hidden.toggle()
+            }
             
             WideButton(
                 text: "Delete from Next Candles",
                 systemName: "trash.fill",
                 bg: Color.pink.gradient
-            ) { }
+            ) { showDeleteConfirmation.toggle() }
+            .confirmationDialog(
+                "Are you should you would like to delete this contact?",
+                isPresented: $showDeleteConfirmation,
+                titleVisibility: .visible,
+                actions: { Button(role: .destructive) {
+                    router.popToHome()
+                    modelContext.delete(contact)
+                } },
+                message: { Text("Deleting from Next Candles does not delete this person from the Contacts app.") }
+            )
         }
+        .padding()
     }
     
     var body: some View {
@@ -180,40 +164,24 @@ struct ContactDetailView: View {
                     Divider().padding(.top, 12)
                     
                     if !(contact.emails.isEmpty && contact.phones.isEmpty) {
-                        smallButtons.padding()
+                        smallButtons
                         Divider()
                     }
+                    
+                    notifs
+                    
+                    Divider()
 
-                    largeButtons.padding()
+                    largeButtons
                 }
                 .offset(y: -120)
             }
             .toolbar { ContactDetailToolbar() }
         }
-        .task {
-            Task {
-                let (existing, diffs) = try await ContactsUtils.fetch(existingContacts: allContacts)
-                if (existing.count > 0) {
-                    existing.forEach { modelContext.insert($0) }
-                } else if diffs.count != 0 {
-                    showResolveDiffs = true
-                    toResolve = diffs
-                } else {
-                    if showNoNewAlert {
-                        alertRouter.setAlert(
-                            Alert(title: Text("No new contacts to import."))
-                        )
-                    }
-                }
-            }
-        }
     }
 }
 
 #Preview {
-    BackgroundView()
-        .sheet(isPresented: .constant(true)) {
-            ContactDetailView(contact: Contact.examples.randomElement()!)
-        }
-        .applyEnvironment(prePopulate: true)
+    ContentView()
+        .applyEnvironment()
 }

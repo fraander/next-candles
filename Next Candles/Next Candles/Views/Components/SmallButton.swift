@@ -7,6 +7,42 @@
 
 import SwiftUI
 
+struct SmallMenu<Content: View>: View {
+    var text: String
+    var systemName: String
+    var bg: AnyGradient
+    var actions: Content
+    
+    init(text: String, systemName: String, bg: AnyGradient, actions: (() -> Content)) {
+        self.text = text
+        self.systemName = systemName
+        self.bg = bg
+        self.actions = actions()
+    }
+    
+    var body: some View {
+        Menu {
+            actions
+        } label: {
+            VStack {
+                Image(systemName: systemName)
+                    .foregroundStyle(.white)
+                    .imageScale(.large)
+                
+                Text(text)
+                    .font(.system(.headline, design: .rounded, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .offset(y: 2)
+            }
+            .frame(maxWidth: .infinity, minHeight: 84, maxHeight: 84)
+            .background {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(bg)
+            }
+        }
+    }
+}
+
 struct SmallButton: View {
     
     var text: String

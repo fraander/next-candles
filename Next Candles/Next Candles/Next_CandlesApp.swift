@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+#warning("update icon to Icon Composer, Liquid Glass")
+
 @main
 struct Next_CandlesApp: App {
     var body: some Scene {

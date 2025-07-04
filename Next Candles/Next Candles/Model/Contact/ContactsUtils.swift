@@ -16,9 +16,9 @@ struct ContactFetchResponse {
 class ContactsUtils {
     // fetch the contacts from the system and create ContactWrappers from the useful ones
     // throws error if trouble fetching from System; returns [] if no valid contacts are found
-    static func fetch(existingContacts: [Contact]) async throws -> ([Contact], [(new: Contact, old: Contact)]) {
+    static func fetch(existingContacts: [Contact]) async throws -> ([Contact], [(old: Contact?, new: Contact)]) {
         var contacts: [Contact] = [] // fetched Contacts (that have valid birthdays and names)
-        var diffs: [(new: Contact, old: Contact)] = []
+        var diffs: [(old: Contact?, new: Contact)] = []
         
         let store = CNContactStore() // store to access system contacts
         let fetchRequest = CNContactFetchRequest(keysToFetch: [CNContactGivenNameKey as CNKeyDescriptor, CNContactFamilyNameKey as CNKeyDescriptor, CNContactBirthdayKey as CNKeyDescriptor, CNContactNicknameKey as CNKeyDescriptor, CNContactIdentifierKey as CNKeyDescriptor, CNContactPhoneNumbersKey as CNKeyDescriptor, CNContactImageDataKey as CNKeyDescriptor, CNContactEmailAddressesKey as CNKeyDescriptor]) // attributes to request so that the size is small
@@ -30,12 +30,13 @@ class ContactsUtils {
                 if let existing = existingContacts.first(where: {$0.identifier == contact.identifier}) {
                     if let new = createContact(contact: contact) {
                         if Contact.areDifferent(new, existing) {
-                            diffs.append((new, existing))
+                            diffs.append((existing, new))
                         }
                     }
                 } else { // if new
                     if let c = createContact(contact: contact) {
                         contacts.append( c )
+                        diffs.append((nil, c))
                     }
                 }
             }

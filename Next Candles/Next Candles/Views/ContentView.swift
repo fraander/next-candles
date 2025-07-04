@@ -10,8 +10,16 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @Environment(\.scenePhase) var scenePhase
+    
     @Environment(Router.self) var router
+    
+    @Environment(\.modelContext) var modelContext
     @Query var contacts: [Contact]
+    
+    @State var diffs: [(Contact?, Contact)] = []
+    @State var showResolveDiffs = false
+    @State var showFetchAlert = false
     
     var noContactsView: some View {
         ContentUnavailableView(
@@ -42,9 +50,34 @@ struct ContentView: View {
                 }
             }
         }
+        .sheet(isPresented: $showResolveDiffs) {
+            DiffView(toResolve: $diffs)
+        }
         .task {
             if contacts.isEmpty {
-                
+                fetch(showNoNewAlert: true)
+            }
+        }
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .active && !contacts.isEmpty {
+                fetch(showNoNewAlert: false)
+            }
+        }
+        .alert(
+            "No new contacts to import.",
+            isPresented: $showFetchAlert,
+            actions: {}
+        )
+    }
+    
+    func fetch(showNoNewAlert: Bool = true) {
+        Task {
+            let (_, diffs) = try await ContactsUtils.fetch(existingContacts: contacts)
+            if diffs.count != 0 {
+                self.showResolveDiffs = true
+                self.diffs = diffs
+            } else {
+                if showNoNewAlert { showFetchAlert.toggle() }
             }
         }
     }
@@ -52,5 +85,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .applyEnvironment(prePopulate: true)
+        .applyEnvironment(prePopulate: false)
 }
