@@ -20,7 +20,6 @@ class Contact: ObservableObject, Equatable, Identifiable {
     var day: Int?
     var year: Int?
     var hidden: Bool = false
-//    var notif: String?
     var contactAppIdentifier: String?
     var phones: [String] = []
     var emails: [String] = []
@@ -127,4 +126,10 @@ class Contact: ObservableObject, Equatable, Identifiable {
             lhs.emails != rhs.emails
         )
     }
+    
+    // MARK: EXAMPLES -
+    static let examples = [
+        Contact(identifier: "random1", givenName: "John", familyName: "Smith", nickname: "Jack", month: 2, day: 28, year: 1964, phones: [], emails: [], image: nil),
+        Contact(identifier: "random1", givenName: "Jamie", familyName: "Benson", month: 9, day: 4, year: 1997, phones: [], emails: [], image: nil)
+    ]
 }
