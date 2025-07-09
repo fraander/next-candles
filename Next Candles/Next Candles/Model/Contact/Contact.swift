@@ -127,6 +127,46 @@ class Contact: ObservableObject, Equatable, Identifiable {
         )
     }
     
+    private func nextBirthday(from birthDate: Date) -> Date? {
+        let calendar = Calendar.current
+        let today = Date()
+        
+        // Get birth month and day
+        let birthComponents = calendar.dateComponents([.month, .day], from: birthDate)
+        
+        // Create this year's birthday
+        var thisYearComponents = calendar.dateComponents([.year], from: today)
+        thisYearComponents.month = birthComponents.month
+        thisYearComponents.day = birthComponents.day
+        
+        guard let thisYearBirthday = calendar.date(from: thisYearComponents) else { return nil }
+        
+        // If this year's birthday hasn't passed, return it
+        if thisYearBirthday >= today {
+            return thisYearBirthday
+        }
+        
+        // Otherwise, return next year's birthday
+        thisYearComponents.year! += 1
+        return calendar.date(from: thisYearComponents)
+    }
+
+    func getNextBirthday() -> Date? {
+        guard let d = self.day, let m = self.month else { return nil }
+        
+        let y = self.year ?? 0
+        if let date = Calendar.current.date(from: DateComponents(year: y, month: m, day: d)) {
+            return nextBirthday(from: date)
+        } else {
+            return nil
+        }
+    }
+    
+    func daysToNextBirthday() -> Int? {
+        guard let nextBirthday = self.getNextBirthday() else { return nil }
+        return Calendar.current.dateComponents([.day], from: Date(), to: nextBirthday).day
+    }
+    
     // MARK: EXAMPLES -
     static let examples = [
         Contact(identifier: "random1", givenName: "John", familyName: "Smith", nickname: "Jack", month: 2, day: 28, year: 1964, phones: [], emails: [], image: nil),

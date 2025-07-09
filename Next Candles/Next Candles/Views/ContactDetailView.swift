@@ -112,16 +112,6 @@ struct ContactDetailView: View {
     
     var largeButtons: some View {
         VStack(spacing: 12) {
-            if (contact.emails.isEmpty && contact.phones.isEmpty) {
-                WideButton(
-                    text: "Notify",
-                    systemName: "bell.fill",
-                    bg: Color.yellow.gradient
-                ) {
-                    
-                }
-            }
-            
             WideButton(
                 text: contact.hidden ? "Show" : "Hide",
                 systemName: contact.hidden ? "eye.fill" : "eye.slash.fill",
@@ -168,7 +158,7 @@ struct ContactDetailView: View {
                         Divider()
                     }
                     
-                    notifs
+                    NotificationEditor(contact: contact)
                     
                     Divider()
 

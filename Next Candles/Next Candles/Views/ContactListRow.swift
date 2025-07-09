@@ -19,10 +19,15 @@ struct ContactListRow: View {
             HStack {
                 Text(contact.name)
                     .font(.headline)
+                    .foregroundStyle((contact.daysToNextBirthday() ?? 1000) > 20 ? .primary : Color.accentColor)
+                    .bold((contact.daysToNextBirthday() ?? 1000) > 20)
                 
                 Spacer()
                 
-                Text("## days away")
+                if let dt = contact.daysToNextBirthday() {
+                    Text("^[\(dt) day](inflect: true) away")
+                }
+                
                 Spacer()
                     .frame(width: 15)
                 Image(systemName: "chevron.right")

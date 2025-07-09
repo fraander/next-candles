@@ -35,6 +35,8 @@
 		015F953D2E1824FA00015197 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F953C2E1824F900015197 /* Route.swift */; };
 		015F953E2E1824FA00015197 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F953C2E1824F900015197 /* Route.swift */; };
 		015F95402E1826F600015197 /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F953F2E1826F200015197 /* ContactDetailView.swift */; };
+		019ADDD62E1DEC7000A27981 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019ADDD52E1DEC7000A27981 /* Line.swift */; };
+		019ADDD82E1DECC500A27981 /* NotificationEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019ADDD72E1DECC100A27981 /* NotificationEditor.swift */; };
 		01A33DDC2E18280700A31C76 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A33DDB2E18280600A31C76 /* Settings.swift */; };
 		01DCAC262E1829B000E1CB39 /* ContactDetailToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC252E1829AE00E1CB39 /* ContactDetailToolbar.swift */; };
 		01DCAC282E182BF600E1CB39 /* ColorWrappedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */; };
@@ -79,6 +81,8 @@
 		015F953A2E181FB200015197 /* ContactListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactListRow.swift; sourceTree = "<group>"; };
 		015F953C2E1824F900015197 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		015F953F2E1826F200015197 /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
+		019ADDD52E1DEC7000A27981 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		019ADDD72E1DECC100A27981 /* NotificationEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditor.swift; sourceTree = "<group>"; };
 		01A33DDB2E18280600A31C76 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		01DCAC252E1829AE00E1CB39 /* ContactDetailToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailToolbar.swift; sourceTree = "<group>"; };
 		01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWrappedContentView.swift; sourceTree = "<group>"; };
@@ -129,6 +133,8 @@
 		015F951C2E181A6B00015197 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				019ADDD72E1DECC100A27981 /* NotificationEditor.swift */,
+				019ADDD52E1DEC7000A27981 /* Line.swift */,
 				01DCAC322E18433D00E1CB39 /* ContactActions.swift */,
 				01DCAC2F2E1836BD00E1CB39 /* DiffView.swift */,
 				01DCAC2B2E182E3500E1CB39 /* SmallButton.swift */,
@@ -340,12 +346,14 @@
 				015F95342E181AE200015197 /* Metrics.swift in Sources */,
 				015F95352E181AE200015197 /* Symbols.swift in Sources */,
 				015F95372E181D9D00015197 /* ContactListToolbar.swift in Sources */,
+				019ADDD82E1DECC500A27981 /* NotificationEditor.swift in Sources */,
 				015F951E2E181A6F00015197 /* BackgroundView.swift in Sources */,
 				015F95102E18178900015197 /* ContentView.swift in Sources */,
 				01DCAC332E18433D00E1CB39 /* ContactActions.swift in Sources */,
 				BDFE4DD12B0C48680074D0A9 /* Contact.swift in Sources */,
 				BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */,
 				BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */,
+				019ADDD62E1DEC7000A27981 /* Line.swift in Sources */,
 				01A33DDC2E18280700A31C76 /* Settings.swift in Sources */,
 				BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */,
 				015F951B2E18192600015197 /* Router.swift in Sources */,

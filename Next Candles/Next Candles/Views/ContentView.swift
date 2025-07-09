@@ -42,6 +42,7 @@ struct ContentView: View {
                 }
             }
             .toolbar { ContactListToolbar() }
+            .navigationTitle("Next Candles")
         }
         .sheet(isPresented: router.sheetIsPresentedBinding) {
             Group {

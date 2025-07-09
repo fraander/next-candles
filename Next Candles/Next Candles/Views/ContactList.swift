@@ -68,10 +68,44 @@ struct ContactListSection: View {
 struct ContactList: View {
     let months = Calendar.current.monthSymbols
     
+    var sortedMonths: [String] {
+        let currentMonth = Calendar.current.component(.month, from: Date())
+        let remainingThisYear = months[(currentMonth-1)...]
+        let startOfNextYear = months[..<(currentMonth-1)]
+        return Array(remainingThisYear) + Array(startOfNextYear)
+    }
+    
+    var yearDivider: some View {
+        VStack {
+            Text(String(Calendar.current.component(.year, from: Date())))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            
+            Line()
+                .stroke(style: StrokeStyle(lineWidth: 1, dash: [5]))
+                .fill(.secondary)
+                .frame(height: 1)
+            
+            Text(String(Calendar.current.component(.year, from: Date()) + 1))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+    
     var body: some View {
-        List(months, id: \.self) { ContactListSection(month: $0) }
+        List(Array(sortedMonths.enumerated()), id: \.offset) { index, month in
+            ContactListSection(month: month)
+            
+            if month == "December" && sortedMonths.last != "December" {
+               yearDivider
+               .listRowSeparator(.hidden)
+               .listRowBackground(Color.clear)
+            }
+        }
     }
 }
+
+
 
 #Preview {
     ContentView()
