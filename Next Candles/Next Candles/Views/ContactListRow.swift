@@ -12,7 +12,15 @@ struct ContactListRow: View {
     
     var contact: Contact
     
+    @Namespace private var transitionNamespace
+    
     var body: some View {
+        
+        let presentSheetForContactBinding: Binding<Bool> = .init(
+            get: { router.sheet == .contact(contact) },
+            set: { if $0 {} else { router.popToHome() } }
+        )
+        
         Button {
             router.present(.contact(contact))
         } label: {
@@ -33,6 +41,11 @@ struct ContactListRow: View {
                 Image(systemName: "chevron.right")
                     .foregroundStyle(.secondary)
             }
+            .matchedTransitionSource(id: contact.identifier, in: transitionNamespace)
+        }
+        .sheet(isPresented: presentSheetForContactBinding) {
+            ContactDetailView(contact: contact)
+                .navigationTransition(.zoom(sourceID: contact.identifier, in: transitionNamespace))
         }
     }
 }

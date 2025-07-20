@@ -10,12 +10,14 @@ import SwiftUI
 struct ContactListToolbar: ToolbarContent {
     
     @Environment(Router.self) var router
+    let transitionNamespace: Namespace.ID
     
     var body: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
             Button("Settings", systemImage: "gear") {
                 router.present(.settings)
             }
+            .matchedTransitionSource(id: "settings", in: transitionNamespace)
         }
         
 //        ToolbarItemGroup(placement: .principal) { }
@@ -32,8 +34,7 @@ struct ContactListToolbar: ToolbarContent {
 
 #Preview {
     NavigationView {
-        BackgroundView()
-            .toolbar { ContactListToolbar() }
+        ContentView()
     }
     .applyEnvironment(prePopulate: true)
 }

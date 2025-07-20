@@ -29,7 +29,14 @@ struct ContentView: View {
         )
     }
     
+    @Namespace private var transitionNamespace
+    
     var body: some View {
+        let presentSheetForContactBinding: Binding<Bool> = .init(
+            get: { router.sheet == .settings },
+            set: { if $0 {} else { router.popToHome() } }
+        )
+        
         NavigationView {
             ZStack {
                 BackgroundView(color: .accentColor)
@@ -41,15 +48,12 @@ struct ContentView: View {
                         .scrollContentBackground(.hidden)
                 }
             }
-            .toolbar { ContactListToolbar() }
+            .toolbar { ContactListToolbar(transitionNamespace: transitionNamespace) }
             .navigationTitle("Next Candles")
         }
-        .sheet(isPresented: router.sheetIsPresentedBinding) {
-            Group {
-                if let rs = router.sheet {
-                    rs.correspondingView()
-                }
-            }
+        .sheet(isPresented: presentSheetForContactBinding) {
+            SettingsView()
+                .navigationTransition(.zoom(sourceID: "settings", in: transitionNamespace))
         }
         .sheet(isPresented: $showResolveDiffs) {
             DiffView(toResolve: $diffs)
