@@ -37,7 +37,7 @@
 		015F95402E1826F600015197 /* ContactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F953F2E1826F200015197 /* ContactDetailView.swift */; };
 		019ADDD62E1DEC7000A27981 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019ADDD52E1DEC7000A27981 /* Line.swift */; };
 		019ADDD82E1DECC500A27981 /* NotificationEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019ADDD72E1DECC100A27981 /* NotificationEditor.swift */; };
-		019F3D0F2E303F3200CC140F /* App Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019F3D0E2E303F3200CC140F /* App Icon.icon */; };
+		019F3D0F2E303F3200CC140F /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019F3D0E2E303F3200CC140F /* AppIcon.icon */; };
 		01A33DDC2E18280700A31C76 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A33DDB2E18280600A31C76 /* Settings.swift */; };
 		01DCAC262E1829B000E1CB39 /* ContactDetailToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC252E1829AE00E1CB39 /* ContactDetailToolbar.swift */; };
 		01DCAC282E182BF600E1CB39 /* ColorWrappedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */; };
@@ -84,7 +84,7 @@
 		015F953F2E1826F200015197 /* ContactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailView.swift; sourceTree = "<group>"; };
 		019ADDD52E1DEC7000A27981 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		019ADDD72E1DECC100A27981 /* NotificationEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditor.swift; sourceTree = "<group>"; };
-		019F3D0E2E303F3200CC140F /* App Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "App Icon.icon"; sourceTree = "<group>"; };
+		019F3D0E2E303F3200CC140F /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		01A33DDB2E18280600A31C76 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		01DCAC252E1829AE00E1CB39 /* ContactDetailToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailToolbar.swift; sourceTree = "<group>"; };
 		01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWrappedContentView.swift; sourceTree = "<group>"; };
@@ -186,7 +186,7 @@
 				BDDFAAC328CF6082009FC717 /* Model */,
 				BDDFAAC228CF6076009FC717 /* Views */,
 				BD168DD22892E69D0082E461 /* Assets.xcassets */,
-				019F3D0E2E303F3200CC140F /* App Icon.icon */,
+				019F3D0E2E303F3200CC140F /* AppIcon.icon */,
 				BD168DD42892E69D0082E461 /* Next_Candles.entitlements */,
 				BD168DD52892E69D0082E461 /* Preview Content */,
 			);
@@ -328,7 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD168DD72892E69D0082E461 /* Preview Assets.xcassets in Resources */,
-				019F3D0F2E303F3200CC140F /* App Icon.icon in Resources */,
+				019F3D0F2E303F3200CC140F /* AppIcon.icon in Resources */,
 				BD168DD32892E69D0082E461 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
