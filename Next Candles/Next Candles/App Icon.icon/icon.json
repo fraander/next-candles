@@ -1,0 +1,64 @@
+{
+  "fill" : "automatic",
+  "groups" : [
+    {
+      "blur-material" : 0.5,
+      "layers" : [
+        {
+          "fill-specializations" : [
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "srgb:0.75407,0.75409,0.75408,1.00000"
+              }
+            }
+          ],
+          "image-name" : "Next Candles - Light (2).svg",
+          "name" : "Next Candles - Light (2)"
+        },
+        {
+          "fill-specializations" : [
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "srgb:0.66422,0.66424,0.66423,1.00000"
+              }
+            }
+          ],
+          "image-name" : "Next Candles - Light (1).svg",
+          "name" : "Next Candles - Light (1)"
+        },
+        {
+          "fill-specializations" : [
+            {
+              "value" : "none"
+            },
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "solid" : "srgb:0.66422,0.66424,0.66423,1.00000"
+              }
+            }
+          ],
+          "glass" : true,
+          "image-name" : "Next Candles - Light.svg",
+          "name" : "Next Candles - Light"
+        }
+      ],
+      "shadow" : {
+        "kind" : "layer-color",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : false,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
