@@ -10,7 +10,7 @@ import SwiftData
 
 struct ApplyEnvironmentModifier: ViewModifier {
     
-    @State var notifs: NotificationsStore = .init()
+    @State var notifs: NotificationManager = .init()
     @State var router: Router = .init()
     
     let prePopulate: Bool

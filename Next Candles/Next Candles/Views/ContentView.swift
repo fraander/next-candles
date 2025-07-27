@@ -12,6 +12,7 @@ struct ContentView: View {
     
     @Environment(\.scenePhase) var scenePhase
     
+    @Environment(NotificationManager.self) var notifs
     @Environment(Router.self) var router
     
     @Environment(\.modelContext) var modelContext
@@ -59,6 +60,11 @@ struct ContentView: View {
             DiffView(toResolve: $diffs)
         }
         .task {
+            Task {
+                await notifs.requestPermission()
+                await notifs.updateNotifications()
+            }
+            
             if contacts.isEmpty {
                 fetch(showNoNewAlert: true)
             }
