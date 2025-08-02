@@ -17,17 +17,13 @@ struct ContactListToolbar: ToolbarContent {
             Button("Settings", systemImage: "gear") {
                 router.present(.settings)
             }
-            .matchedTransitionSource(id: "settings", in: transitionNamespace)
+//            .matchedTransitionSource(id: "settings", in: transitionNamespace)
         }
         
 //        ToolbarItemGroup(placement: .principal) { }
         
         ToolbarItemGroup(placement: .topBarTrailing) {
-            Menu("More", systemImage: "ellipsis") {
-                Button("Button 1") {}
-                Button("Button 2") {}
-                Button("Button 3") {}
-            }
+            Button("Filter", systemImage: "line.3.horizontal.decrease.circle") { }
         }
     }
 }

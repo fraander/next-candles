@@ -29,12 +29,15 @@ struct ContactListRow: View {
                     .font(.headline)
                     .foregroundStyle((contact.daysToNextBirthday() ?? 1000) > 20 ? .primary : Color.accentColor)
                     .bold((contact.daysToNextBirthday() ?? 1000) > 20)
+                #warning("use settings for days thing instead of this")
                 
                 Spacer()
                 
                 if let dt = contact.daysToNextBirthday() {
                     Text("^[\(dt) day](inflect: true) away")
                 }
+                
+                #warning("missing icons for notification on day vs. other")
                 
                 Spacer()
                     .frame(width: 15)

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		014394392E3E9A820036A649 /* NotificationEditorRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014394372E3E9A390036A649 /* NotificationEditorRow.swift */; };
 		015F95102E18178900015197 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F950F2E18178800015197 /* ContentView.swift */; };
 		015F95132E1817BD00015197 /* View+applyEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F95122E1817B800015197 /* View+applyEnvironment.swift */; };
 		015F95142E1817BD00015197 /* View+applyEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F95122E1817B800015197 /* View+applyEnvironment.swift */; };
@@ -66,6 +67,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		014394372E3E9A390036A649 /* NotificationEditorRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorRow.swift; sourceTree = "<group>"; };
 		015F950F2E18178800015197 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		015F95122E1817B800015197 /* View+applyEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+applyEnvironment.swift"; sourceTree = "<group>"; };
 		015F95192E18192600015197 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
@@ -125,6 +127,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		014394382E3E9A400036A649 /* NotificationEditor */ = {
+			isa = PBXGroup;
+			children = (
+				019ADDD72E1DECC100A27981 /* NotificationEditor.swift */,
+				014394372E3E9A390036A649 /* NotificationEditorRow.swift */,
+			);
+			path = NotificationEditor;
+			sourceTree = "<group>";
+		};
 		015F95152E1818A700015197 /* Contact */ = {
 			isa = PBXGroup;
 			children = (
@@ -138,7 +149,7 @@
 		015F951C2E181A6B00015197 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				019ADDD72E1DECC100A27981 /* NotificationEditor.swift */,
+				014394382E3E9A400036A649 /* NotificationEditor */,
 				019ADDD52E1DEC7000A27981 /* Line.swift */,
 				01DCAC322E18433D00E1CB39 /* ContactActions.swift */,
 				01DCAC2F2E1836BD00E1CB39 /* DiffView.swift */,
@@ -366,6 +377,7 @@
 				01A33DDC2E18280700A31C76 /* Settings.swift in Sources */,
 				BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */,
 				015F951B2E18192600015197 /* Router.swift in Sources */,
+				014394392E3E9A820036A649 /* NotificationEditorRow.swift in Sources */,
 				015F95132E1817BD00015197 /* View+applyEnvironment.swift in Sources */,
 				01DCAC302E1836BD00E1CB39 /* DiffView.swift in Sources */,
 				015F953E2E1824FA00015197 /* Route.swift in Sources */,

@@ -54,7 +54,7 @@ struct ContentView: View {
         }
         .sheet(isPresented: presentSheetForContactBinding) {
             SettingsView()
-                .navigationTransition(.zoom(sourceID: "settings", in: transitionNamespace))
+//                .navigationTransition(.zoom(sourceID: "settings", in: transitionNamespace))
         }
         .sheet(isPresented: $showResolveDiffs) {
             DiffView(toResolve: $diffs)

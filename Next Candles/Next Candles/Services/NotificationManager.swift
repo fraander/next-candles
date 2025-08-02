@@ -8,6 +8,7 @@
 
 import Observation
 import NotificationCenter
+import SwiftUI
 
 /// Observable notification manager that handles all local notification operations.
 /// Provides a centralized interface for creating, monitoring, and managing notifications.
@@ -41,7 +42,10 @@ class NotificationManager {
     
     /// Refreshes the list of pending notifications from the system
     func updateNotifications() async {
-        pendingRequests = await center.pendingNotificationRequests()
+        let pr = await center.pendingNotificationRequests()
+        withAnimation {
+            pendingRequests = pr
+        }
     }
     
     /// Adds a new notification request and refreshes the pending list
@@ -92,7 +96,7 @@ class NotificationManager {
     ///   - title: The notification title text
     ///   - body: The notification body message
     /// - Throws: Errors from the notification center if scheduling fails
-    func createYearlyNotification(for date: Date, contact: Contact, title: String, body: String) async throws {
+    func createYearlyNotification(on date: Date, contact: Contact, title: String, body: String) async throws {
         let uuidString = contact.identifier + "%%%" + UUID().uuidString
         let content = createContent(title: title, body: body)
         let trigger = createYearlyTrigger(for: date)

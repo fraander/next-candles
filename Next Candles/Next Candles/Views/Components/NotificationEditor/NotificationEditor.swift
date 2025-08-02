@@ -29,7 +29,7 @@ struct NotificationEditor: View {
                 
                 return prefix == contact.identifier
             }
-            .sorted { $0.nextFireDate ?? Date() < $1.nextFireDate ?? Date() }
+            .sorted { $0.nextFireDate ?? Date() > $1.nextFireDate ?? Date() }
     }
     
     var body: some View {
@@ -37,7 +37,7 @@ struct NotificationEditor: View {
             HStack {
                 DatePicker("Time", selection: $newTime, displayedComponents: .hourAndMinute)
                     .labelsHidden()
-
+                
                 
                 Picker("Days before", selection: $newDaysBefore) {
                     ForEach(0..<366) { day in
@@ -51,22 +51,10 @@ struct NotificationEditor: View {
                 
                 Spacer()
                 
-                Button("Set", systemImage: "bell.fill") {
-                    if let d = contact.getNextBirthday() {
-                        Task {
-                            try await notifs.createYearlyNotification(
-                                for: d,
-                                contact: contact,
-                                title: "Testing",
-                                body: "test test test"
-                            )
-                            
-                        }
-                    }
-                }
-                .bold()
-                .buttonStyle(.bordered)
-                .tint(.accentColor)
+                Button("Set", systemImage: "bell.fill") { Task { await setNotification() } }
+                    .bold()
+                    .buttonStyle(.bordered)
+                    .tint(.accentColor)
             }
             .padding()
             .background(.white, in: .rect(cornerRadius: 16))
@@ -78,31 +66,7 @@ struct NotificationEditor: View {
                     ContentUnavailableView("No notifications have been set for this contact.", systemImage: "bell.slash")
                 } else {
                     ForEach(notificationsForContact, id: \.identifier) { request in
-                        if let nextDate = request.nextFireDate {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(nextDate, style: .date)
-                                    
-                                    Text(nextDate, style: .time)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                }
-                                
-                                Spacer()
-                                
-                                // Swipe-to-delete action for removing notifications
-                                Button("Delete", systemImage: "trash", role: .destructive) {
-                                    Task {
-                                        await notifs.removePendingNotificationRequests(
-                                            withIdentifiers: [request.identifier]
-                                        )
-                                    }
-                                }
-                                .labelStyle(.iconOnly)
-                                .buttonStyle(.bordered)
-                                .tint(.secondary)
-                            }
-                        }
+                        NotificationEditorRow(contact: contact, request: request) { deleteNotification(request: request) }
                         
                         if (request != notificationsForContact.last) {
                             Divider()
@@ -114,6 +78,60 @@ struct NotificationEditor: View {
             .padding()
             .background(.white, in: .rect(cornerRadius: 16))
             .padding([.bottom, .horizontal])
+        }
+    }
+    
+    func deleteNotification(request: UNNotificationRequest) {
+        Task {
+            await notifs.removePendingNotificationRequests(
+                withIdentifiers: [request.identifier]
+            )
+        }
+    }
+    
+    func setNotification() async {
+        if let d = contact.getNextBirthday() {
+            // TITLE CALCULATION
+            let displayName = {
+                if let nickname = contact.nickname, !nickname.isEmpty {
+                    return nickname
+                } else {
+                    return [contact.givenName, contact.familyName]
+                        .compactMap { $0 }
+                        .filter { !$0.isEmpty }
+                        .joined(separator: " ")
+                }
+            }()
+            
+            let possessiveName = displayName.hasSuffix("s") ?
+            "\(displayName)'" :
+            "\(displayName)'s"
+            
+            let title = newDaysBefore == 0 ?
+            "\(possessiveName) birthday is today! 🥳" :
+            "\(possessiveName) birthday is in \(newDaysBefore) days"
+            
+            // DATE CALCULATION
+            let currentDate = Date()
+            var notificationDate = Calendar.current.date(byAdding: .day, value: -newDaysBefore, to: d)!
+
+            // If notification date is in the past, use next year's birthday
+            if notificationDate < currentDate {
+               let nextYearBirthday = Calendar.current.date(byAdding: .year, value: 1, to: d)!
+               notificationDate = Calendar.current.date(byAdding: .day, value: -newDaysBefore, to: nextYearBirthday)!
+            }
+
+            // Set the time to newTime
+            let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: newTime)
+            let date = Calendar.current.date(bySettingHour: timeComponents.hour!, minute: timeComponents.minute!, second: 0, of: notificationDate)!
+            
+            // CREATE NOTIFICATION
+            try? await notifs.createYearlyNotification(
+                on: date,
+                contact: contact,
+                title: title,
+                body: newDaysBefore == 0 ? "It's time to wish them a happy birthday." : "Their birthday is coming up!"
+            )
         }
     }
 }

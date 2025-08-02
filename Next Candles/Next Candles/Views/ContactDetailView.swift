@@ -104,12 +104,6 @@ struct ContactDetailView: View {
         .padding()
     }
     
-    var notifs: some View {
-        #warning("TODO: rewrite notif manager; ui for managing")
-        Text("notifs")
-            .padding()
-    }
-    
     var largeButtons: some View {
         VStack(spacing: 12) {
             WideButton(
