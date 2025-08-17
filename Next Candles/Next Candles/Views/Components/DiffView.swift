@@ -155,6 +155,8 @@ struct DiffViewRow: View {
     }
 }
 
+#warning("This is cool, but it should be replaced by an alert that just shows who has been imported / had a birthday added since last time. No need to show all the other changes.")
+
 struct DiffView: View {
     
     @Environment(\.dismiss) var dismiss

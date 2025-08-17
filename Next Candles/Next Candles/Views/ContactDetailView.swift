@@ -109,7 +109,7 @@ struct ContactDetailView: View {
             WideButton(
                 text: contact.hidden ? "Show" : "Hide",
                 systemName: contact.hidden ? "eye.fill" : "eye.slash.fill",
-                bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient
+                bg: contact.hidden ? Color.cyan.gradient : Color.orange.gradient
             ) {
                 contact.hidden.toggle()
             }

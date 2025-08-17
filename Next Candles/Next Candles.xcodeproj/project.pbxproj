@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		014394392E3E9A820036A649 /* NotificationEditorRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014394372E3E9A390036A649 /* NotificationEditorRow.swift */; };
+		015D15AD2E522CF900719486 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D15AC2E522CF800719486 /* Settings.swift */; };
+		015D15AE2E522CF900719486 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D15AC2E522CF800719486 /* Settings.swift */; };
+		015D15B02E522D1D00719486 /* HiddenBirthdaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D15AF2E522D1900719486 /* HiddenBirthdaysView.swift */; };
+		015D15B22E522E5300719486 /* AddManuallySheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D15B12E522E4E00719486 /* AddManuallySheet.swift */; };
 		015F95102E18178900015197 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F950F2E18178800015197 /* ContentView.swift */; };
 		015F95132E1817BD00015197 /* View+applyEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F95122E1817B800015197 /* View+applyEnvironment.swift */; };
 		015F95142E1817BD00015197 /* View+applyEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015F95122E1817B800015197 /* View+applyEnvironment.swift */; };
@@ -41,7 +45,7 @@
 		019DD7DE2E36AE2700301F09 /* UNNotificationRequest+nextFireDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019DD7DD2E36AE2700301F09 /* UNNotificationRequest+nextFireDate.swift */; };
 		019DD7DF2E36AE2700301F09 /* UNNotificationRequest+nextFireDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019DD7DD2E36AE2700301F09 /* UNNotificationRequest+nextFireDate.swift */; };
 		019F3D0F2E303F3200CC140F /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 019F3D0E2E303F3200CC140F /* AppIcon.icon */; };
-		01A33DDC2E18280700A31C76 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A33DDB2E18280600A31C76 /* Settings.swift */; };
+		01A33DDC2E18280700A31C76 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A33DDB2E18280600A31C76 /* SettingsView.swift */; };
 		01DCAC262E1829B000E1CB39 /* ContactDetailToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC252E1829AE00E1CB39 /* ContactDetailToolbar.swift */; };
 		01DCAC282E182BF600E1CB39 /* ColorWrappedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */; };
 		01DCAC2A2E182D8D00E1CB39 /* WideButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC292E182D8D00E1CB39 /* WideButton.swift */; };
@@ -68,6 +72,9 @@
 
 /* Begin PBXFileReference section */
 		014394372E3E9A390036A649 /* NotificationEditorRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorRow.swift; sourceTree = "<group>"; };
+		015D15AC2E522CF800719486 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		015D15AF2E522D1900719486 /* HiddenBirthdaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenBirthdaysView.swift; sourceTree = "<group>"; };
+		015D15B12E522E4E00719486 /* AddManuallySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddManuallySheet.swift; sourceTree = "<group>"; };
 		015F950F2E18178800015197 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		015F95122E1817B800015197 /* View+applyEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+applyEnvironment.swift"; sourceTree = "<group>"; };
 		015F95192E18192600015197 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
@@ -90,7 +97,7 @@
 		019DD7DA2E36ABC600301F09 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		019DD7DD2E36AE2700301F09 /* UNNotificationRequest+nextFireDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotificationRequest+nextFireDate.swift"; sourceTree = "<group>"; };
 		019F3D0E2E303F3200CC140F /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
-		01A33DDB2E18280600A31C76 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		01A33DDB2E18280600A31C76 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		01DCAC252E1829AE00E1CB39 /* ContactDetailToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailToolbar.swift; sourceTree = "<group>"; };
 		01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWrappedContentView.swift; sourceTree = "<group>"; };
 		01DCAC292E182D8D00E1CB39 /* WideButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideButton.swift; sourceTree = "<group>"; };
@@ -242,7 +249,9 @@
 		BDDFAAC228CF6076009FC717 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				01A33DDB2E18280600A31C76 /* Settings.swift */,
+				015D15B12E522E4E00719486 /* AddManuallySheet.swift */,
+				015D15AF2E522D1900719486 /* HiddenBirthdaysView.swift */,
+				01A33DDB2E18280600A31C76 /* SettingsView.swift */,
 				015F953F2E1826F200015197 /* ContactDetailView.swift */,
 				015F951C2E181A6B00015197 /* Components */,
 				015F950F2E18178800015197 /* ContentView.swift */,
@@ -255,6 +264,7 @@
 		BDDFAAC328CF6082009FC717 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				015D15AC2E522CF800719486 /* Settings.swift */,
 				015F953C2E1824F900015197 /* Route.swift */,
 				015F95152E1818A700015197 /* Contact */,
 			);
@@ -374,7 +384,7 @@
 				BDDFAAC128CF605B009FC717 /* ContactCodingError.swift in Sources */,
 				BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */,
 				019ADDD62E1DEC7000A27981 /* Line.swift in Sources */,
-				01A33DDC2E18280700A31C76 /* Settings.swift in Sources */,
+				01A33DDC2E18280700A31C76 /* SettingsView.swift in Sources */,
 				BDFE4DD52B0D53DD0074D0A9 /* ContactsUtils.swift in Sources */,
 				015F951B2E18192600015197 /* Router.swift in Sources */,
 				014394392E3E9A820036A649 /* NotificationEditorRow.swift in Sources */,
@@ -382,6 +392,8 @@
 				01DCAC302E1836BD00E1CB39 /* DiffView.swift in Sources */,
 				015F953E2E1824FA00015197 /* Route.swift in Sources */,
 				015F95252E181AA900015197 /* View+readSize.swift in Sources */,
+				015D15AD2E522CF900719486 /* Settings.swift in Sources */,
+				015D15B02E522D1D00719486 /* HiddenBirthdaysView.swift in Sources */,
 				01DCAC262E1829B000E1CB39 /* ContactDetailToolbar.swift in Sources */,
 				01DCAC2C2E182E3500E1CB39 /* SmallButton.swift in Sources */,
 				01DCAC282E182BF600E1CB39 /* ColorWrappedContentView.swift in Sources */,
@@ -390,6 +402,7 @@
 				015F95272E181AA900015197 /* Color+systemGroupedBackground.swift in Sources */,
 				015F95282E181AA900015197 /* View+numbersOnly.swift in Sources */,
 				015F95292E181AA900015197 /* Array+Codable.swift in Sources */,
+				015D15B22E522E5300719486 /* AddManuallySheet.swift in Sources */,
 				015F95392E181F6800015197 /* ContactList.swift in Sources */,
 				015F952A2E181AA900015197 /* LabelStyle+IconTintLabelStyle.swift in Sources */,
 				01DCAC2A2E182D8D00E1CB39 /* WideButton.swift in Sources */,
@@ -408,6 +421,7 @@
 				015F952C2E181AA900015197 /* View+symbolToggleEffect.swift in Sources */,
 				015F952D2E181AA900015197 /* Color+systemGroupedBackground.swift in Sources */,
 				019DD7DF2E36AE2700301F09 /* UNNotificationRequest+nextFireDate.swift in Sources */,
+				015D15AE2E522CF900719486 /* Settings.swift in Sources */,
 				015F952E2E181AA900015197 /* View+numbersOnly.swift in Sources */,
 				015F952F2E181AA900015197 /* Array+Codable.swift in Sources */,
 				015F95302E181AA900015197 /* LabelStyle+IconTintLabelStyle.swift in Sources */,

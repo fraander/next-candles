@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContactListRow: View {
     @Environment(Router.self) var router
+    @AppStorage(S.highlightRangeKey) var highlightRange = S.highlightRangeDefault
     
     var contact: Contact
     
@@ -27,9 +28,8 @@ struct ContactListRow: View {
             HStack {
                 Text(contact.name)
                     .font(.headline)
-                    .foregroundStyle((contact.daysToNextBirthday() ?? 1000) > 20 ? .primary : Color.accentColor)
-                    .bold((contact.daysToNextBirthday() ?? 1000) > 20)
-                #warning("use settings for days thing instead of this")
+                    .foregroundStyle((contact.daysToNextBirthday() ?? 1000) > highlightRange ? .primary : Color.accentColor)
+                    .bold((contact.daysToNextBirthday() ?? 1000) > highlightRange)
                 
                 Spacer()
                 
