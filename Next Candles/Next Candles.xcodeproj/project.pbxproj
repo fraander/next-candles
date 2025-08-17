@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		014394392E3E9A820036A649 /* NotificationEditorRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014394372E3E9A390036A649 /* NotificationEditorRow.swift */; };
+		0151306F2E5243AD0048A908 /* ContactImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0151306E2E5243A90048A908 /* ContactImportManager.swift */; };
+		015130702E5243AD0048A908 /* ContactImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0151306E2E5243A90048A908 /* ContactImportManager.swift */; };
 		015D15AD2E522CF900719486 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D15AC2E522CF800719486 /* Settings.swift */; };
 		015D15AE2E522CF900719486 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D15AC2E522CF800719486 /* Settings.swift */; };
 		015D15B02E522D1D00719486 /* HiddenBirthdaysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D15AF2E522D1900719486 /* HiddenBirthdaysView.swift */; };
@@ -50,7 +52,6 @@
 		01DCAC282E182BF600E1CB39 /* ColorWrappedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */; };
 		01DCAC2A2E182D8D00E1CB39 /* WideButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC292E182D8D00E1CB39 /* WideButton.swift */; };
 		01DCAC2C2E182E3500E1CB39 /* SmallButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC2B2E182E3500E1CB39 /* SmallButton.swift */; };
-		01DCAC302E1836BD00E1CB39 /* DiffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC2F2E1836BD00E1CB39 /* DiffView.swift */; };
 		01DCAC332E18433D00E1CB39 /* ContactActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DCAC322E18433D00E1CB39 /* ContactActions.swift */; };
 		BD168DCF2892E69C0082E461 /* Next_CandlesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */; };
 		BD168DD32892E69D0082E461 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BD168DD22892E69D0082E461 /* Assets.xcassets */; };
@@ -72,6 +73,7 @@
 
 /* Begin PBXFileReference section */
 		014394372E3E9A390036A649 /* NotificationEditorRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEditorRow.swift; sourceTree = "<group>"; };
+		0151306E2E5243A90048A908 /* ContactImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactImportManager.swift; sourceTree = "<group>"; };
 		015D15AC2E522CF800719486 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		015D15AF2E522D1900719486 /* HiddenBirthdaysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenBirthdaysView.swift; sourceTree = "<group>"; };
 		015D15B12E522E4E00719486 /* AddManuallySheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddManuallySheet.swift; sourceTree = "<group>"; };
@@ -102,7 +104,6 @@
 		01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWrappedContentView.swift; sourceTree = "<group>"; };
 		01DCAC292E182D8D00E1CB39 /* WideButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WideButton.swift; sourceTree = "<group>"; };
 		01DCAC2B2E182E3500E1CB39 /* SmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallButton.swift; sourceTree = "<group>"; };
-		01DCAC2F2E1836BD00E1CB39 /* DiffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffView.swift; sourceTree = "<group>"; };
 		01DCAC322E18433D00E1CB39 /* ContactActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactActions.swift; sourceTree = "<group>"; };
 		BD168DCB2892E69C0082E461 /* Next Candles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Next Candles.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD168DCE2892E69C0082E461 /* Next_CandlesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Next_CandlesApp.swift; sourceTree = "<group>"; };
@@ -159,7 +160,6 @@
 				014394382E3E9A400036A649 /* NotificationEditor */,
 				019ADDD52E1DEC7000A27981 /* Line.swift */,
 				01DCAC322E18433D00E1CB39 /* ContactActions.swift */,
-				01DCAC2F2E1836BD00E1CB39 /* DiffView.swift */,
 				01DCAC2B2E182E3500E1CB39 /* SmallButton.swift */,
 				01DCAC292E182D8D00E1CB39 /* WideButton.swift */,
 				01DCAC272E182BF600E1CB39 /* ColorWrappedContentView.swift */,
@@ -240,6 +240,7 @@
 		BDBE88DE2B23C41C005D4C0F /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				0151306E2E5243A90048A908 /* ContactImportManager.swift */,
 				019DD7DA2E36ABC600301F09 /* NotificationManager.swift */,
 				015F95192E18192600015197 /* Router.swift */,
 			);
@@ -373,6 +374,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				015F95342E181AE200015197 /* Metrics.swift in Sources */,
+				015130702E5243AD0048A908 /* ContactImportManager.swift in Sources */,
 				015F95352E181AE200015197 /* Symbols.swift in Sources */,
 				015F95372E181D9D00015197 /* ContactListToolbar.swift in Sources */,
 				019ADDD82E1DECC500A27981 /* NotificationEditor.swift in Sources */,
@@ -389,7 +391,6 @@
 				015F951B2E18192600015197 /* Router.swift in Sources */,
 				014394392E3E9A820036A649 /* NotificationEditorRow.swift in Sources */,
 				015F95132E1817BD00015197 /* View+applyEnvironment.swift in Sources */,
-				01DCAC302E1836BD00E1CB39 /* DiffView.swift in Sources */,
 				015F953E2E1824FA00015197 /* Route.swift in Sources */,
 				015F95252E181AA900015197 /* View+readSize.swift in Sources */,
 				015D15AD2E522CF900719486 /* Settings.swift in Sources */,
@@ -419,6 +420,7 @@
 				015F952B2E181AA900015197 /* View+readSize.swift in Sources */,
 				019DD7DB2E36ABC600301F09 /* NotificationManager.swift in Sources */,
 				015F952C2E181AA900015197 /* View+symbolToggleEffect.swift in Sources */,
+				0151306F2E5243AD0048A908 /* ContactImportManager.swift in Sources */,
 				015F952D2E181AA900015197 /* Color+systemGroupedBackground.swift in Sources */,
 				019DD7DF2E36AE2700301F09 /* UNNotificationRequest+nextFireDate.swift in Sources */,
 				015D15AE2E522CF900719486 /* Settings.swift in Sources */,

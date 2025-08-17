@@ -11,6 +11,7 @@ import SwiftData
 struct SettingsView: View {
     @Environment(Router.self) var router
     @Environment(NotificationManager.self) var notifs
+    @Environment(ContactImportManager.self) var importer
     @Environment(\.modelContext) var modelContext
     
     @State var showAddManuallySheet = false
@@ -20,6 +21,8 @@ struct SettingsView: View {
     @AppStorage(S.highlightRangeKey) var highlightRange = S.highlightRangeDefault
     @AppStorage(S.monthIndexKey) var monthIndex = S.monthIndexDefault
     @AppStorage(S.emptyMonthSectionKey) var emptyMonthSection = S.emptyMonthSectionDefault
+    
+    @AppStorage(S.notificationIndicatorsKey) var notificationIndicators = S.notificationIndicatorsDefault
     
     @Query var contacts: [Contact]
     
@@ -46,7 +49,7 @@ struct SettingsView: View {
                 Section {
                     
                     Button("Import from Contacts", systemImage: "square.and.arrow.down") {
-                        
+                        Task { await importer.importContacts(modelContext: modelContext, showAlert: true) }
                     }
                         .labelStyle(.tintedIcon(.cyan))
                         .symbolColorRenderingMode(.gradient)
@@ -62,24 +65,15 @@ struct SettingsView: View {
                         }
                 }
                 
-                Section {
-                    Toggle("Show changes on import", systemImage: "circle.lefthalf.striped.horizontal", isOn: .constant(true))
-                        .labelStyle(.tintedIcon(.teal))
-                        .symbolColorRenderingMode(.gradient)
-                        .tint(.accentColor)
-                }
-                
                 //
                 
                 Section {
-                    Picker(selection: $monthTop) {
-                        Text("Current month").tag(S.MonthTopOption.current)
-                        Text("January").tag(S.MonthTopOption.january)
-                    } label: {
-                        Label("Month on top", systemImage: "inset.filled.tophalf.rectangle")
-                            .labelStyle(.tintedIcon(.indigo))
+                    Toggle(isOn: $notificationIndicators) {
+                        Label("Notification indicators", systemImage: "bell.badge")
+                            .labelStyle(.tintedIcon(.orange))
                             .symbolColorRenderingMode(.gradient)
                     }
+                    .tint(.orange)
                     
                     LabeledContent {
                         let highlightRangeBinding = Binding<String>(
@@ -99,6 +93,15 @@ struct SettingsView: View {
                     } label: {
                         Label("Highlight range", systemImage: "highlighter")
                             .labelStyle(.tintedIcon(.accentColor))
+                            .symbolColorRenderingMode(.gradient)
+                    }
+                    
+                    Picker(selection: $monthTop) {
+                        Text("Current month").tag(S.MonthTopOption.current)
+                        Text("January").tag(S.MonthTopOption.january)
+                    } label: {
+                        Label("Month on top", systemImage: "inset.filled.tophalf.rectangle")
+                            .labelStyle(.tintedIcon(.indigo))
                             .symbolColorRenderingMode(.gradient)
                     }
                     

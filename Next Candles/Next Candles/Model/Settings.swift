@@ -39,4 +39,8 @@ struct S {
         case shown
         case hidden
     }
+    
+    // MARK: - Notification indicators
+    static let notificationIndicatorsKey = "notificationIndicators"
+    static let notificationIndicatorsDefault = true
 }

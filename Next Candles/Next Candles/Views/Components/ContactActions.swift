@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 struct ContactActions: View {
     
     @Environment(\.openURL) var openURL
@@ -19,8 +20,8 @@ struct ContactActions: View {
         Group {
             ForEach(choices, id: \.self) { choice in
                 Button(choice, systemImage: symbolName) {
-                    if let url = URL(string: prefix + choice) {
-                        #warning("this doesn't always work. something about spacer characters maybe?")
+                    if let encodedChoice = choice.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                       let url = URL(string: prefix + encodedChoice) {
                         openURL.callAsFunction(url)
                     }
                 }

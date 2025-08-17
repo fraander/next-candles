@@ -153,10 +153,21 @@ class Contact: ObservableObject, Equatable, Identifiable {
 
     func getNextBirthday() -> Date? {
         guard let d = self.day, let m = self.month else { return nil }
-        
-        let y = self.year ?? 0
+        let now = Date()
+        let currentYear = Calendar.current.component(.year, from: now)
+        let currentMonth = Calendar.current.component(.month, from: now)
+        let y: Int
+        if m == currentMonth {
+            y = currentYear
+        } else {
+            y = self.year ?? 0
+        }
         if let date = Calendar.current.date(from: DateComponents(year: y, month: m, day: d)) {
-            return nextBirthday(from: date)
+            if m == currentMonth {
+                return date
+            } else {
+                return nextBirthday(from: date)
+            }
         } else {
             return nil
         }
@@ -173,3 +184,4 @@ class Contact: ObservableObject, Equatable, Identifiable {
         Contact(identifier: "random1", givenName: "Jamie", familyName: "Benson", month: 9, day: 4, year: 1997, phones: [], emails: [], image: nil)
     ]
 }
+

@@ -11,6 +11,7 @@ import SwiftData
 struct ApplyEnvironmentModifier: ViewModifier {
     
     @State var notifs: NotificationManager = .init()
+    @State var importManager: ContactImportManager = .init()
     @State var router: Router = .init()
     
     let prePopulate: Bool
@@ -36,10 +37,20 @@ struct ApplyEnvironmentModifier: ViewModifier {
     }
     
     func body(content: Content) -> some View {
+        
+        let alertBinding = Binding<Bool>(
+            get: { importManager.resultToShow != nil },
+            set: { if (!$0) { importManager.resultToShow = nil } }
+        )
+        
         content
             .environment(notifs)
             .environment(router)
+            .environment(importManager)
             .modelContainer(modelContainer)
+            .alert("Imported Contacts", isPresented: alertBinding) { } message: {
+                Text("Found ^[\(importManager.resultToShow ?? 0) birthday](inflect: true)! 🥳")
+            }
     }
 }
 

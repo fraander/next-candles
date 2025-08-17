@@ -14,6 +14,7 @@ struct ContentView: View {
     
     @Environment(NotificationManager.self) var notifs
     @Environment(Router.self) var router
+    @Environment(ContactImportManager.self) var importManager
     
     @Environment(\.modelContext) var modelContext
     @Query var contacts: [Contact]
@@ -56,9 +57,6 @@ struct ContentView: View {
             SettingsView()
 //                .navigationTransition(.zoom(sourceID: "settings", in: transitionNamespace))
         }
-        .sheet(isPresented: $showResolveDiffs) {
-            DiffView(toResolve: $diffs)
-        }
         .task {
             Task {
                 await notifs.requestPermission()
@@ -83,13 +81,7 @@ struct ContentView: View {
     
     func fetch(showNoNewAlert: Bool = true) {
         Task {
-            let (_, diffs) = try await ContactsUtils.fetch(existingContacts: contacts)
-            if diffs.count != 0 {
-                self.showResolveDiffs = true
-                self.diffs = diffs
-            } else {
-                if showNoNewAlert { showFetchAlert.toggle() }
-            }
+            await importManager.importContacts(modelContext: modelContext, showAlert: showNoNewAlert)
         }
     }
 }

@@ -10,6 +10,8 @@ import SwiftUI
 struct ContactListRow: View {
     @Environment(Router.self) var router
     @AppStorage(S.highlightRangeKey) var highlightRange = S.highlightRangeDefault
+    @AppStorage(S.notificationIndicatorsKey) var notificationIndicators = S.notificationIndicatorsDefault
+    @Environment(NotificationManager.self) var notifs
     
     var contact: Contact
     
@@ -28,16 +30,42 @@ struct ContactListRow: View {
             HStack {
                 Text(contact.name)
                     .font(.headline)
-                    .foregroundStyle((contact.daysToNextBirthday() ?? 1000) > highlightRange ? .primary : Color.accentColor)
-                    .bold((contact.daysToNextBirthday() ?? 1000) > highlightRange)
+                    .foregroundStyle((contact.daysToNextBirthday() ?? 1000) > highlightRange || (contact.daysToNextBirthday() ?? 1000) < 0 ? .primary : Color.accentColor)
+                    .bold()
                 
                 Spacer()
                 
                 if let dt = contact.daysToNextBirthday() {
-                    Text("^[\(dt) day](inflect: true) away")
+                    if dt == 0 {
+                        Text("Today")
+                    } else if dt < 0 {
+                        Text("^[\(abs(dt)) day](inflect: true) ago")
+                    } else {
+                        Text("^[\(dt) day](inflect: true) away")
+                    }
                 }
                 
-                #warning("missing icons for notification on day vs. other")
+//                Image(systemName: "party.popper.fill")
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fit)
+//                    .frame(width: 14, height: 14)
+//                    .foregroundStyle(.white)
+//                    .padding(6)
+//                    .background(.yellow.gradient, in: .circle)
+                
+                if notificationIndicators && !notifs.pendingRequests.filter({
+                    let idComponents = $0.identifier.split(separator: "%%%")
+                    let prefix = idComponents.prefix(idComponents.count - 1).joined(separator: "")
+                    return prefix == contact.identifier
+                }).isEmpty {
+                    Image(systemName: "bell.fill")
+                        .foregroundStyle(.white)
+                        .imageScale(.small)
+                        .frame(width: 14, height: 14)
+                        .foregroundStyle(.white)
+                        .padding(6)
+                        .background(.orange.gradient, in: .circle)
+                }
                 
                 Spacer()
                     .frame(width: 15)

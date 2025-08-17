@@ -16,11 +16,38 @@ struct NotificationEditorRow: View {
     
     @State var showDeleteConfirmation: Bool = false
     
+    private func nextBirthday(after date: Date) -> Date? {
+        guard let month = contact.month, let day = contact.day else { return nil }
+        let cal = Calendar.current
+        var comps = cal.dateComponents([.year], from: date)
+        comps.month = month
+        comps.day = day
+        if let thisYear = cal.date(from: comps), thisYear > date {
+            return thisYear
+        } else {
+            comps.year = (comps.year ?? 0) + 1
+            return cal.date(from: comps)
+        }
+    }
+    
     var body: some View {
         Group {
             if let nextDate = request.nextFireDate {
                 
-                let daysBetween = Calendar.current.dateComponents([.day], from: nextDate, to: contact.getNextBirthday() ?? Date()).day ?? 0
+                let cal = Calendar.current
+                let nextBirthdayDate = nextBirthday(after: nextDate)
+                let isBirthday = {
+                    guard let month = contact.month, let day = contact.day else { return false }
+                    let comps = cal.dateComponents([.month, .day], from: nextDate)
+                    return comps.month == month && comps.day == day
+                }()
+                let daysBetween: Int = {
+                    guard let nextBirthdayDate else { return 0 }
+                    let startOfNotif = cal.startOfDay(for: nextDate)
+                    let startOfBirthday = cal.startOfDay(for: nextBirthdayDate)
+                    let components = cal.dateComponents([.day], from: startOfNotif, to: startOfBirthday)
+                    return isBirthday ? 0 : (components.day ?? 0)
+                }()
                 
                 HStack {
                     VStack(alignment: .leading) {
@@ -49,3 +76,4 @@ struct NotificationEditorRow: View {
         }
     }
 }
+

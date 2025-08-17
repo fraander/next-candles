@@ -12,8 +12,8 @@ struct NotificationEditor: View {
     @Environment(NotificationManager.self) var notifs
     var contact: Contact
     
-    @State var newTime: Date = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())!
-    @State var newDaysBefore: Int = 0
+    @AppStorage("newTime") var newTime: Date = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date())!
+    @AppStorage("newDays") var newDaysBefore: Int = 0
     
     var notificationsForContact: [UNNotificationRequest] {
         notifs
@@ -21,11 +21,11 @@ struct NotificationEditor: View {
             .filter { unr in
                 let idComponents = unr.identifier.split(separator: "%%%")
                 
-                print("idc:", idComponents)
+//                print("idc:", idComponents)
                 
                 let prefix = idComponents[0 ..< idComponents.endIndex - 1].joined(separator: "")
                 
-                print("prefix:", prefix)
+//                print("prefix:", prefix)
                 
                 return prefix == contact.identifier
             }
@@ -37,25 +37,34 @@ struct NotificationEditor: View {
             HStack {
                 DatePicker("Time", selection: $newTime, displayedComponents: .hourAndMinute)
                     .labelsHidden()
+                    .frame(height: 36)
                 
                 
                 Picker("Days before", selection: $newDaysBefore) {
-                    ForEach(0..<366) { day in
-                        Text("^[\(day) day](inflect: true) before")
-                            .tag(day)
+                    ForEach([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 20, 21, 25, 30, 31, 40, 50, 60, 90, 100, 120, 150, 180, 270, 365], id: \.self) { day in
+                        if day == 0 {
+                            Text("On the day")
+                                .tag(day)
+                        } else {
+                            Text("^[\(day) day](inflect: true) before")
+                                .tag(day)
+                        }
                     }
                 }
+                .frame(maxWidth: .infinity, maxHeight: 36)
                 .labelsHidden()
                 .tint(.primary)
                 .background(Color(uiColor: UIColor.tertiarySystemGroupedBackground), in: .rect(cornerRadius: 8.0))
                 
-                Spacer()
+//                Spacer()
                 
                 Button("Set", systemImage: "bell.fill") { Task { await setNotification() } }
                     .bold()
                     .buttonStyle(.bordered)
                     .tint(.accentColor)
+                    .frame(height: 36)
             }
+            .frame(maxWidth: .infinity)
             .padding()
             .background(.white, in: .rect(cornerRadius: 16))
             .padding([.top, .horizontal])
@@ -78,6 +87,7 @@ struct NotificationEditor: View {
             .padding()
             .background(.white, in: .rect(cornerRadius: 16))
             .padding([.bottom, .horizontal])
+            .id(notificationsForContact.count)
         }
     }
     
@@ -113,17 +123,17 @@ struct NotificationEditor: View {
             
             // DATE CALCULATION
             let currentDate = Date()
+            // Calculate the first candidate notification date for this year
             var notificationDate = Calendar.current.date(byAdding: .day, value: -newDaysBefore, to: d)!
-
-            // If notification date is in the past, use next year's birthday
-            if notificationDate < currentDate {
-               let nextYearBirthday = Calendar.current.date(byAdding: .year, value: 1, to: d)!
-               notificationDate = Calendar.current.date(byAdding: .day, value: -newDaysBefore, to: nextYearBirthday)!
-            }
-
-            // Set the time to newTime
             let timeComponents = Calendar.current.dateComponents([.hour, .minute], from: newTime)
-            let date = Calendar.current.date(bySettingHour: timeComponents.hour!, minute: timeComponents.minute!, second: 0, of: notificationDate)!
+            var date = Calendar.current.date(bySettingHour: timeComponents.hour!, minute: timeComponents.minute!, second: 0, of: notificationDate)!
+
+            // If that date/time is in the past, use next year's birthday
+            if date < currentDate {
+                let nextYearBirthday = Calendar.current.date(byAdding: .year, value: 1, to: d)!
+                notificationDate = Calendar.current.date(byAdding: .day, value: -newDaysBefore, to: nextYearBirthday)!
+                date = Calendar.current.date(bySettingHour: timeComponents.hour!, minute: timeComponents.minute!, second: 0, of: notificationDate)!
+            }
             
             // CREATE NOTIFICATION
             try? await notifs.createYearlyNotification(
