@@ -2,284 +2,170 @@
 //  ContactDetailView.swift
 //  Next Candles
 //
-//  Created by Frank Anderson on 12/20/23.
+//  Created by Frank Anderson on 7/4/25.
 //
 
-// TODO: Refactor
-
 import SwiftUI
-import Contacts
-import ContactsUI
-import SwiftData
 
 struct ContactDetailView: View {
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(\.dismiss) var dismiss
+    @Environment(Router.self) var router
     @Environment(\.modelContext) var modelContext
-    @Environment(\.horizontalSizeClass) var sizeClass
-    @EnvironmentObject var alertRouter: AlertRouter
-    @EnvironmentObject var settings: Settings
-
-    @State var setNotifSheet = false
-
-    @State var showCallSheet = false
-    @State var showTextSheet = false
-    @State var showEmailSheet = false
+    
+    @State var showDeleteConfirmation = false
     
     var contact: Contact
     
-    func customButton(systemName: String, text: String, bg: AnyGradient, action: @escaping () -> Void) -> some View {
-        return Button(action: action) {
-            VStack {
-                Image(systemName: systemName)
-                    .foregroundStyle(.white)
-                    .imageScale(.large)
-                
-                Text(text)
-                    .font(.system(.headline, design: .rounded, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .offset(y: 2)
-            }
-            .frame(width: 80, height: 84)
-            .background {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(bg)
+    var profileImage: some View {
+        Group {
+            if let imageData = contact.image, let uiImage = UIImage(data: imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .clipShape(.circle)
+            } else {
+                Image(systemName: "person.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(.white, .gray)
             }
         }
-        #if os(macOS)
-        .buttonStyle(.plain)
-        #endif
+        .frame(width: 180, height: 180)
+        .background { Circle().fill(.white) }
+        .overlay { Circle().stroke(.white, lineWidth: 12) }
+    }
+    var contactName: some View {
+        Text(contact.name)
+            .font(.system(.largeTitle, design: .rounded, weight: .semibold))
+    }
+    var contactAge: some View {
+        Group {
+            if let ca = (contact.age) {
+                Text("\(ca) going on \(ca + 1)")
+                    .font(.system(.headline, design: .rounded, weight: .semibold))
+                    .italic()
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+    var contactBirth: some View {
+        Group {
+            if (contact.year != nil) {
+                Text((contact.birthdate ?? Date()).formatted(.dateTime.day().month(.wide).year()))
+            }
+            
+            if (contact.year == nil) {
+                Text((contact.birthdate ?? Date()).formatted(.dateTime.day().month(.wide)))
+            }
+        }
+        .font(.system(.headline, design: .rounded, weight: .semibold))
+        .foregroundStyle(.white)
+        .padding()
+        .background {
+            Capsule()
+                .fill(.pink.gradient)
+        }
     }
     
-    func customWideButton(systemName: String, text: String, bg: AnyGradient, action: @escaping () -> Void) -> some View {
-        return Button(action: action) {
-            HStack(spacing: 16) {
-                VStack {
-                    Image(systemName: systemName)
-                        .foregroundStyle(.white)
-                        .imageScale(.large)
-                }
-                .frame(width: 60, height: 60)
-                .background {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(bg)
+    var smallButtons: some View {
+        HStack(spacing: 0) {
+            if !contact.phones.isEmpty {
+                
+                SmallMenu(
+                    text: "Call",
+                    systemName: "phone.fill",
+                    bg: Color.green.gradient
+                ) {
+                    ContactActions(prefix: "tel://", choices: contact.phones, symbolName: "phone.fill", color: .green)
                 }
                 
-                Text(text)
-                    .font(.system(.title3, design: .rounded, weight: .medium))
-                    .foregroundStyle(
-                        colorScheme == .light
-                        ? .black.opacity(0.8)
-                        : .white.opacity(0.8)
-                    )
+                Spacer()
+                
+                SmallMenu(
+                    text: "Text",
+                    systemName: "message.fill",
+                    bg: Color.mint.gradient
+                ) {
+                    ContactActions(prefix: "sms:", choices: contact.phones, symbolName: "message.fill", color: .mint)
+                }
                 
                 Spacer()
             }
-            .padding(8)
-            .background {
-                Group {
-                    colorScheme == .light ? Color.white : Color.gray.opacity(0.3)
+            
+            if !contact.emails.isEmpty {
+                SmallMenu(
+                    text: "Email",
+                    systemName: "paperplane.fill",
+                    bg: Color.blue.gradient
+                ) {
+                    ContactActions(prefix: "mailto:", choices: contact.emails, symbolName: "paperplane.fill", color: .blue)
                 }
-                .cornerRadius(20)
             }
         }
+        .padding()
+    }
+    
+    var largeButtons: some View {
+        VStack(spacing: 12) {
+            WideButton(
+                text: contact.hidden ? "Show" : "Hide",
+                systemName: contact.hidden ? "eye.fill" : "eye.slash.fill",
+                bg: contact.hidden ? Color.cyan.gradient : Color.orange.gradient
+            ) {
+                contact.hidden.toggle()
+            }
+            
+            WideButton(
+                text: "Delete from Next Candles",
+                systemName: "trash.fill",
+                bg: Color.pink.gradient
+            ) { showDeleteConfirmation.toggle() }
+            .confirmationDialog(
+                "Are you should you would like to delete this contact?",
+                isPresented: $showDeleteConfirmation,
+                titleVisibility: .visible,
+                actions: { Button(role: .destructive) {
+                    router.popToHome()
+                    modelContext.delete(contact)
+                } },
+                message: { Text("Deleting from Next Candles does not delete this person from the Contacts app.") }
+            )
+        }
+        .padding()
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 8) {
-                Rectangle()
-                    .fill(Color.pink.gradient)
-                    .ignoresSafeArea(.all, edges: .top)
-                    .frame(height: 240)
-                
-                Group {
-                    Group {
-                        if let imageData = contact.image, let uiImage = UIImage(data: imageData) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFill()
-                                .clipShape(.circle)
-                        } else {
-                            Image(systemName: "person.circle.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .foregroundStyle(.white, .gray)
-                        }
-                    }
-                    .frame(width: 180, height: 180)
-                    .background { Circle().fill(.white) }
-                    .overlay { Circle().stroke(.white, lineWidth: 12) }
+        NavigationView {
+            ColorWrappedContentView(headerHeight: 200, headerOffsetLimit: 200) {
+                VStack {
+                    profileImage
                     
-                    Text(contact.name)
-                        .font(.system(.largeTitle, design: .rounded, weight: .semibold))
-                        .padding(.top, 12)
+                    contactName.padding(.top, 12)
                     
-                    if let ca = (contact.age) {
-                        Text("\(ca) going on \(ca + 1)")
-                            .font(.system(.headline, design: .rounded, weight: .semibold))
-                            .italic()
-                            .foregroundStyle(.secondary)
-                        
+                    contactAge
+                    
+                    contactBirth
+                    
+                    Divider().padding(.top, 12)
+                    
+                    if !(contact.emails.isEmpty && contact.phones.isEmpty) {
+                        smallButtons
+                        Divider()
                     }
                     
-                    Group {
-                        if (contact.year != nil) {
-                            Text((contact.birthdate ?? Date()).formatted(.dateTime.day().month(.wide).year()))
-                        }
-                        
-                        if (contact.year == nil) {
-                            Text((contact.birthdate ?? Date()).formatted(.dateTime.day().month(.wide)))
-                        }
-                    }
-                    .font(.system(.headline, design: .rounded, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .padding()
-                    .background { Capsule().fill(.pink.gradient) }
+                    NotificationEditor(contact: contact)
                     
                     Divider()
-                        .padding(.top, 12)
-                    
-#if os(macOS)
-                    HStack {
-                        customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
-                            showCallSheet.toggle()
-                        }
-                        customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
-                            showTextSheet.toggle()
-                        }
-                        customButton(systemName: "bell.fill", text: "Notifs", bg: Color.yellow.gradient) {
-                            setNotifSheet.toggle()
-                        }
-                        customButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
-                            contact.hidden.toggle()
-                            dismiss()
-                        }
-                        
-                        customButton(systemName: "trash.fill", text: "Delete", bg: Color.pink.gradient) {
-                            modelContext.delete(contact)
-                        }
-                    }
-                    .padding()
-#else
-                    if sizeClass == .compact {
-                        HStack(spacing: 0) {
-                            customButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
-                                showCallSheet.toggle()
-                            }
-                            Spacer()
-                            customButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
-                                showTextSheet.toggle()
-                            }
-                            Spacer()
-                            customButton(systemName: "paperplane.fill", text: "Email", bg: Color.blue.gradient) {
-                                showEmailSheet.toggle()
-                            }
-                            Spacer()
-                            customButton(systemName: "bell.fill", text: "Notify", bg: Color.yellow.gradient) {
-                                setNotifSheet.toggle()
-                            }
-                        }
-                        .padding(.vertical, 12)
-                        .padding(.horizontal)
-                        
-                        Divider()
-                        
-                        VStack(spacing: 12) {
-                            customWideButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
-                                contact.hidden.toggle()
-                                dismiss()
-                            }
-                            
-                            customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
-                                alertRouter.setAlert(
-                                    Alert(
-                                        title: Text("Delete this Contact from Next Candles?"),
-                                        message: Text("Does not delete from the Contacts app"),
-                                        primaryButton: .destructive(Text("Delete")),
-                                        secondaryButton: .cancel()
-                                    )
-                                )
-                                modelContext.delete(contact)
-                            }
-                        }
-                        .padding()
-                    } else {
-                        VStack {
-                            customWideButton(systemName: "phone.fill", text: "Call", bg: Color.green.gradient) {
-                                showCallSheet.toggle()
-                            }
-                            customWideButton(systemName: "message.fill", text: "Text", bg: Color.mint.gradient) {
-                                showTextSheet.toggle()
-                            }
-                            customWideButton(systemName: "paperplane.fill", text: "Email", bg: Color.blue.gradient) {
-                                showEmailSheet.toggle()
-                            }
-                            customWideButton(systemName: "bell.fill", text: "Notify", bg: Color.yellow.gradient) {
-                                setNotifSheet.toggle()
-                            }
-                            customWideButton(systemName: contact.hidden ? "eye.fill" : "eye.slash.fill", text: contact.hidden ? "Show" : "Hide", bg: contact.hidden ? Color.secondary.gradient : Color.orange.gradient ) {
-                                contact.hidden.toggle()
-                                dismiss()
-                            }
-                            
-                            customWideButton(systemName: "trash.fill", text: "Delete from Next Candles", bg: Color.pink.gradient) {
-                                alertRouter.setAlert(
-                                    Alert(
-                                        title: Text("Delete this Contact from Next Candles?"),
-                                        message: Text("Does not delete from the Contacts app"),
-                                        primaryButton: .destructive(Text("Delete")),
-                                        secondaryButton: .cancel()
-                                    )
-                                )
-                                modelContext.delete(contact)
-                            }
-                        }
-                        .padding()
-                    }
-#endif
+
+                    largeButtons
                 }
                 .offset(y: -120)
-                Spacer()
             }
+            .toolbar { ContactDetailToolbar() }
         }
-        .ignoresSafeArea(.all)
-        .background {
-            Rectangle()
-                .fill(colorScheme == .light ? Color.white.gradient : Color.black.gradient)
-                .ignoresSafeArea(.all, edges: .bottom)
-        }
-        .sheet(isPresented: $showEmailSheet) {
-            EmailSheet(contact: contact)
-                .frame(minWidth: 300, minHeight: 300)
-                .presentationDetents(
-                    [.height(300)]
-                )
-        }
-        .sheet(isPresented: $showCallSheet) {
-            PhoneSheet(contact: contact, sheetType: .call)
-                .frame(minWidth: 300, minHeight: 300)
-                .presentationDetents(
-                    [.height(300)]
-                )
-        }
-        .sheet(isPresented: $showTextSheet) {
-            PhoneSheet(contact: contact, sheetType: .text)
-                .frame(minWidth: 300, minHeight: 300)
-                .presentationDetents(
-                    [.height(300)]
-                )
-        }
-        .sheet(isPresented: $setNotifSheet) { SetNotificationView(settings: settings, contact: contact) }
     }
 }
 
 #Preview {
-    
-    let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: Contact.self, configurations: config)
-    
-    let contact = Contact(givenName: "Frank", familyName: "Anderson", month: 2, day: 7, year: 2003)
-    return ContactDetailView(contact: contact)
-        .modelContainer(container)
+    ContentView()
+        .applyEnvironment()
 }
