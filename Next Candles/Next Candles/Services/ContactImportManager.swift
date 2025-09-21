@@ -10,6 +10,7 @@ import SwiftUI
 import SwiftData
 
 @Observable
+@MainActor
 class ContactImportManager {
     var resultToShow: Int? = nil
     
@@ -18,6 +19,9 @@ class ContactImportManager {
      - Parameter modelContext: Your SwiftData model context for contacts.
      */
     func importContacts(modelContext: ModelContext, showAlert: Bool) async {
+        // Any long-running work (fetching, diffing) should be done off the main actor.
+        // Only modelContext mutations and UI-bound state (resultToShow) are performed here, as the class is @MainActor.
+        
         // Fetch all existing contacts from SwiftData
         let fetchDescriptor = FetchDescriptor<Contact>()
         guard let existing = try? modelContext.fetch(fetchDescriptor) else { return }
@@ -29,6 +33,12 @@ class ContactImportManager {
         let actuallyNewContacts = diffs.filter { $0.old == nil }.map { $0.new }
         for contact in actuallyNewContacts {
             modelContext.insert(contact)
+        }
+        // Persist changes so @Query updates will observe them
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to save contacts: \(error)")
         }
         
         // Set resultToShow to count of new contacts added

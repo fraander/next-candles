@@ -175,7 +175,8 @@ class Contact: ObservableObject, Equatable, Identifiable {
     
     func daysToNextBirthday() -> Int? {
         guard let nextBirthday = self.getNextBirthday() else { return nil }
-        return Calendar.current.dateComponents([.day], from: Date(), to: nextBirthday).day
+        let count = Calendar.current.dateComponents([.day], from: Date(), to: nextBirthday).day
+        return (count ?? 0) + 1
     }
     
     // MARK: EXAMPLES -
