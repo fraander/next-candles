@@ -66,7 +66,7 @@ struct NotificationEditor: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(.white, in: .rect(cornerRadius: 16))
+            .background(Color.gray.opacity(0.3), in: .rect(cornerRadius: 16))
             .padding([.top, .horizontal])
             
             VStack(alignment: .leading) {
@@ -85,7 +85,7 @@ struct NotificationEditor: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .padding()
-            .background(.white, in: .rect(cornerRadius: 16))
+            .background(Color.gray.opacity(0.3), in: .rect(cornerRadius: 16))
             .padding([.bottom, .horizontal])
             .id(notificationsForContact.count)
         }
