@@ -55,7 +55,9 @@ struct ContactListSection: View {
         Group {
             if emptyMonthSection == .shown || !contacts.isEmpty {
                 Section {
-                    ForEach(contacts) { ContactListRow(contact: $0) }
+                    ForEach(contacts) { contact in
+                        ContactListRow(contact: contact)
+                    }
                 } header: {
                     HStack {
                         Text(monthSymbol)

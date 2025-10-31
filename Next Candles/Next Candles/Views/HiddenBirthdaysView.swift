@@ -133,6 +133,22 @@ struct HiddenBirthdaysView: View {
                     .foregroundStyle(.cyan)
                     .labelStyle(.iconOnly)
                 }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    if !contact.hidden {
+                        Button("Hide", systemImage: "eye.slash") {
+                            contact.hidden.toggle()
+                        }
+                        .tint(.orange)
+                        .labelStyle(.iconOnly)
+                    } else {
+                        Button("Show", systemImage: "eye") {
+                            contact.hidden.toggle()
+                        }
+                        .tint(.cyan)
+                        .labelStyle(.iconOnly)
+                    }
+                    
+                }
             }
             
             if filteredContacts.isEmpty {

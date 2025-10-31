@@ -6,6 +6,7 @@
 //
 
 struct S {
+    
     // MARK: - Month Top
     static let monthTopKey: String = "monthTop"
     static let monthTopDefault: MonthTopOption = .current

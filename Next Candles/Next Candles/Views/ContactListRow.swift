@@ -7,6 +7,33 @@
 
 import SwiftUI
 
+struct DateIcon: View {
+    
+    let contact: Contact
+    
+    var body: some View {
+        
+        let condition = (contact.daysToNextBirthday() ?? 0) > 0
+        
+        Group {
+            if let d = contact.day {
+                Text(d, format: .number)
+                    .fontDesign(.rounded)
+                    .bold()
+                    .monospacedDigit()
+                    .frame(width: 24, height: 24)
+            }
+        }
+        .aspectRatio(1.0, contentMode: .fill)
+        .padding(5)
+        .background {
+            ConcentricRectangle(corners: .concentric(minimum: 15))
+                .fill(.gray.gradient.opacity(0.5))
+        }
+        .opacity(condition ? 1 : 0.5)
+    }
+}
+
 struct ContactListRow: View {
     @Environment(Router.self) var router
     @AppStorage(S.highlightRangeKey) var highlightRange = S.highlightRangeDefault
@@ -28,6 +55,7 @@ struct ContactListRow: View {
             router.present(.contact(contact))
         } label: {
             HStack {
+                DateIcon(contact: contact)
                 Text(contact.name)
                     .font(.headline)
                     .foregroundStyle((contact.daysToNextBirthday() ?? 1000) > highlightRange || (contact.daysToNextBirthday() ?? 1000) < 0 ? .primary : Color.accentColor)
@@ -35,15 +63,18 @@ struct ContactListRow: View {
                 
                 Spacer()
                 
-                if let dt = contact.daysToNextBirthday() {
-                    if dt == 0 {
-                        Text("Today")
-                    } else if dt < 0 {
-                        Text("^[\(abs(dt)) day](inflect: true) ago")
-                    } else {
-                        Text("^[\(dt) day](inflect: true) away")
+                Group {
+                    if let dt = contact.daysToNextBirthday() {
+                        if dt == 0 {
+                            Text("Today")
+                        } else if dt < 0 {
+                            Text("^[\(abs(dt)) day](inflect: true) ago")
+                        } else {
+                            Text("^[\(dt) day](inflect: true) away")
+                        }
                     }
                 }
+                .font(.footnote)
                 
 //                Image(systemName: "party.popper.fill")
 //                    .resizable()
@@ -73,6 +104,22 @@ struct ContactListRow: View {
                     .foregroundStyle(.secondary)
             }
             .matchedTransitionSource(id: contact.identifier, in: transitionNamespace)
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            if !contact.hidden {
+                Button("Hide", systemImage: "eye.slash") {
+                    contact.hidden.toggle()
+                }
+                .tint(.orange)
+                .labelStyle(.iconOnly)
+            } else {
+                Button("Show", systemImage: "eye") {
+                    contact.hidden.toggle()
+                }
+                .tint(.cyan)
+                .labelStyle(.iconOnly)
+            }
+            
         }
         .sheet(isPresented: presentSheetForContactBinding) {
             ContactDetailView(contact: contact)
