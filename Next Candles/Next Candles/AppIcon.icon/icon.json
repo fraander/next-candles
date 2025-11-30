@@ -21,6 +21,44 @@
             {
               "appearance" : "tinted",
               "value" : {
+                "solid" : "gray:0.52418,1.00000"
+              }
+            }
+          ],
+          "image-name" : "Rectangle 7 (1).svg",
+          "name" : "Rectangle 7 (1)",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              276
+            ]
+          }
+        },
+        {
+          "fill-specializations" : [
+            {
+              "appearance" : "tinted",
+              "value" : {
+                "automatic-gradient" : "gray:0.52418,1.00000"
+              }
+            }
+          ],
+          "image-name" : "Rectangle 6 (1).svg",
+          "name" : "Rectangle 6 (1)",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              138
+            ]
+          }
+        },
+        {
+          "fill-specializations" : [
+            {
+              "appearance" : "tinted",
+              "value" : {
                 "solid" : "srgb:0.66422,0.66424,0.66423,1.00000"
               }
             }
@@ -41,8 +79,16 @@
             }
           ],
           "glass" : true,
+          "hidden" : true,
           "image-name" : "Next Candles - Light.svg",
-          "name" : "Next Candles - Light"
+          "name" : "Next Candles - Light",
+          "position" : {
+            "scale" : 1,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
         }
       ],
       "shadow" : {

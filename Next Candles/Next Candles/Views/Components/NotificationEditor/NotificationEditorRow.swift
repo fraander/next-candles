@@ -72,8 +72,12 @@ struct NotificationEditorRow: View {
                         titleVisibility: .visible
                     ) { Button(role: .destructive, action: onDelete) }
                 }
+//                .contextMenu {
+//                    Button("Copy Link", systemImage: "document.on.document") {
+//                        print(request.identifier)
+//                    }
+//                }
             }
         }
     }
 }
-
