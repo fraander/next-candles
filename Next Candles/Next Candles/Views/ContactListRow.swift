@@ -13,14 +13,15 @@ struct DateIcon: View {
     
     var body: some View {
         
-        let condition = (contact.daysToNextBirthday() ?? 0) > 0
+        let condition = (contact.daysToNextBirthday() ?? 0) > -1
         
         Group {
             if let d = contact.day {
                 Text(d, format: .number)
-                    .fontDesign(.rounded)
-                    .bold()
+//                    .fontDesign(.rounded)
+//                    .bold()
                     .monospacedDigit()
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
                     .frame(width: 24, height: 24)
             }
         }

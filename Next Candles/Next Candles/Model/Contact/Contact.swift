@@ -153,30 +153,41 @@ class Contact: ObservableObject, Equatable, Identifiable {
 
     func getNextBirthday() -> Date? {
         guard let d = self.day, let m = self.month else { return nil }
+        let calendar = Calendar.current
         let now = Date()
-        let currentYear = Calendar.current.component(.year, from: now)
-        let currentMonth = Calendar.current.component(.month, from: now)
-        let y: Int
-        if m == currentMonth {
-            y = currentYear
-        } else {
-            y = self.year ?? 0
-        }
-        if let date = Calendar.current.date(from: DateComponents(year: y, month: m, day: d)) {
-            if m == currentMonth {
-                return date
-            } else {
-                return nextBirthday(from: date)
-            }
-        } else {
+        let currentYear = calendar.component(.year, from: now)
+        
+        // Create this year's birthday
+        guard let thisYearBirthday = calendar.date(from: DateComponents(year: currentYear, month: m, day: d)) else {
             return nil
+        }
+        
+        let startOfToday = calendar.startOfDay(for: now)
+        let startOfBirthday = calendar.startOfDay(for: thisYearBirthday)
+        
+        // If birthday is today or future, return this year's
+        if startOfBirthday >= startOfToday {
+            return startOfBirthday
+        }
+        
+        // Birthday was in the past this year - check if within 5 days OR same month
+        let daysSince = calendar.dateComponents([.day], from: startOfBirthday, to: startOfToday).day ?? 0
+        let currentMonth = calendar.component(.month, from: now)
+
+        if daysSince <= 5 || m == currentMonth {
+            // Within 5 days ago - return this year's (for negative count)
+            return startOfBirthday
+        } else {
+            // More than 5 days ago - return next year's
+            return calendar.date(from: DateComponents(year: currentYear + 1, month: m, day: d))
         }
     }
     
     func daysToNextBirthday() -> Int? {
         guard let nextBirthday = self.getNextBirthday() else { return nil }
-        let count = Calendar.current.dateComponents([.day], from: Date(), to: nextBirthday).day
-        return (count ?? 0) + 1
+        let startOfToday = Calendar.current.startOfDay(for: Date())
+        let startOfBirthday = Calendar.current.startOfDay(for: nextBirthday)
+        return Calendar.current.dateComponents([.day], from: startOfToday, to: startOfBirthday).day
     }
     
     // MARK: EXAMPLES -

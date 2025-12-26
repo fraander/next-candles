@@ -96,14 +96,14 @@ struct SettingsView: View {
                             .symbolColorRenderingMode(.gradient)
                     }
                     
-                    Picker(selection: $monthTop) {
-                        Text("Current month").tag(S.MonthTopOption.current)
-                        Text("January").tag(S.MonthTopOption.january)
-                    } label: {
-                        Label("Month on top", systemImage: "inset.filled.tophalf.rectangle")
-                            .labelStyle(.tintedIcon(.indigo))
-                            .symbolColorRenderingMode(.gradient)
-                    }
+//                    Picker(selection: $monthTop) {
+//                        Text("Current month").tag(S.MonthTopOption.current)
+//                        Text("January").tag(S.MonthTopOption.january)
+//                    } label: {
+//                        Label("Month on top", systemImage: "inset.filled.tophalf.rectangle")
+//                            .labelStyle(.tintedIcon(.indigo))
+//                            .symbolColorRenderingMode(.gradient)
+//                    }
                     
                     Picker(selection: $monthIndex) {
                         Text("Dash empty months").tag(S.MonthIndexOption.hashed)
